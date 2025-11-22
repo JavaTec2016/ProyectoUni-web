@@ -213,8 +213,22 @@
         }
         public function makeFiltroSimple(string $campo, $valor, string $tipo){
             $modo = $valor;
-            if ($tipo == "string") $modo = "'" . $modo . "'";
+            if ($tipo == "string" || $tipo == "date") $modo = "'" . $modo . "'";
             return $campo . " = " . $modo;
+        }
+        public function getTiposCadena(array $tipos){
+            $out = "";
+            foreach ($tipos as $tipo) {
+                switch($tipo){
+                    case 'date':
+                    case 'string': $out += "s"; break;
+                    case 'double':
+                    case 'float': $out += "d"; break;
+                    case 'int':
+                    case 'integer': $out += "i"; break;
+                }
+            }
+            return $out;
         }
     }
 

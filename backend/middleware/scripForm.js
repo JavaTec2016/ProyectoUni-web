@@ -43,6 +43,12 @@ class FormBuilder {
         if (txt) label.innerHTML = txt;
         return label;
     }
+    makeInvalid(id){
+        let inv = document.createElement('div');
+        inv.setAttribute('id', id);
+        inv.setAttribute('class', 'invalid-feedback');
+        return inv;
+    }
     /**
      * 
      * @param {HTMLSelectElement} input 
@@ -66,11 +72,11 @@ class FormBuilder {
         let div = this.makeField(fieldId);
         let label = this.makeLabel(inputId, labelTxt);
         let input = this.makeInput(inputId, inputType, inputName);
-        
+        let invalid = this.makeInvalid(inputId+"_invalid");
         if(input instanceof HTMLSelectElement){
             this.fillSelect(input, values);
         }
-        div.append(label, input);
+        div.append(label, input, invalid);
         return div;
     }
 
@@ -97,6 +103,26 @@ class FormBuilder {
             default: input.value = val; break;
         }
     }
-}
+    }
+    showInvalido(id, mensaje){
+        let m = document.getElementById(id+"_invalid");
+        m.innerHTML = mensaje;
+        m.hidden = false;
+        m.style.display = "flex";
+    }
+    hideInvalido(id){
+        console.log(id);
+        let m = document.getElementById(id + "_invalid");
+        m.hiden = true;
+        m.style.display = "none";
+    }
+    /**
+     * 
+     * @param {HTMLFormElement} form 
+     * @param {string} fieldId
+     */
+    getValue(form, fieldId){
+        return new FormData(form).get(fieldId);
+    }
 }
 const fb = new FormBuilder();

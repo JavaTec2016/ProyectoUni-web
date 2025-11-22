@@ -71,8 +71,11 @@
 <script src="../../middleware/scripForm.js"></script>
 <script src="../../middleware/ABCCUtils.js"></script>
 <script src="../../middleware/validar.js"></script>
+<script src="./funcinoesValidacion/evento.js"></script>
 
 <script type="text/javascript">
+    ////DEFINICION DE DATOS
+
     const tablaSQL = "evento";
     let validacionRules = {};
     const postSuccess = "Evento agregado";
@@ -96,46 +99,52 @@
     const tablaBody = document.getElementById("tablaResults-body");
     tablaBody.childNodes.forEach(n => tablaBody.removeChild(n));
 
+    ///DEFINICIONES CON PHP
+
     const datos = [
         <?php echoArray($campos) ?>
     ];
+    const camposIds = {
+        id: "<?php echo Evento::ID ?>",
+        nombre: "<?php echo Evento::NOMBRE ?>",
+        fechaInicio: "<?php echo Evento::FECHA_INICIO ?>",
+        fechaFin: "<?php echo Evento::FECHA_FIN ?>",
+        tipo: "<?php echo Evento::TIPO ?>",
+        descripcion: "<?php echo Evento::DESCRIPCION ?>"
+    }
+
+    ///reglas auto
+
     requestRules(tablaSQL,
         (json) => {
             validacionRules = json.rules;
-            setValidadores();
+            setupRules();
         },
         (reason) => {
             console.error("Reglas fail: \n", reason)
         }
     )
-    let erroresAlert = "";
-
     form.onsubmit = (ev) => {
         ev.preventDefault();
-        erroresAlert="";
-        validadorAgregar.runValidadores(new FormData(form));
-        if (erroresAlert.length > 0) {
-            alert(erroresAlert);
-            return;
-        }
+        if (!validarForm(validadorAgregar, form)) return;
         agregarRegistro(form);
     }
 
     ///SETUP DE VALIDACION
-
-
-    function setValidadores() {
-        for (const campo in validacionRules) {
-            if (campo == "id") continue;
-
-            const key = campo + "_input";
-            const ruleValues = validacionRules[campo];
-
-            validadorAgregar.agregarValidador(key, ...ruleValues, (id, codigo) => {
-                erroresAlert += genericHandler(id, codigo);
-            })
-        }
+    function validarForm(validador, form) {
+        console.log(form);
+        if (Object.keys(validacionRules).length == 0 || !validador.runValidadores(new FormData(form))) return false;
+        return true;
     }
+
+    function setupRules() {
+        makeMensajesEvento(validadorAgregar, camposIds);
+        makeMensajesEvento(validadorModificar, camposIds);
+
+        makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules);
+        makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules);
+    }
+
     ///CONSULTAS
 
     /**@param {HTMLTableElement} tablaModal*/
@@ -281,7 +290,7 @@
         )
     }
 
-    ///CONSULTA SECUNDARIA
+    ///CONSULTAR DETALLES
 
     /**@param {HTMLAnchorElement} boton @param {HTMLDivElement} tablaObj  */
     function btnDetallesCallback(boton, tablaObj, callback = (tabla, boton) => {}) {
@@ -292,7 +301,6 @@
         setBodyHTML(tabla, "Buscando...");
         callback(tabla, boton);
     }
-
 
     ///PREPARAR EDICION
 
@@ -331,6 +339,7 @@
 
         form.onsubmit = (ev) => {
             ev.preventDefault();
+            if (!validarForm(validadorModificar, form)) return;
             actualizarRegistro(url, form);
         }
     }

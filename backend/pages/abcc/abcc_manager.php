@@ -3,7 +3,7 @@
 use function PHPSTORM_META\type;
 
 include_once('../../model/allModels.php');
-function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null)
+function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null, string $invalidMsg="")
 {
     if (!isset($inputName) || $inputName == null) $inputName = $id . "_input";
     if (!isset($values) || $values == null) $values = array();
@@ -25,7 +25,9 @@ function buildField(string $id, string $type, string $label, string|null $inputN
         <?php } else { ?>
             <input type="<?php echo $type ?>" class="form-control" id="<?php echo $id . "_input" ?>" name="<?php echo $inputName ?>">
         <?php } ?>
-
+            <div class="invalid-feedback" id="<?php echo $inputName ?>_invalid" hidden>
+                <?php echo $invalidMsg ?>
+            </div>
     </div>
 
 
