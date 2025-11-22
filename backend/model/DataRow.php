@@ -37,7 +37,13 @@
         public function get(string $campo){
             return $this[$campo];
         }
-
+        public function getFields(array $campos){
+            $o = [];
+            foreach ($campos as $campo) {
+                array_push($o, $this->get($campo));
+            }
+            return $o;
+        }
         public function offsetExists(mixed $offset): bool
         {
             return isset($this->$offset);

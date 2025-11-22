@@ -18,24 +18,17 @@
     }
 
     .outliner {
-        outline-width: 4px;
-    }
-
-    .scale {
-        transition: transform .25s, background .25s;
-    }
-
-    .scale:hover {
-        transform: scale(0.9);
+        outline-width: 0px;
     }
 
     .evento-feed {
-        transform: scale(0.8);
+        border-width: 0px;
+        transform: scale(0.9);
         transition: transform .25s, background .25s;
     }
 
     .evento-feed:hover {
-        transform: scale(0.9);
+        transform: scale(1);
         cursor: pointer;
     }
 
@@ -115,13 +108,13 @@
         position: relative;
 
         width: 100%;
-        
+
 
         object-fit: cover;
     }
-    
+
     .abcc_opcion:hover {
-        background-color: rgba(0,0,0,.15);
+        background-color: rgba(0, 0, 0, .15);
     }
 
     .abcc_opcion img {
@@ -142,10 +135,19 @@
     }
 
     .side-nav {
-        height: 100vh;
+        display: flex;
+        flex-direction: column;
         width: 20rem;
         flex-grow: 0;
         flex-shrink: 0;
 
+    }
+
+    .margin-half {
+        margin-left: 50%;
+        transform: translate(-50%, 0%);
+    }
+    *, ::after, ::before {
+        box-sizing: border-box;
     }
 </style>

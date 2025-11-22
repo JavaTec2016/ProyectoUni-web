@@ -18,7 +18,7 @@ class Evento extends Modelo {
         static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, ""));
         static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, ""));
         static::addRule(self::FECHA_INICIO, new DataRow("string", "DATETIME", true, false, false, -1, -1, false, ""));
-        static::addRule(self::FECHA_FIN, new DataRow("string", "DATETIME", true, false, false, -1, -1, false, ""));
+        static::addRule(self::FECHA_FIN, new DataRow("string", "DATETIME", false, false, false, -1, -1, false, ""));
         static::addRule(self::TIPO, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, ""));
         static::addRule(self::DESCRIPCION, new DataRow("string", "TEXT", true, false, false, -1, -1, false, ""));
     }

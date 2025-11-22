@@ -1,13 +1,21 @@
 <?php
 
-include_once('../backend/controller/funcion_baja.php');
+include_once(__DIR__ . '/../controller/funcion_baja.php');
 header("Content-Type: application/json");
 
-if($_SERVER["REQUEST_METHOD"] == "DELETE"){
+if($_SERVER["REQUEST_METHOD"] == "GET"){
     $cadenaJSON = file_get_contents('php://input');
 
     if (!isset($cadenaJSON) || $cadenaJSON == false) {
-        echo "No hay cadena JSON";
+        if ($_POST) {
+            echo procesarBaja($_POST);
+        } else if ($_GET) {
+            echo procesarBaja($_GET);
+        }
+        else {
+            echo "No hay datos";
+            return;
+        }
         return;
     }
     $datos = json_decode($cadenaJSON, true);

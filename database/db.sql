@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS Circulo (
 
 
 CREATE TABLE IF NOT EXISTS Evento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
-    fecha DATE,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE,
     tipo VARCHAR(50),
     descripcion TEXT
 );

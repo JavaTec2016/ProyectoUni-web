@@ -1,0 +1,23 @@
+//incluir FetchRequest en donde se vaya a usar esto
+function actualizar(url, form, success = (res) => { }, reject = (reason) => { }) {
+    const req = new FetchRequest(url, "GET");
+    req.setBody(form);
+    req.callbackJSON(success, reject);
+}
+
+function agregar(url, form, success = (res) => { }, reject = (reason) => { }){
+    const req = new FetchRequest(url, "POST");
+    req.setBody(form);
+    req.callbackJSON(success, reject);
+}
+
+function consultar(url, form, success = (res) => { }, reject = (reason) => { }){
+    const req = new FetchRequest(url, "GET");
+    req.setBody(form);
+    req.callbackJSON(success, reject);
+}
+function eliminar(url, form, success = (res) => { }, reject = (reason) => { }){
+    const req = new FetchRequest(url, "GET");
+    req.setBody(form);
+    req.callbackJSON(success, reject);
+}

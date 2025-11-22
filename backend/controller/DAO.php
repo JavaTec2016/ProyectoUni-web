@@ -3,6 +3,8 @@
     require_once(__DIR__ . '/../model/Modelo.php');
 
     class DAO {
+        public final const ASCEND = "ASC";
+        public final const DESCEND = "DESC";
         private $conexion;
 
         public function __construct(){
@@ -19,7 +21,8 @@
 
 
         public function agregar(string $tabla, array $modelo){
-            $sql = "INSERT INTO " . $tabla . " VALUES";
+            $campos = "(" . join(",", array_keys($modelo)) . ")";
+            $sql = "INSERT INTO " . $tabla . " " . $campos . " VALUES";
             $ponidos = array();
             foreach ($modelo as $key => $value) {
                 $val = $value;
@@ -82,7 +85,14 @@
 
         }
 
-        public function consultar(string $tabla, array $selectNombres = array(0=>"*"), array|null $camposValores = null, array|null $camposComodines = null, int $limite = -1){
+        public function getCamposOrder(array $camposOrder){
+            $out = array();
+            foreach ($camposOrder as $campo => $orden) {
+                array_push($out, $campo . " " . $orden);
+            }
+            return join(", ", $out);
+        }
+        public function consultar(string $tabla, array $selectNombres = array(0=>"*"), array|null $camposValores = null, array|null $camposComodines = null, array|null $camposOrder = null, int $limite = -1){
             $sql = "SELECT ".join(", ", $selectNombres)." FROM " . $tabla;
             
             if($camposValores != null){
@@ -90,14 +100,18 @@
                 $where = " WHERE " . $this->makeWhereCamposSimple($camposValores, $camposComodines, $tipos);
                 $sql = $sql . $where;
             }
+            if($camposOrder != null) $sql = $sql . " ORDER BY " . $this->getCamposOrder($camposOrder);
             if($limite > 0) $sql = $sql . " LIMIT ". $limite;
             return mysqli_query($this->getConexion(), $sql);
+        }
+        public function assoc(mysqli_result $res){
+            return mysqli_fetch_all($res, MYSQLI_ASSOC);
         }
         ////=----------FORMATEO DINAMICO
 
         public function prepararStatement($consulta, $tipos = null, $valores = null){
             
-            $statement = $this->getConexion()->prepare($this->getConexion(), $consulta);
+            $statement = mysqli_prepare($this->getConexion(), $consulta);
             /**
              * tira error gg
              * @var string

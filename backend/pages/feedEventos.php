@@ -13,18 +13,18 @@
 <body id="h">
     <?php require_once('plantillaEvento.php') ?>
     <?php require_once('navbar_feedEventos.php') ?>
-    <div style="display:flex;">
+    <?php require_once('../controller/DAO.php') ?>
+    <div style="display:flex;height: 100%;">
 
-        <div class="sticky-top side-nav" style="z-index:1019;">
-            <div name="nav-filler"></div>
-            <nav class="vh-100 bg-light abcc">
+        <div class="side-nav" style="z-index:1019">
+            <nav class="bg-light abcc scroller">
                 <div clas="col">
                     <!-- cosas de eventos o volver al panel -->
                     <div class="row">
 
                     </div>
                     <!-- botones para cambiar entre tablas ABCC rapidito -->
-                    <a class="row abcc_opcion" href="#">
+                    <a class="row abcc_opcion" href="abcc/abcc_evento.php">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Eventos</p>
                     </a>
@@ -53,8 +53,12 @@
             </nav>
         </div>
         <div class="container" style="position: relative;">
-            <div name="nav-filler"></div>
-            <div class="row">
+            <div class="row scroller" style="height: 90vh;">
+                <!-- BANNER -->
+                <div class="col-sm-12">
+                    <h1 class="display-5 text-center pt-5">Eventos más recientes</h1>
+                    <p class="text-center pb-5">Presione en un evento para ver detalles</p>
+                </div>
                 <!-- PANEL DE EVENTOS -->
                 <div class="col-sm-12">
                     <div class="no-overflow">
@@ -64,19 +68,20 @@
 
                             <!-- loop llenando las cartas de eventos -->
                             <?php
-                            $placeholder = array(
-                                Evento::NOMBRE => "evento",
-                                Evento::DESCRIPCION => "evento placeholder WIP ahi va ya merito sale esto",
-                                Evento::FECHA_INICIO => "11-11-11",
-                                Evento::FECHA_FIN => "11-11-12"
+                            $datos = array(
+                                Evento::NOMBRE => 1,
+                                Evento::DESCRIPCION => 2,
+                                Evento::FECHA_INICIO => 3,
+                                Evento::FECHA_FIN => 4
                             );
+                            $dao = new DAO();
+                            $result = $dao->assoc($dao->consultar("evento", array_keys($datos), null, null, array(Evento::FECHA_INICIO => DAO::DESCEND), 16));
 
-                            for ($i = 0; $i < 16; $i++) {
+                            foreach ($result as $idx => $registro) {
                             ?>
-
                                 <div class="col align-items-center">
                                     <?php
-                                    echo eventoCard("evento_" . $i, $placeholder);
+                                    echo eventoCard("evento_" . $idx, $registro);
                                     ?>
                                 </div>
 
@@ -90,12 +95,9 @@
         </div>
     </div>
 </body>
+<script src="../middleware/navFix.js"></script>
 <script>
-    const nav = document.getElementById('nav-feed');
-    document.getElementsByName('nav-filler').forEach(elem => {
-        elem.style.height = nav.offsetHeight + "px";
-        console.log(nav.offsetHeight);
-    })
+    setFiller('nav-feed');
 </script>
 
 </html>

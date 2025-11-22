@@ -53,11 +53,17 @@ abstract class Modelo {
         }
         return $out;
     }
-    protected static function getRule(string $campo)
+    protected static function getRule(string $campo): DataRow
     {
         return static::$rules[$campo];
     }
-
+    public static function getRuleMap(array $campos, array $ruleNames){
+        $o = [];
+        foreach ($campos as $campo) {
+            $o[$campo] = static::getRule($campo)->getFields($ruleNames);
+        }
+        return $o;
+    }
     public static function setRules(){
         static::$rules = array();
     }

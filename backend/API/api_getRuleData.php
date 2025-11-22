@@ -1,17 +1,11 @@
 <?php
-
-include_once('../backend/controller/funcion_consulta.php');
 header("Content-Type: application/json");
-
-if($_SERVER["REQUEST_METHOD"] == "GET"){
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $cadenaJSON = file_get_contents('php://input');
-
     if (!isset($cadenaJSON) || $cadenaJSON == false) {
-        echo "No hay cadena JSON";
+        echo procesarConsulta($_GET);
         return;
     }
     $datos = json_decode($cadenaJSON, true);
-    echo procesarConsulta($datos);
 }
-
 ?>

@@ -2,7 +2,7 @@
 include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
 
-function procesarAlta(array $datos){
+$datos = json_decode(file_get_contents('php://input'), true);
     $dao = new DAO();
     $modelo = array();
     $tabla = $datos["tabla"];
@@ -13,12 +13,12 @@ function procesarAlta(array $datos){
     $datos_correctos = true;
     $res = false;
     if ($datos_correctos) {
-       
+        //var_dump($modelo);
         $res = $dao->agregar($tabla, $modelo);
     }
     if ($res != false) $res = true;
     $json = array("status" => $res);
     return json_encode($json);
-}
+
 
 ?>
