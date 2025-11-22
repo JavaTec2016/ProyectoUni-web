@@ -50,11 +50,11 @@ function vacio(dato=""){
  * @returns 
  */
 function validar(datoString, tipo, noNulo, umbral, limite){
-    let dato = null;
-    if(!noNulo) {
-        if (vacio(datoString)) return validarCodigos.OK;
-        else return validarCodigos.NULL_DATA;
-    }try{
+    
+    if (!noNulo && vacio(datoString)) return validarCodigos.OK;
+    if (noNulo && vacio(datoString)) return validarCodigos.NULL_DATA;
+    console.log("SI: ", ...arguments);
+    try{
         dato = convertir(datoString, tipo);
     }catch(e) { return validarCodigos.WRONG_TYPE; }
     if(umbral + limite > -1 && !enRango(dato, umbral, limite)) return validarCodigos.OUT_OF_RANGE;
@@ -72,14 +72,16 @@ function validarFechas(menor, mayor){
 }
 
 class Validador {
+    id="";
     params = [];
-    callback = (codigo) =>{return}
-    constructor(callback=null, ...params){
+    callback = (codigo, id) =>{return}
+    constructor(id, callback=null, ...params){
         if(callback) this.callback = callback;
+        this.id = id;
         this.params = params;
     }
     run(dato){
-        this.callback(validar(dato, ...this.params));
+        this.callback(validar(dato, ...this.params), this.id);
     }
 }
 class ValidadorRunner {
@@ -89,7 +91,7 @@ class ValidadorRunner {
     validadores = new Map();
 
     agregarValidador(campoId, tipo, noNulo, umbral, limite, callback=(codigo)=>{return}){
-        this.validadores.set(campoId, new Validador(callback, tipo, noNulo, umbral, limite));
+        this.validadores.set(campoId, new Validador(campoId, callback, tipo, noNulo, umbral, limite));
     }
     /**
      * 
@@ -104,4 +106,21 @@ class ValidadorRunner {
             v.run(formData.get(field).toString())
         });
     }
+}
+
+//no hace chequeos posteriores ni soporta mensajes personalizados
+function genericHandler(codigo, id){
+    let errores = "";
+    switch (codigo) {
+        case 0: break;
+        case validarCodigos.WRONG_TYPE:
+            errores += "\n"+id+" no es del tipo correcto"; break;
+        case validarCodigos.NULL_DATA:
+            errores += "\n" + id + " no puede ser nulo"; break;
+        case validarCodigos.OUT_OF_RANGE:
+            errores += "\nel valor de " + id + " esta fuera del rango permitido"; break;
+        case validarCodigos.WRONG_DATE:
+            errores += "\n la fecha de " + id + " es incorrecta"; break;
+    }
+    return errores;
 }

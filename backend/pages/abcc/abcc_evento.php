@@ -74,7 +74,7 @@
 
 <script type="text/javascript">
     const tablaSQL = "evento";
-
+    let validacionRules = {};
     const postSuccess = "Evento agregado";
     const postFail = "No se pudo agregar el evento";
     const putSuccess = "Evento actualizado";
@@ -99,8 +99,25 @@
     const datos = [
         <?php echoArray($campos) ?>
     ];
+    requestRules(tablaSQL,
+        (json) => {
+            validacionRules = json.rules;
+            setValidadores();
+        },
+        (reason) => {
+            console.error("Reglas fail: \n", reason)
+        }
+    )
+    let erroresAlert = "";
+
     form.onsubmit = (ev) => {
         ev.preventDefault();
+        erroresAlert="";
+        validadorAgregar.runValidadores(new FormData(form));
+        if (erroresAlert.length > 0) {
+            alert(erroresAlert);
+            return;
+        }
         agregarRegistro(form);
     }
 
@@ -108,9 +125,17 @@
 
 
     function setValidadores() {
-        validadorAgregar.agregarValidador("<?php echo Evento::NOMBRE?>_input", <?php getValidadorParams("evento", Evento::NOMBRE) ?> )
-    }
+        for (const campo in validacionRules) {
+            if (campo == "id") continue;
 
+            const key = campo + "_input";
+            const ruleValues = validacionRules[campo];
+
+            validadorAgregar.agregarValidador(key, ...ruleValues, (id, codigo) => {
+                erroresAlert += genericHandler(id, codigo);
+            })
+        }
+    }
     ///CONSULTAS
 
     /**@param {HTMLTableElement} tablaModal*/

@@ -57,8 +57,9 @@ abstract class Modelo {
     {
         return static::$rules[$campo];
     }
-    public static function getRuleMap(array $campos, array $ruleNames){
+    public static function getRuleMap(array|null $campos, array $ruleNames){
         $o = [];
+        if($campos == null) $campos = array_keys(static::$rules);
         foreach ($campos as $campo) {
             $o[$campo] = static::getRule($campo)->getFields($ruleNames);
         }
