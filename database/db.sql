@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS Circulo (
     monto_minimo DECIMAL(10,2) NOT NULL CHECK (monto_minimo >= 0)
 );
 
-
 CREATE TABLE IF NOT EXISTS Evento (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
