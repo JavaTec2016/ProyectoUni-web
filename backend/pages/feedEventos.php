@@ -28,6 +28,10 @@
                         <img src="assets/img/cogs.png" alt="">
                         <p>Eventos</p>
                     </a>
+                    <a class="row abcc_opcion" href="abcc/abcc_Corporacion.php">
+                        <img src="assets/img/cogs.png" alt="">
+                        <p>Corporaciones</p>
+                    </a>
                     <a class="row abcc_opcion" href="#">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Donadores</p>

@@ -15,7 +15,7 @@ function buildField(string $id, string $type, string $label, string|null $inputN
     <div class="mb-3" id="<?php echo $id ?>">
         <label for="<?php echo $inputName ?>" class="form-label"><?php echo $label ?> </label>
         <?php if ($type == 'select') { ?>
-            <select class="form-control" name="<?php echo $inputName ?>" id=" <?php echo $inputId ?>">
+            <select class="form-control" name="<?php echo $inputName ?>" id="<?php echo $inputId ?>">
                 <option value="">Seleccionar...</option>
                 <?php foreach ($values as $value => $text) { ?>
                     <option value=<?php echo $value ?>> <?php echo $text ?></option>

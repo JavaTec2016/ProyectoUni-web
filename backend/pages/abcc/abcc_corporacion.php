@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ABCC corporaciones</title>
     <?php include_once('../addBootstrap.php') ?>
     <?php include_once('../styles.php') ?>
 </head>
@@ -14,17 +14,17 @@
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../../model/model_evento.php');
+    require_once('../../model/model_corporacion.php');
     require_once('../toast.php');
     include_once('buildTablaModal.php');
     include_once('buildFormModal.php');
     require_once('form_creador.php');
 
 
-    echo buildTablaModal("tablaDetalles", "Detalles del evento");
-    echo buildFormModal("formCambiar", "Datos del evento", "PUT");
+    echo buildTablaModal("tablaDetalles", "Detalles de la Corporacion");
+    echo buildFormModal("formCambiar", "Datos de la Corporacion", "PUT");
 
-    $campos = [Evento::NOMBRE, Evento::TIPO, Evento::FECHA_INICIO];
+    $campos = [Corporacion::NOMBRE, Corporacion::DIRECCION, Corporacion::TELEFONO, Corporacion::EMAIL];
     ?>
     <div style="display:flex; height:100%">
 
@@ -36,7 +36,7 @@
             <nav class="bg-light abcc scroller" style="overflow-x:hidden; height: 90vh;">
                 <div clas="col">
                     <div class="row" id="form-header">
-                        <?php echo FormCreador::makeFormEvento("form"); ?>
+                        <?php echo FormCreador::makeFormCorporacion("form"); ?>
                     </div>
                 </div>
             </nav>
@@ -73,18 +73,17 @@
 <script src="./funcinoesValidacion/MetodosValidacion.js"></script>
 
 <script type="text/javascript">
-
     ////DEFINICION DE DATOS
 
     console.log("A");
-    const tablaSQL = "evento";
+    const tablaSQL = "corporacion";
     let validacionRules = {};
-    const postSuccess = "Evento agregado";
-    const postFail = "No se pudo agregar el evento";
-    const putSuccess = "Evento actualizado";
-    const putFail = "No se pudo modificar el evento";
-    const deleteSuccess = "Evento eliminado";
-    const deleteFail = "No se pudo eliminar el evento";
+    const postSuccess = "Corporacion agregada";
+    const postFail = "No se pudo agregar la corporacion";
+    const putSuccess = "Corporacion actualizada";
+    const putFail = "No se pudo modificar la corporacion";
+    const deleteSuccess = "Corporacion eliminada";
+    const deleteFail = "No se pudo eliminar la corporacion";
 
     const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
     const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
@@ -102,18 +101,25 @@
 
     ///PHP DEFINICIONES
 
-    const datos = [
-        <?php echoArray($campos) ?>
-    ];
+    const datos = [<?php echoArray($campos) ?>];
     const camposIds = {
-        id: "<?php echo Evento::ID ?>",
-        nombre: "<?php echo Evento::NOMBRE ?>",
-        fechaInicio: "<?php echo Evento::FECHA_INICIO ?>",
-        fechaFin: "<?php echo Evento::FECHA_FIN ?>",
-        tipo: "<?php echo Evento::TIPO ?>",
-        descripcion: "<?php echo Evento::DESCRIPCION ?>"
+        id: "<?php echo Corporacion::ID ?>",
+        nombre: "<?php echo Corporacion::NOMBRE ?>",
+        direccion: "<?php echo Corporacion::DIRECCION ?>",
+        telefono: "<?php echo Corporacion::TELEFONO ?>",
+        email: "<?php echo Corporacion::EMAIL ?>",
     }
-    const eventosTipos = <?php echoAssoc(FormCreador::$evento_tipos) ?>;
+
+    function setFormFields(form) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, "#modal", undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.direccion, "#modal", undefined, "text", undefined, "Direccion: "),
+            fb.buildField(camposIds.telefono, "#modal", undefined, "tel", undefined, "Telefono: "),
+            fb.buildField(camposIds.email, "#modal", undefined, "email", undefined, "Email: "),
+        )
+    }
+
     ///reglas auto
 
     requestRules(tablaSQL,
@@ -132,18 +138,12 @@
     }
 
     ///SETUP DE VALIDACION
-    function validarForm(validador, form) {
-        console.log(form);
-        if (Object.keys(validacionRules).length == 0 || !validador.runValidadores(new FormData(form))) return false;
-        return true;
-    }
-
     function setupRules() {
-        MetodosValidacion.makeMensajesEvento(validadorAgregar, "#", "_input", camposIds);
-        MetodosValidacion.makeMensajesEvento(validadorModificar, "#modal", "_input", camposIds);
+        MetodosValidacion.makeMensajesCorporacion(validadorAgregar, "#", "_input", camposIds);
+        MetodosValidacion.makeMensajesCorporacion(validadorModificar, "#modal", "_input", camposIds);
 
-        MetodosValidacion.makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules, "#");
-        MetodosValidacion.makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules, "#modal");
+        MetodosValidacion.makeValidadoresCorporacion(validadorAgregar, form, camposIds, validacionRules, "#");
+        MetodosValidacion.makeValidadoresCorporacion(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     //////=================== todo lo de la movedera ABCC con el backend (no moverle)
@@ -324,21 +324,8 @@
         )
     }
 
-    ///PHP MODAL
-
     function makeModal(registro, form, url) {
-        form.innerHTML = "";
-        //console.log("seteando modal: ", form);
-
-        form.append(
-            fb.buildField(camposIds.nombre, "#modal", undefined, "text", undefined, "Nombre: "),
-            fb.buildField(camposIds.fechaInicio, "#modal", undefined, "date", undefined, "Fecha de inicio: "),
-            fb.buildField(camposIds.fechaFin, "#modal", undefined, "date", undefined, "Fecha de fin: "),
-            fb.buildField(camposIds.tipo, "#modal", undefined, "select", undefined, "Tipo: ", undefined,
-                eventosTipos
-            ),
-            fb.buildField(camposIds.descripcion, "#modal", undefined, "text", undefined, "Descripcion: ")
-        )
+        setFormFields(form);
         console.log("modal: ", form);
         fb.fillForm(form, registro, "#modal");
 

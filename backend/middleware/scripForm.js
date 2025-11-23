@@ -106,6 +106,8 @@ class FormBuilder {
     }
     showInvalido(id, mensaje){
         let m = document.getElementById(id+"_invalid");
+        let inp = document.getElementById(id);
+        inp.setAttribute("class", "form-control is-invalid");
         m.innerHTML = mensaje;
         m.hidden = false;
         m.style.display = "flex";
@@ -113,6 +115,8 @@ class FormBuilder {
     hideInvalido(id){
         console.log(id);
         let m = document.getElementById(id + "_invalid");
+        let inp = document.getElementById(id);
+        inp.setAttribute("class", "form-control is-valid");
         m.hiden = true;
         m.style.display = "none";
     }
