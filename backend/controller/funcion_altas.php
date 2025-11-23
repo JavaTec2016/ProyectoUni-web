@@ -1,7 +1,7 @@
 <?php
 include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
-
+include_once(__DIR__ . '/funcion_validador.php');
 function procesarAlta(array $datos){
     $dao = new DAO();
     $modelo = array();
@@ -11,15 +11,20 @@ function procesarAlta(array $datos){
     $modelo = Models::cleanKeys($modelo, "_input");
     $modelo = Models::cleanKeys($modelo, "_input");
     $modelo = Models::cutKeys($modelo, "#");
-    //==============VALIDAR (hagalo lado de cliente)
-    $datos_correctos = true;
+    //==============VALIDAR (hagalo lado de cliente nel)
+    
+    $codigos = Validador::escanearModelo($modelo, $tabla);
+    $datos_correctos = Validador::checkScan($codigos);
+
     $res = false;
+    $json = array("status"=> $res, "validation"=>$codigos);
     if ($datos_correctos) {
        
         $res = $dao->agregar($tabla, $modelo);
     }
     if ($res != false) $res = true;
-    $json = array("status" => $res);
+
+    $json['status'] = $res;
     return json_encode($json);
 }
 

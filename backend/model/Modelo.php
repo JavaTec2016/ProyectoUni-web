@@ -13,6 +13,7 @@ abstract class Modelo {
     public final const CHECK_DATE = "DATE";
     /**
      * reglas del modelo, hay que declararla en cada submodelo o van a agarrar esta (las reglas de la superclase)
+     * @var array<string,DataRow>
      */
     public static $rules = array();
     public $valores = array();

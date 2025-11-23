@@ -15,15 +15,21 @@ class Validador {
     /**
      * valida los datos de un modelo y retorna un arreglo asociativo con formato campo => codigo
      */
-    public function escanearModelo(array $valores, string $tabla){
+    public static function escanearModelo(array $valores, string $tabla){
         $codigos = array();
         $rules = Models::get($tabla)::$rules;
         foreach ($valores as $campo => $valor) {
             $probar = $valor == null ? null : "".$valor;
             $codigos[$campo] = self::validar($probar, $rules[$campo]);
         }
+        return $codigos;
     }
-
+    public static function checkScan(array $codigos){
+        foreach ($codigos as $campo => $codigo) {
+            if($codigo != self::OK) return false;
+        }
+        return true;
+    }
     /**
      * Prueba un dato en base a las reglas dadas
      */
