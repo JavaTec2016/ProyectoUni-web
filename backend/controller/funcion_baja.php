@@ -14,7 +14,7 @@ function procesarBaja($datos){
     $estado = $dao->eliminarPrimaria($tabla, $num);
 
     if ($estado != false) $estado = true;
-
+    
     echo json_encode(array("status" => $estado));
 }
 

@@ -45,7 +45,7 @@ class Validador {
                 if(!filter_var($dato, FILTER_VALIDATE_EMAIL)) return self::REGEX_FAIL;
             }
             if(!self::vacio($regex)){
-                if(!preg_match("/^".$regex+"$/", $dato)) return self::REGEX_FAIL;
+                if(!preg_match("/^".$regex."$/", $dato)) return self::REGEX_FAIL;
             }
 
             $convertido = self::convertir($dato, $rules[DataRow::TIPO]);

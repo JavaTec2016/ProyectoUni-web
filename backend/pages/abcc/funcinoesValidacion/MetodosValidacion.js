@@ -290,8 +290,8 @@ class ValidadorRunner {
      */
     errorMensajes = new Map();
 
-    agregarValidador(campoId, tipo, noNulo, umbral, limite, callback = (codigo, id, dato, tipo, noNulo, umbral, limite) => { return true }) {
-        this.validadores.set(campoId, new Validador(campoId, callback, tipo, noNulo, umbral, limite));
+    agregarValidador(campoId, tipo, noNulo, umbral, limite, regex, callback = (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => { return true }) {
+        this.validadores.set(campoId, new Validador(campoId, callback, tipo, noNulo, umbral, limite, regex));
     }
     setMensajesEspeciales(campoId, mensajes = {}) {
         this.errorMensajes.set(campoId, new ErrorEspecial(mensajes));

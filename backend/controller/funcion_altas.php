@@ -23,7 +23,6 @@ function procesarAlta(array $datos){
         $res = $dao->agregar($tabla, $modelo);
     }
     if ($res != false) $res = true;
-
     $json['status'] = $res;
     return json_encode($json);
 }
