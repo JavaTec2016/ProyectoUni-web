@@ -8,7 +8,6 @@ function actualizar(url, form, success = (res) => { }, reject = (reason) => { })
 function agregar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(url, "POST");
     req.setBody(form);
-    req.log();
     req.callbackJSON(success, reject);
 }
 

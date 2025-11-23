@@ -163,19 +163,19 @@ class MetodosValidacion {
     static makeValidadoresCorporacion(validador, form, camposIds, validacionRules, postKey = "#") {
         let key, fieldId;
         key = camposIds['nombre'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['direccion'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['telefono'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['email'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
     }
@@ -267,7 +267,7 @@ class ErrorEspecial {
 class Validador {
     id = "";
     params = [];
-    callback = (codigo, id, dato, tipo, noNulo, umbral, limite) => { return true }
+    callback = (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => { return true }
     constructor(id, callback = null, ...params) {
         if (callback) this.callback = callback;
         this.id = id;
@@ -408,7 +408,12 @@ function probarFechas(dateMenor, dateMayor) {
 function vacio(dato = "") {
     return dato == null | dato.length == 0;
 }
+function probarRegex(dato="", regex=""){
+    if(regex=="EMAIL" || regex=="DATE") return true;
 
+    let pattern = new RegExp(regex, "g");
+    return pattern.test(dato);
+}
 /**
  * secuencia de validacion, retorna un codigo de error si sale mal o 0 si sale bien
  * @param {string} datoString 
@@ -417,18 +422,20 @@ function vacio(dato = "") {
  * @param {number} umbral 
  * @param {number} limite 
  */
-function validar(datoString, tipo, noNulo, umbral, limite) {
+function validar(datoString, tipo, noNulo, umbral, limite, regex="") {
     let dato = null;
     if (!noNulo && vacio(datoString)) return validarCodigos.OK;
     if (noNulo && vacio(datoString)) return validarCodigos.NULL_DATA;
-    console.log("SI: ", ...arguments);
+    //console.log("SI: ", ...arguments);
     try {
         dato = convertir(datoString, tipo);
         if (dato instanceof Date && isNaN(dato.getDate())) return validarCodigos.WRONG_DATE;
     } catch (e) { return validarCodigos.WRONG_TYPE; }
     if (umbral > -1 && !enRangoMulti(dato, undefined, umbral)) { return validarCodigos.DATA_TOO_SMALL; }
     if (limite > -1 && !enRangoMulti(dato, limite)) { return validarCodigos.DATA_TOO_BIG; }
-
+    if(regex != null && regex.length > 0){
+        if(!probarRegex(datoString, regex)) return validarCodigos.REGEX_FAIL;
+    }
     return validarCodigos.OK;
 }
 /**

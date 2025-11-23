@@ -42,9 +42,8 @@ class Validador {
         try{
             $regex = $rules[DataRow::REGEX];
             if($regex == Modelo::CHECK_EMAIL){
-                if(!filter_var($dato, FILTER_VALIDATE_EMAIL)) return self::REGEX_FAIL;
-            }
-            if(!self::vacio($regex)){
+                if(filter_var($dato, FILTER_VALIDATE_EMAIL) == false) return self::REGEX_FAIL;
+            }else if(!self::vacio($regex)){
                 if(!preg_match("/^".$regex."$/", $dato)) return self::REGEX_FAIL;
             }
 
@@ -86,9 +85,9 @@ class Validador {
      * prueba si un numero esta dentro de un rango
      */
     static function enRango(int|float $x, int|float|null $max = null, int|float|null $min = null){
-        if(!isset($max) || $max == null) $max = $x+1;
+        if(!isset($max) || $max == null) $max = $x + 1;
         if (!isset($min) || $min == null) $min = $x - 1;
-        return $min >= $x && $x <= $max;
+        return $min <= $x && $x <= $max;
     }
     static function enRangoMulti(int|float|string|DateTime $x, int|float|null $max = null, int|float|null $min = null){
         if($x instanceof DateTime){
