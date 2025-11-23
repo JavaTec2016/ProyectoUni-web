@@ -1,7 +1,16 @@
 <?php
 require_once('Models.php');
 abstract class Modelo {
-
+    public final const REGEX_AZ = "[A-Z-a-z]+";
+    public final const REGEX_ACENTO = "([0-9 a-zA-ZÀ-ÿ\\u00f1\\u00d1]+(\\s*[a-zA-ZÀ-ÿ\\u00f1\\u00d1]*)*[a-zA-ZÀ-ÿ\\u00f1\\u00d1])+";
+    public final const REGEX_AZ_SPACE = "[A-Z-a-z]+";
+    public final const REGEX_AZ_NUMBER = "[0-9A-Za-z]+";
+    public final const REGEX_AZ_NUMBER_SPACE = "[0-9 A-Za-z]+";
+    public final const REGEX_NO_SPECIAL = "[^@!$%^&*+\\-_=\\/\\(\\)\\[\\]]+";
+    public final const REGEX_INTEGER = "[0-9]+";
+    public final const REGEX_DECIMAL = "(\\d{1,10}.\\d{1,2})";
+    public final const CHECK_EMAIL = "EMAIL";
+    public final const CHECK_DATE = "DATE";
     /**
      * reglas del modelo, hay que declararla en cada submodelo o van a agarrar esta (las reglas de la superclase)
      */

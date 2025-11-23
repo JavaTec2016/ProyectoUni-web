@@ -179,6 +179,62 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
+
+    /**
+     * crea mensajes de error para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesGarantia(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.REGEX_FAIL, "Solo se permiten letras, numeros y espacios",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['direccion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 200 caracteres",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['telefono'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_SMALL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 10 caracteres",
+            validarCodigos.REGEX_FAIL, "Debe ser un formato de número telefónico válido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['email'] + postKey + inputPostfix, [
+            validarCodigos.WRONG_TYPE, "como",
+            validarCodigos.DATA_TOO_SMALL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 50 caracteres",
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.REGEX_FAIL, "Debe ser un formato de correo válido",
+        ]);
+    }
+    /**
+     * crea validadores para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresGarantia(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['direccion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['telefono'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['email'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
 }
 
 /**

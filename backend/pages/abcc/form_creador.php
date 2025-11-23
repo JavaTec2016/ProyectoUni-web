@@ -45,6 +45,25 @@ class FormCreador
             </div>
             <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
         </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormGarantia(string $id)
+    {
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Corporacion::NOMBRE, "text", "Nombre: ");
+                echo buildField(Corporacion::DIRECCION, "text", "Direccion: ");
+                echo buildField(Corporacion::TELEFONO, "tel", "Numero de telefono: ");
+                echo buildField(Corporacion::EMAIL, "email", "Correo electronico: "); //selecccc
+                ?>
+            </div>
+            <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+        </form>
 <?php
         return ob_get_clean();
     }

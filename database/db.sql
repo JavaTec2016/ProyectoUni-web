@@ -79,7 +79,6 @@ CREATE TABLE IF NOT EXISTS Garantia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_donador INT NOT NULL,
     id_evento INT NOT NULL,
-    anio_fiscal INT NOT NULL,
     garantia DECIMAL(10,2) NOT NULL CHECK (garantia >= 0),
     pago_total DECIMAL(10,2) DEFAULT 0 CHECK (pago_total >= 0),
     metodo_pago VARCHAR(50) NOT NULL,
@@ -90,8 +89,7 @@ CREATE TABLE IF NOT EXISTS Garantia (
     estado VARCHAR(20) DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente', 'Completada')),
     FOREIGN KEY (id_donador) REFERENCES Donador(id) ON UPDATE CASCADE,
     FOREIGN KEY (id_circulo) REFERENCES Circulo(id) ON UPDATE CASCADE,
-    FOREIGN KEY (id_evento) REFERENCES Evento(id) ON UPDATE CASCADE,
-    FOREIGN KEY (anio_fiscal) REFERENCES AnioFiscal(id) ON UPDATE CASCADE,
+    FOREIGN KEY (id_evento) REFERENCES Evento(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Pago (
@@ -115,3 +113,4 @@ CREATE TABLE IF NOT EXISTS Llamada (
     FOREIGN KEY (id_garantia) REFERENCES Garantia(id)
 );
 
+CREATE VIEW IF NOT EXISTS Pago_Donador
