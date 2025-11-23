@@ -96,15 +96,15 @@ class MetodosValidacion {
     static makeValidadoresEvento(validador, form, camposIds, validacionRules, postKey = "#") {
         let key, fieldId;
         key = camposIds['nombre'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['fechaInicio'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['fechaFin'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             if (codigo == 0) {
                 //si la fecha fin existe, revisa que sea mayor a la de inicio esta horrible
                 if (convertirSafe(dato, tipo) instanceof Date && fechaValida(dato))
@@ -113,11 +113,11 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['tipo'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['descripcion'], fieldId = key + postKey + "_input";
-        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
     }

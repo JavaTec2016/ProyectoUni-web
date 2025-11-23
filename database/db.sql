@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Evento (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     fecha_inicio DATE NOT NULL,
-    fecha_fin DATE,
+    fecha_fin DATE CHECK(fecha_fin == NULL || fecha_fin > fecha_inicio),
     tipo VARCHAR(50),
     descripcion TEXT
 );

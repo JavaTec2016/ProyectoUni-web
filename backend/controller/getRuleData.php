@@ -5,7 +5,7 @@ function getRuleData(array $input){
 
     $json = array(
         "rules"=> Models::get($tabla)::getRuleMap(null, 
-            [DataRow::TIPO, DataRow::NO_NULO, DataRow::UMBRAL, DataRow::LIMITE] )
+            [DataRow::TIPO, DataRow::NO_NULO, DataRow::UMBRAL, DataRow::LIMITE, DataRow::REGEX] )
         );
 
     return json_encode($json);
