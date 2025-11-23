@@ -32,6 +32,11 @@
         public static function cleanStr(string $value, string $toClean){
             return str_replace($toClean, "", $value);
         }
+        public static function cutStr(string $value, string $marker){
+            $pos = strrpos($value, $marker);
+            if($pos == false) return $value;
+            return substr($value, 0, strrpos($value, $marker));
+        }
         /**
          * retorna un asociativo con llaves limpias y sus valores
          */
@@ -39,6 +44,13 @@
             $out = array();
             foreach ($assoc as $key => $value) {
                 $out[static::cleanStr($key, $valueToClean)] = $value;
+            }
+            return $out;
+        }
+        public static function cutKeys(array $assoc, string $marker){
+            $out = array();
+            foreach ($assoc as $key => $value) {
+                $out[static::cutStr($key, $marker)] = $value;
             }
             return $out;
         }

@@ -138,11 +138,11 @@
     }
 
     function setupRules() {
-        makeMensajesEvento(validadorAgregar, camposIds);
-        makeMensajesEvento(validadorModificar, camposIds);
+        makeMensajesEvento(validadorAgregar, "#", "_input", camposIds);
+        makeMensajesEvento(validadorModificar, "#modal", "_input", camposIds);
 
-        makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules);
-        makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules);
+        makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules, "#");
+        makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     ///CONSULTAS
@@ -326,16 +326,16 @@
         //console.log("seteando modal: ", form);
 
         form.append(
-            fb.buildField("<?php echo Evento::NOMBRE ?>", undefined, "text", undefined, "Nombre: "),
-            fb.buildField("<?php echo Evento::FECHA_INICIO ?>", undefined, "date", undefined, "Fecha de inicio: "),
-            fb.buildField("<?php echo Evento::FECHA_FIN ?>", undefined, "date", undefined, "Fecha de fin: "),
-            fb.buildField("<?php echo Evento::TIPO ?>", undefined, "select", undefined, "Tipo: ", undefined,
+            fb.buildField("<?php echo Evento::NOMBRE ?>", "#modal", undefined, "text", undefined, "Nombre: "),
+            fb.buildField("<?php echo Evento::FECHA_INICIO ?>", "#modal", undefined, "date", undefined, "Fecha de inicio: "),
+            fb.buildField("<?php echo Evento::FECHA_FIN ?>", "#modal", undefined, "date", undefined, "Fecha de fin: "),
+            fb.buildField("<?php echo Evento::TIPO ?>", "#modal", undefined, "select", undefined, "Tipo: ", undefined,
                 <?php echoAssoc(FormEvento::$selectTipo) ?>
             ),
-            fb.buildField("<?php echo Evento::DESCRIPCION ?>", undefined, "text", undefined, "Descripcion: ")
+            fb.buildField("<?php echo Evento::DESCRIPCION ?>", "#modal", undefined, "text", undefined, "Descripcion: ")
         )
         console.log("modal: ", form);
-        fb.fillForm(form, registro);
+        fb.fillForm(form, registro, "#modal");
 
         form.onsubmit = (ev) => {
             ev.preventDefault();

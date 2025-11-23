@@ -65,6 +65,9 @@ abstract class Modelo {
         }
         return $o;
     }
+    public static function getRuleKeys(){
+        return array_keys(static::$rules);
+    }
     public static function setRules(){
         static::$rules = array();
     }

@@ -68,7 +68,7 @@ class FormBuilder {
     }
     //============ si
 
-    buildFieldGenerico(fieldId = "", inputId = fieldId + "_input", inputType = "", inputName = inputId, labelTxt = "", values={}) {
+    buildFieldGenerico(fieldId = "", fieldAfter ="#", inputId = fieldId + fieldAfter + "_input", inputType = "", inputName = inputId, labelTxt = "", values={}) {
         let div = this.makeField(fieldId);
         let label = this.makeLabel(inputId, labelTxt);
         let input = this.makeInput(inputId, inputType, inputName);
@@ -80,8 +80,8 @@ class FormBuilder {
         return div;
     }
 
-    buildField(fieldId = "", inputId = fieldId + "_input", inputType = "", inputName = inputId, labelTxt = "", attribs = {}, values={}) {
-        let field = this.buildFieldGenerico(fieldId, inputId, inputType, inputName, labelTxt, values);
+    buildField(fieldId = "", fieldAfter="#", inputId, inputType, inputName, labelTxt, attribs = {}, values={}) {
+        let field = this.buildFieldGenerico(fieldId, fieldAfter, inputId, inputType, inputName, labelTxt, values);
         let input = field.children[1];
         for (const attribName in attribs) {
             input.setAttribute(attribName, attribs[attribName]);
@@ -93,10 +93,10 @@ class FormBuilder {
      * @param {HTMLFormElement} form 
      * @param {FormData} data 
      */
-    fillForm(form, data) {
+    fillForm(form, data, postKey="#") {
     const entries = (new URLSearchParams(data)).entries();
     for (const [key, val] of entries) {
-        const input = form.elements[key+"_input"];
+        const input = form.elements[key+postKey+"_input"];
         if(!input || !input.type) continue;
         switch (input.type) {
             case 'checkbox': input.checked = !!val; break;
@@ -123,6 +123,21 @@ class FormBuilder {
      */
     getValue(form, fieldId){
         return new FormData(form).get(fieldId);
+    }
+    /**
+     * mueve los datos de un formData a otro
+     * @param {FormData} data 
+     * @param {string[]} newKeys 
+     */
+    migrateFormData(data, newKeys=[]){
+        let formData = new FormData();
+        let i = 0;
+        data.forEach((val, oldKey)=>{
+            formData.set(newKeys[i], val.toString());
+            i++
+        })
+
+        return formData;
     }
 }
 const fb = new FormBuilder();

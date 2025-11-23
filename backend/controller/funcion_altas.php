@@ -8,7 +8,9 @@ function procesarAlta(array $datos){
     $tabla = $datos["tabla"];
     unset($datos['tabla']);
     $modelo = Models::cleanKeys($datos, "caja_");
-    $modelo = Models::cleanKeys($datos, "_input");
+    $modelo = Models::cleanKeys($modelo, "_input");
+    $modelo = Models::cleanKeys($modelo, "_input");
+    $modelo = Models::cutKeys($modelo, "#");
     //==============VALIDAR (hagalo lado de cliente)
     $datos_correctos = true;
     $res = false;

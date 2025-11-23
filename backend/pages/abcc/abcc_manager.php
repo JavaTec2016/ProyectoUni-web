@@ -5,15 +5,17 @@ use function PHPSTORM_META\type;
 include_once('../../model/allModels.php');
 function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null, string $invalidMsg="")
 {
-    if (!isset($inputName) || $inputName == null) $inputName = $id . "_input";
+    $inputId = $id . "#_input";
+    if (!isset($inputName) || $inputName == null) $inputName = $inputId;
     if (!isset($values) || $values == null) $values = array();
+    
     ob_start();
 ?>
 
     <div class="mb-3" id="<?php echo $id ?>">
         <label for="<?php echo $inputName ?>" class="form-label"><?php echo $label ?> </label>
         <?php if ($type == 'select') { ?>
-            <select class="form-control" name="<?php echo $inputName ?>" id=" <?php echo $id . "_input" ?>">
+            <select class="form-control" name="<?php echo $inputName ?>" id=" <?php echo $inputId ?>">
                 <option value="">Seleccionar...</option>
                 <?php foreach ($values as $value => $text) { ?>
                     <option value=<?php echo $value ?>> <?php echo $text ?></option>
@@ -21,11 +23,11 @@ function buildField(string $id, string $type, string $label, string|null $inputN
             </select>
             
         <?php } else if ($type == 'textarea') { ?>
-            <textarea class="form-control" name="<?php echo $inputName ?>" id="<?php echo $id . "_input" ?>"></textarea>
+            <textarea class="form-control" name="<?php echo $inputName ?>" id="<?php echo $inputId ?>"></textarea>
         <?php } else { ?>
-            <input type="<?php echo $type ?>" class="form-control" id="<?php echo $id . "_input" ?>" name="<?php echo $inputName ?>">
+            <input type="<?php echo $type ?>" class="form-control" id="<?php echo $inputId ?>" name="<?php echo $inputName ?>">
         <?php } ?>
-            <div class="invalid-feedback" id="<?php echo $inputName ?>_invalid" hidden>
+            <div class="invalid-feedback" id="<?php echo $inputId ?>_invalid" hidden>
                 <?php echo $invalidMsg ?>
             </div>
     </div>

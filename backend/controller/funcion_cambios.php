@@ -16,7 +16,7 @@ function procesarCambio(array $datos){
     //filtro pal dao
     $filtro = array("" . $primaria => $num);
     $valores = Models::cleanKeys($datos, "_input");
-
+    $valores = Models::cutKeys($valores, "#");
     //modelo actualizao
     $modelo = Models::instanciar($tabla, $valores);
     $res = $dao->modificar($tabla, $filtro, $modelo);

@@ -12,6 +12,7 @@ function procesarConsulta(array $datos)
     $filtrados = array();
     $filtrados = Models::cleanKeys($datos, "caja_");
     $filtrados = Models::cleanKeys($filtrados, "_input");
+    $filtrados = Models::cutKeys($filtrados, "#");
     //tovia no hay comodines
     $res = $dao->consultar($tabla, array(0 => "*"), $filtrados, $dao->fakeComodines($filtrados, true));
 
