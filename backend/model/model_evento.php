@@ -15,12 +15,12 @@ class Evento extends Modelo {
     }
 
     public static function setRules(){
-        static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, ""));
-        static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, ""));
-        static::addRule(self::FECHA_INICIO, new DataRow("date", "DATE", true, false, false, -1, -1, false, ""));
-        static::addRule(self::FECHA_FIN, new DataRow("date", "DATE", false, false, false, -1, -1, false, ""));
-        static::addRule(self::TIPO, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, ""));
-        static::addRule(self::DESCRIPCION, new DataRow("string", "TEXT", true, false, false, -1, -1, false, ""));
+        static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, Modelo::REGEX_INTEGER));
+        static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, Modelo::REGEX_ACENTO));
+        static::addRule(self::FECHA_INICIO, new DataRow("date", "DATE", true, false, false, -1, -1, false, Modelo::CHECK_DATE));
+        static::addRule(self::FECHA_FIN, new DataRow("date", "DATE", false, false, false, -1, -1, false, Modelo::CHECK_DATE));
+        static::addRule(self::TIPO, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, Modelo::REGEX_ACENTO));
+        static::addRule(self::DESCRIPCION, new DataRow("string", "TEXT", true, false, false, -1, -1, false, Modelo::REGEX_ACENTO));
     }
 }
 Evento::setRules();
