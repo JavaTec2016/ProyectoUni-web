@@ -56,10 +56,15 @@ class FormCreador
         <form id="<?php echo $id ?>">
             <div id="<?php echo $id ?>-body">
                 <?php
-                echo buildField(Corporacion::NOMBRE, "text", "Nombre: ");
-                echo buildField(Corporacion::DIRECCION, "text", "Direccion: ");
-                echo buildField(Corporacion::TELEFONO, "tel", "Numero de telefono: ");
-                echo buildField(Corporacion::EMAIL, "email", "Correo electronico: "); //selecccc
+                echo buildField(Garantia::ID_EVENTO, "button", "Evento al que pertenece: "); //configuracion posterior
+                echo buildField(Garantia::ID_DONADOR, "button", "Donador: ");
+                echo buildField(Garantia::GARANTIA, "decimal", "Donacion garantizada: ");
+                //echo buildField(Garantia::PAGO_TOTAL, "decimal", "Ttotal pagado: "); auto
+                echo buildField(Garantia::METODO_PAGO, "text", "Metodo de pago: ");
+                //echo buildField(Garantia::NUMERO_PAGOS, "number", "Numero de pagos: "); auto
+                echo buildField(Garantia::FECHA_INICIO, "date", "Fecha de registro: ");
+                echo buildField(Garantia::FECHA_GARANTIA, "date", "Fecha de vencimiento: ");
+                //echo buildField(Garantia::ID_CIRCULO, "select", "Circulo: "); auto
                 ?>
             </div>
             <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>

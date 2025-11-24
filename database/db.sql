@@ -84,9 +84,10 @@ CREATE TABLE IF NOT EXISTS Garantia (
     numero_pagos INT DEFAULT 1 CHECK (numero_pagos > 0),
     numero_tarjeta VARCHAR(20),
     fecha_inicio DATE NOT NULL,
-    fecha_garantia DATE NOT NULL CHECK (fecha_garantia > fecha_inicio),
+    fecha_garantia DATE NOT NULL,
     id_circulo INT,
     estado VARCHAR(20) DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente', 'Completada')),
+    CHECK(fecha_garantia > fecha_inicio),
     FOREIGN KEY (id_donador) REFERENCES Donador(id) ON UPDATE CASCADE,
     FOREIGN KEY (id_circulo) REFERENCES Circulo(id) ON UPDATE CASCADE,
     FOREIGN KEY (id_evento) REFERENCES Evento(id) ON UPDATE CASCADE
@@ -113,4 +114,45 @@ CREATE TABLE IF NOT EXISTS Llamada (
     FOREIGN KEY (id_garantia) REFERENCES Garantia(id)
 );
 
-CREATE VIEW IF NOT EXISTS Pago_Donador
+CREATE OR REPLACE VIEW Garantia_donador_evento(
+    id_garantia,
+    id_donador,
+    id_evento,
+    garantia,
+    pago_total,
+    metodo_pago,
+    numero_pagos,
+    numero_tarjeta,
+    fecha_inicio,
+    fecha_garantia,
+    id_circulo,
+    estado,
+
+    nombre_donador,
+    telefono,
+    email,
+
+    nombre_evento
+) AS
+SELECT 
+    g.id,
+    g.id_donador,
+    g.id_evento,
+    g.garantia,
+    g.pago_total,
+    g.metodo_pago,
+    g.numero_pagos,
+    g.numero_tarjeta,
+    g.fecha_inicio,
+    g.fecha_garantia,
+    g.id_circulo,
+    g.estado,
+    d.nombre,
+    d.telefono,
+    d.email,
+    e.nombre
+FROM Garantia g
+INNER JOIN Donador d
+ON d.id=g.id_donador
+INNER JOIN Evento e
+ON e.id=g.id_evento;
