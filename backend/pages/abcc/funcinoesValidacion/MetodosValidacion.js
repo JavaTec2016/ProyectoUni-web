@@ -186,27 +186,41 @@ class MetodosValidacion {
      * @param {any{}} camposIds 
      */
     static makeMensajesGarantia(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
-        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
-            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
-            validarCodigos.NULL_DATA, "No puede ser nulo",
-            validarCodigos.REGEX_FAIL, "Solo se permiten letras, numeros y espacios",
+        validador.setMensajesEspecialesSerial(camposIds['idDonador'] + postKey + inputPostfix, [
+            validarCodigos.DATA_TOO_BIG, "",
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.REGEX_FAIL, "",
         ]);
-        validador.setMensajesEspecialesSerial(camposIds['direccion'] + postKey + inputPostfix, [
-            validarCodigos.NULL_DATA, "No puede ser nulo",
-            validarCodigos.DATA_TOO_BIG, "No debe exceder 200 caracteres",
+        validador.setMensajesEspecialesSerial(camposIds['idEvento'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.DATA_TOO_BIG, "",
         ]);
-        validador.setMensajesEspecialesSerial(camposIds['telefono'] + postKey + inputPostfix, [
+        validador.setMensajesEspecialesSerial(camposIds['garantia'] + postKey + inputPostfix, [
             validarCodigos.NULL_DATA, "No puede ser nulo",
             validarCodigos.DATA_TOO_SMALL, "",
-            validarCodigos.DATA_TOO_BIG, "No debe exceder 10 caracteres",
-            validarCodigos.REGEX_FAIL, "Debe ser un formato de número telefónico válido",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 12 numeros (incluyendo decimales)",
+            validarCodigos.REGEX_FAIL, "Debe ser un numero decimal positivo",
         ]);
-        validador.setMensajesEspecialesSerial(camposIds['email'] + postKey + inputPostfix, [
-            validarCodigos.WRONG_TYPE, "como",
+        //pago total skipeado
+        validador.setMensajesEspecialesSerial(camposIds['metodoPago'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
             validarCodigos.DATA_TOO_SMALL, "",
             validarCodigos.DATA_TOO_BIG, "No debe exceder 50 caracteres",
+            validarCodigos.REGEX_FAIL, "Sólo se admiten letras y espacios",
+        ]);
+        //numero pagos skipeado
+        validador.setMensajesEspecialesSerial(camposIds['fechaInicio'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.REGEX_FAIL, "Formato de fecha invalido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['fechaGarantia'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.REGEX_FAIL, "Formato de fecha invalido",
+            validarCodigos.DATE_NEGATIVE, "No debe ser menor a la fecha de inicio"
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idCirculo'] + postKey + inputPostfix, [
             validarCodigos.NULL_DATA, "",
-            validarCodigos.REGEX_FAIL, "Debe ser un formato de correo válido",
+            validarCodigos.DATA_TOO_BIG, "",
         ]);
     }
     /**
@@ -218,19 +232,36 @@ class MetodosValidacion {
      */
     static makeValidadoresGarantia(validador, form, camposIds, validacionRules, postKey = "#") {
         let key, fieldId;
-        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        key = camposIds['idDonador'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
-        key = camposIds['direccion'], fieldId = key + postKey + "_input";
+        key = camposIds['idEvento'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
-        key = camposIds['telefono'], fieldId = key + postKey + "_input";
+        key = camposIds['garantia'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
-        key = camposIds['email'], fieldId = key + postKey + "_input";
+        key = camposIds['metodoPago'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['fechaInicio'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['fechaGarantia'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            if (codigo == 0) {
+                //otra vez
+                if (convertirSafe(dato, tipo) instanceof Date && fechaValida(dato))
+                    codigo = validarFechas(fb.getValue(form, camposIds['fechaInicio'] + postKey + "_input"), dato);
+            }
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['idCirculo'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
