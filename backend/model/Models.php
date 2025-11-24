@@ -1,6 +1,9 @@
 <?php
     require_once('DataRow.php');
     abstract class Models {
+        /**
+         * @var array<string,Modelo>
+         */
         static $MODELOS = array();
 
         /**
@@ -54,5 +57,6 @@
             }
             return $out;
         }
+    
     }
 ?>

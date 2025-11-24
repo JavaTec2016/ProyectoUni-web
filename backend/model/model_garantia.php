@@ -11,9 +11,11 @@ class Garantia extends Modelo
     public final const PAGO_TOTAL = "pago_total";
     public final const METODO_PAGO = "metodo_pago";
     public final const NUMERO_PAGOS = "numero_pagos";
+    public final const NUMERO_TARJETA = "numero_tarjeta";
     public final const FECHA_INICIO = "fecha_inicio";
     public final const FECHA_GARANTIA = "fecha_garantia";
     public final const ID_CIRCULO = "id_circulo";
+    public final const ESTADO = "estado";
 
     public function __construct(
         int|null $id = null,
@@ -39,9 +41,11 @@ class Garantia extends Modelo
         static::addRule(self::PAGO_TOTAL, new DataRow("double", "DECIMAL", true, false, false, -1, -1, false, Modelo::REGEX_DECIMAL));
         static::addRule(self::METODO_PAGO, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, Modelo::REGEX_ACENTO));
         static::addRule(self::NUMERO_PAGOS, new DataRow("int", "INT", true, false, false, -1, -1, false, Modelo::REGEX_INTEGER));
+        static::addRule(self::NUMERO_TARJETA, new DataRow("int", "INT", true, false, false, 0, 20, false, Modelo::REGEX_INTEGER));
         static::addRule(self::FECHA_INICIO, new DataRow("date", "DATE", true, false, false, -1, -1, false, Modelo::CHECK_DATE));
         static::addRule(self::FECHA_GARANTIA, new DataRow("date", "DATE", true, false, false, -1, -1, false, Modelo::CHECK_DATE));
         static::addRule(self::ID_CIRCULO, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER));
+        static::addRule(self::ESTADO, new DataRow("int", "INT", true, false, false, 0, 20, false, Modelo::REGEX_AZ));
     }
 }
 Garantia::setRules();

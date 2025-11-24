@@ -16,6 +16,10 @@ abstract class Modelo {
      * @var array<string,DataRow>
      */
     public static $rules = array();
+    /**
+     * @var array<string,array<string,string>>
+     */
+    public static $aliases = array();
     public $valores = array();
     /**
      * Inicializa las llaves de los datos del modelo y establece sus valores
@@ -115,6 +119,32 @@ abstract class Modelo {
             if($rule == $ruleValor) $out[$key] = $value;
         }
         return $out;
+    }
+    /**
+     * retorna el alias asignado a un campo en este modelo, o nulo si no es encontrada
+     */
+    public static function getAlias(string $seccion, string $key){
+        if (!in_array($seccion, array_keys(static::$aliases))) return null;
+        if (!in_array($key, array_keys(static::$aliases[$seccion]))) return null;
+        return static::$aliases[$seccion][$key];
+    }
+    /**
+     * Combina campos de diferentes modelos con sus respectivas reglas en este modelo
+     * @param array<string,array<string,string|null>> $seleccion arreglo asociativo con el formato (nombre original del campo) => (alias),
+     * si el alias de un campo es nulo, se asigna el mismo nombre
+     * @param string[] $tablas nombres de las tablas a combinar
+     */
+    public static function combineAs(array $seleccion)
+    {
+        $aliases = $seleccion;
+        foreach ($seleccion as $tabla => $campos) {
+            $ruleset = Models::get($tabla);
+
+            foreach ($campos as $campo => $alias) {
+                if($alias == null) $alias = $campo;
+                static::addRule($alias, $ruleset[$campo]);
+            }
+        }
     }
 }
 
