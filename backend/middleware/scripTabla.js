@@ -1,18 +1,33 @@
 /**
- * 
+ * establece el header de una tabla
  * @param {HTMLTableElement} tabla 
  * @param {any[]} datos 
  */
 function crearHeader(tabla, datos=[]){
-    let head = document.createElement("thead");
+    if (document.getElementById(tabla.id + "-head") != null)
+        document.getElementById(tabla.id + "-head").innerHTML = "";
+    else {
+        let head = document.createElement("thead");
+        head.setAttribute("id", tabla.id + "-head");
+        fillHeader(head, datos);
+        tabla.append(head);
+    }
+}
+/**
+ * rellena el header de una tabla
+ * @param {HTMLTableSectionElement} head 
+ * @param {string[]} datos 
+ */
+function fillHeader(head, datos=[]){
     let tr = document.createElement("tr");
+
     head.append(tr);
-    datos.forEach(dato =>{
+    datos.forEach(dato => {
         let col = document.createElement("th");
         col.innerHTML = dato;
         tr.append(col);
     })
-    tabla.append(head);
+    return head;
 }
 /**
  * crea el body de una tabla o lo resetea si ya existe
@@ -34,17 +49,19 @@ function crearBody(tabla){
  * @param {HTMLTableElement} tabla 
  * @param {any{}} datos 
  */
-function agregarRow(tabla, datos={}, id=null){
+function agregarRow(tabla, datos={}, id=null, headers={}){
     let body = document.getElementById(tabla.id+"-body");
     
     for(const key in datos){
         let row = document.createElement("tr");
-        if (id) row.setAttribute(body.id + "-" + id);
+        if (id) row.setAttribute("id", body.id + "-" + id);
 
         let dato = datos[key];
         let col = document.createElement("th");
         let val = document.createElement("td");
-        col.innerHTML = key;
+        let header = key;
+        if(key in headers) header = headers[key];
+        col.innerHTML = header;
         val.innerHTML = dato;
 
         row.append(col);
@@ -58,7 +75,7 @@ function agregarRowCompleta(tabla, datos={}, id=null, campos=[]){
     let body = document.getElementById(tabla.id + "-body");
     let row = document.createElement("tr");
     if (id) row.setAttribute("id",body.id + "_" + id);
-
+    row.setAttribute("row_id", id);
     for(const key of campos){
         if(!(key in datos)) continue;
 
@@ -70,6 +87,18 @@ function agregarRowCompleta(tabla, datos={}, id=null, campos=[]){
     }
     body.append(row);
     return row;
+}
+/**
+ * asigna una accion de clic a todos los registros de una tabla
+ * @param {HTMLTableElement} tabla 
+ * @param {(rowElement: HTMLTableRowElement, ev: PointerEvent)=>{}} callback 
+ */
+function rowsOnClick(tabla, callback=(rowElement, ev)=>{return}){
+    let body = document.getElementById(tabla.id + "-body");
+    let rows =  [...body.childNodes];
+    rows.forEach(row=>{
+        if(row instanceof HTMLTableRowElement) row.onclick = (ev) =>{callback(row, ev)};
+    });
 }
 function agregarRowsCompletas(tabla, datos=[{}], idKey=null, campos=[]){
     let id = null;

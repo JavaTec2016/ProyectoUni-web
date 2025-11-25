@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ABCC corporaciones</title>
     <?php include_once('../addBootstrap.php') ?>
     <?php include_once('../styles.php') ?>
 </head>
@@ -14,17 +14,17 @@
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../../model/model_evento.php');
+    require_once('../../model/model_clase.php');
     require_once('../toast.php');
     include_once('buildTablaModal.php');
     include_once('buildFormModal.php');
     require_once('form_creador.php');
 
 
-    echo buildTablaModal("tablaDetalles", "Detalles del evento");
-    echo buildFormModal("formCambiar", "Datos del evento", "PUT");
+    echo buildTablaModal("tablaDetalles", "Detalles de la clase");
+    echo buildFormModal("formCambiar", "Datos de la clase", "PUT");
 
-    $campos = [Evento::NOMBRE, Evento::TIPO, Evento::FECHA_INICIO];
+    $campos = [Clase::ID, Clase::ANIO_GRADUCION];
     ?>
     <div style="display:flex; height:100%">
 
@@ -36,7 +36,7 @@
             <nav class="bg-light abcc scroller" style="overflow-x:hidden; height: 90vh;">
                 <div clas="col">
                     <div class="row" id="form-header">
-                        <?php echo FormCreador::makeFormEvento("form"); ?>
+                        <?php echo FormCreador::makeFormClase("form"); ?>
                     </div>
                 </div>
             </nav>
@@ -76,14 +76,14 @@
     ////DEFINICION DE DATOS
 
     console.log("A");
-    const tablaSQL = "evento";
+    const tablaSQL = "clase";
     let validacionRules = {};
-    const postSuccess = "Evento agregado";
-    const postFail = "No se pudo agregar el evento";
-    const putSuccess = "Evento actualizado";
-    const putFail = "No se pudo modificar el evento";
-    const deleteSuccess = "Evento eliminado";
-    const deleteFail = "No se pudo eliminar el evento";
+    const postSuccess = "Clase agregada";
+    const postFail = "No se pudo agregar la clase";
+    const putSuccess = "Clase actualizada";
+    const putFail = "No se pudo modificar la clase";
+    const deleteSuccess = "Clase eliminada";
+    const deleteFail = "No se pudo eliminar la clase";
 
     const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
     const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
@@ -101,18 +101,16 @@
 
     ///PHP DEFINICIONES
 
-    const datos = [
-        <?php echoArray($campos) ?>
-    ];
+    const datos = [<?php echoArray($campos) ?>];
     const camposIds = {
-        id: "<?php echo Evento::ID ?>",
-        nombre: "<?php echo Evento::NOMBRE ?>",
-        fechaInicio: "<?php echo Evento::FECHA_INICIO ?>",
-        fechaFin: "<?php echo Evento::FECHA_FIN ?>",
-        tipo: "<?php echo Evento::TIPO ?>",
-        descripcion: "<?php echo Evento::DESCRIPCION ?>"
+        id: "<?php echo Clase::ID ?>",
+        anioGraduacion: "<?php echo Clase::ANIO_GRADUCION ?>",
     }
-    const eventosTipos = <?php echoAssoc(FormCreador::$evento_tipos) ?>;
+
+    function setFormFields(form, idAfter = "#modal") {
+        FormBuilder.setFormFieldsCorporacion(form, idAfter, camposIds);
+    }
+
     ///reglas auto
 
     requestRules(tablaSQL,
@@ -131,18 +129,12 @@
     }
 
     ///SETUP DE VALIDACION
-    function validarForm(validador, form) {
-        console.log(form);
-        if (Object.keys(validacionRules).length == 0 || !validador.runValidadores(new FormData(form))) return false;
-        return true;
-    }
-
     function setupRules() {
-        MetodosValidacion.makeMensajesEvento(validadorAgregar, "#", "_input", camposIds);
-        MetodosValidacion.makeMensajesEvento(validadorModificar, "#modal", "_input", camposIds);
+        MetodosValidacion.makeMensajesClase(validadorAgregar, "#", "_input", camposIds);
+        MetodosValidacion.makeMensajesClase(validadorModificar, "#modal", "_input", camposIds);
 
-        MetodosValidacion.makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules, "#");
-        MetodosValidacion.makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules, "#modal");
+        MetodosValidacion.makeValidadoresClase(validadorAgregar, form, camposIds, validacionRules, "#");
+        MetodosValidacion.makeValidadoresClase(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     //////=================== todo lo de la movedera ABCC con el backend (no moverle)
@@ -156,20 +148,11 @@
         setBodyHTML(tablaModal, "Buscando...");
         req.callbackJSON(
             (result) => {
-                const modelo = result.resultSet[0];
                 setBodyHTML(tablaModal, "");
-                const headers = {};
-                headers[camposIds.id] = "ID: ";
-                headers[camposIds.nombre] = "Nombre: ";
-                headers[camposIds.fechaInicio] = "fecha de inicio: ";
-                headers[camposIds.fechaFin] = "fecha de fin: ";
-                headers[camposIds.tipo] = "Tipo: ";
-                headers[camposIds.descripcion] = "Descripcion: ";
-                agregarRow(tablaModal, modelo, modelo.id, headers);
-                console.log("Row")
+                agregarRows(tablaModal, result.resultSet, null);
             },
             (reason) => {
-                console.error(reason);
+
             }
         )
     }
@@ -332,12 +315,9 @@
         )
     }
 
-    ///PHP MODAL
-
     function makeModal(registro, form, url) {
-
-        FormBuilder.setFormFieldsEvento(form, "#modal", camposIds, eventosTipos);
-        
+        setFormFields(form);
+        console.log("modal: ", form);
         fb.fillForm(form, registro, "#modal");
 
         form.onsubmit = (ev) => {

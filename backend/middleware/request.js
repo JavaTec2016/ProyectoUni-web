@@ -61,13 +61,13 @@ class FetchRequest {
         return this.response.then(res => res.text());
     }
     callbackJSON(success=(json)=>{}, reject=(reason)=>{}){
-        this.send()
+        return this.send()
         .getJSON()
         .then(json => success(json))
         .catch(reason => reject(reason));
     }
     log(){
-        this.send()
+        return this.send()
         .getText()
         .then(txt => console.log(txt))
         .catch(rs => console.error(rs));

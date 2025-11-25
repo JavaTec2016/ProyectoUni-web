@@ -14,6 +14,33 @@
     <?php require_once('plantillaEvento.php') ?>
     <?php require_once('navbar_feedEventos.php') ?>
     <?php require_once('../controller/DAO.php') ?>
+
+    <!-- DETALLES DE EVENTO SI -->
+
+    <div class="modal" tabindex="-1" id="modalEvento" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modalEvento_content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Detalles del evento </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!--modal interior -->
+                <div class="modal-body" id="navEvento">
+                    <table class="table table-hover" id="detallesEvento_table">
+
+                    </table>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div style="display:flex;height: 100%;">
 
         <div class="side-nav" style="z-index:1019">
@@ -32,23 +59,19 @@
                         <img src="assets/img/cogs.png" alt="">
                         <p>Corporaciones</p>
                     </a>
-                    <a class="row abcc_opcion" href="#">
+                    <a class="row abcc_opcion" href="abcc/abcc_donador.php">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Donadores</p>
                     </a>
                     <a class="row abcc_opcion" href="#">
                         <img src="assets/img/cogs.png" alt="">
-                        <p>Asistencias</p>
-                    </a>
-                    <a class="row abcc_opcion" href="#">
-                        <img src="assets/img/cogs.png" alt="">
                         <p>Donativos</p>
                     </a>
-                    <a class="row abcc_opcion" href="#">
+                    <a class="row abcc_opcion" href="abcc/abcc_garantia.php">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Garantías</p>
                     </a>
-                    <a class="row abcc_opcion" href="#">
+                    <a class="row abcc_opcion" href="abcc/abcc_clases.php">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Clases</p>
                     </a>
@@ -73,6 +96,7 @@
                             <!-- loop llenando las cartas de eventos -->
                             <?php
                             $datos = array(
+                                Evento::ID => 0,
                                 Evento::NOMBRE => 1,
                                 Evento::DESCRIPCION => 2,
                                 Evento::FECHA_INICIO => 3,
@@ -85,7 +109,7 @@
                             ?>
                                 <div class="col align-items-center">
                                     <?php
-                                    echo eventoCard("evento_" . $idx, $registro);
+                                    echo eventoCard("evento_" . $registro[Evento::ID], $registro);
                                     ?>
                                 </div>
 
@@ -99,9 +123,51 @@
         </div>
     </div>
 </body>
-<script src="../middleware/navFix.js"></script>
+<script src="../middleware/scripTabla.js"></script>
+<script src="../middleware/request.js"></script>
+<script src="../middleware/showToast.js"></script>
+<script src="../middleware/scripForm.js"></script>
+<script src="../middleware/ABCCUtils.js"></script>
 <script>
-    setFiller('nav-feed');
+    const feeds = [...document.getElementsByClassName('evento-feed')];
+    const tablaModal = document.getElementById("detallesEvento_table");
+    const camposIds = {
+        id: "<?php echo Evento::ID ?>",
+        nombre: "<?php echo Evento::NOMBRE ?>",
+        fechaInicio: "<?php echo Evento::FECHA_INICIO ?>",
+        fechaFin: "<?php echo Evento::FECHA_FIN ?>",
+        tipo: "<?php echo Evento::TIPO ?>",
+        descripcion: "<?php echo Evento::DESCRIPCION ?>"
+    }
+
+    feeds.forEach(
+        /**@param {HTMLDivElement} feed*/
+        feed => {
+            feed.onclick = (ev) => {
+                let id = parseInt(feed.id.split("_")[1]);
+                crearBody(tablaModal);
+                setBodyHTML(tablaModal, "Cargando...");
+                consultar("http://localhost:80/proyesto/backend/API/api_mysql_consultas.php?tabla=evento&id=" + id, null,
+                    (result) => {
+                        console.log(result, id);
+                        let modelo = result.resultSet[0];
+                        console.log(modelo);
+                        setBodyHTML(tablaModal, "");
+                        const headers = {};
+                        headers[camposIds.id] = "ID: ";
+                        headers[camposIds.nombre] = "Nombre: ";
+                        headers[camposIds.fechaInicio] = "fecha de inicio: ";
+                        headers[camposIds.fechaFin] = "fecha de fin: ";
+                        headers[camposIds.tipo] = "Tipo: ";
+                        headers[camposIds.descripcion] = "Descripcion: ";
+                        agregarRow(tablaModal, modelo, modelo.id, headers);
+                    },
+                    (reason) => {
+                        setBodyHTML(tablaModal, "No se pudieron cargar los datos del evento");
+                    }
+                )
+            }
+        })
 </script>
 
 </html>

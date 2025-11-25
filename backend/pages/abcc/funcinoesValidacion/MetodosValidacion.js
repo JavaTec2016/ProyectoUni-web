@@ -11,7 +11,7 @@ const validarCodigos = {
 const validarTipos = {
     STRING: "string",
     DOUBLE: "double",
-    INTEGER: "integer",
+    INTEGER: "int",
     DATE: "date",
 }
 class MetodosValidacion {
@@ -181,7 +181,7 @@ class MetodosValidacion {
     }
 
     /**
-     * crea mensajes de error para corporacion
+     * crea mensajes de error para garantia
      * @param {ValidadorRunner} validador 
      * @param {any{}} camposIds 
      */
@@ -224,7 +224,7 @@ class MetodosValidacion {
         ]);
     }
     /**
-     * crea validadores para corporacion
+     * crea validadores para garantia
      * @param {ValidadorRunner} validador 
      * @param {HTMLFormElement} form 
      * @param {any{}} camposIds 
@@ -263,6 +263,134 @@ class MetodosValidacion {
         })
         key = camposIds['idCirculo'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
+    static makeMensajesDonador(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "No se permiten caracteres especiales",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['direccion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_SMALL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 200 caracteres",
+            validarCodigos.REGEX_FAIL, "",
+        ]);
+        //pago total skipeado
+        validador.setMensajesEspecialesSerial(camposIds['telefono'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_SMALL, "Debe contener 10 caracteres",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 10 caracteres",
+            validarCodigos.REGEX_FAIL, "Formato de numero telefónico inválido",
+        ]);
+        //numero pagos skipeado
+        validador.setMensajesEspecialesSerial(camposIds['email'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "Formato de correo invalido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['categoria'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.REGEX_FAIL, "Categoria inválida",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['anioGraduacion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "Debe ser un número entero positivo",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idClase'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idCorporacion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['nombreConyuge'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "No se permiten caracteres especiales",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idCorporacionConyuge'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
+    }
+    /**
+     * crea validadores para donador
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresDonador(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['direccion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['telefono'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['email'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['categoria'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['anioGraduacion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            console.log(dato, tipo, regex)
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['idClase'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['idCorporacion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['nombreConyuge'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+        key = camposIds['idCorporacionConyuge'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
+
+    /**
+     * crea mensajes de error para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesClase(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['anioGraduacion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "Debe ser un número entero positivo",
+        ]);
+    }
+    /**
+     * crea validadores para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresClase(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['anioGraduacion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })
     }

@@ -110,14 +110,8 @@
         email: "<?php echo Corporacion::EMAIL ?>",
     }
 
-    function setFormFields(form) {
-        form.innerHTML = "";
-        form.append(
-            fb.buildField(camposIds.nombre, "#modal", undefined, "text", undefined, "Nombre: "),
-            fb.buildField(camposIds.direccion, "#modal", undefined, "text", undefined, "Direccion: "),
-            fb.buildField(camposIds.telefono, "#modal", undefined, "tel", undefined, "Telefono: "),
-            fb.buildField(camposIds.email, "#modal", undefined, "email", undefined, "Email: "),
-        )
+    function setFormFields(form, idAfter="#modal") {
+        FormBuilder.setFormFieldsCorporacion(form, idAfter, camposIds);
     }
 
     ///reglas auto

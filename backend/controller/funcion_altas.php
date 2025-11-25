@@ -19,7 +19,7 @@ function procesarAlta(array $datos){
     $res = false;
     $json = array("status"=> $res, "validation"=>$codigos);
     if ($datos_correctos) {
-       
+        $modelo = Validador::convertirModelo($tabla, $modelo);
         $res = $dao->agregar($tabla, $modelo);
     }
     if ($res != false) $res = true;

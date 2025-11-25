@@ -143,5 +143,52 @@ class FormBuilder {
 
         return formData;
     }
+    /**
+     * 
+     * @param {string[]} fieldIds
+     * @param {(field: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, ev: Event)=>{}} callback 
+     */
+    fieldsOnChange(fieldIds, fieldsAfter="#", callback=(field, ev)=>{return}){
+        fieldIds.forEach(id=>{
+            const field = document.getElementById(id+fieldsAfter);
+            field.onchange = (ev) => {callback(field, ev)}
+        })
+    }
+    static setFormFieldsCorporacion(form, idAfter="#modal", camposIds){
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.direccion, idAfter, undefined, "text", undefined, "Direccion: "),
+            fb.buildField(camposIds.telefono, idAfter, undefined, "tel", undefined, "Telefono: "),
+            fb.buildField(camposIds.email, idAfter, undefined, "email", undefined, "Email: "),
+        )
+    }
+    static setFormFieldsEvento(form, idAfter="#modal", camposIds, ...data){
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.fechaInicio, idAfter, undefined, "date", undefined, "Fecha de inicio: "),
+            fb.buildField(camposIds.fechaFin, idAfter, undefined, "date", undefined, "Fecha de fin: "),
+            fb.buildField(camposIds.tipo, idAfter, undefined, "select", undefined, "Tipo: ", undefined,
+                data[0]
+            ),
+            fb.buildField(camposIds.descripcion, "#modal", undefined, "text", undefined, "Descripcion: ")
+        )
+    }
+    static setFormFieldsDonador(form, idAfter = "#modal", camposIds, ...data){
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.direccion, idAfter, undefined, "text", undefined, "Direccion: "),
+            fb.buildField(camposIds.telefono, idAfter, undefined, "tel", undefined, "Telefono: "),
+            fb.buildField(camposIds.email, idAfter, undefined, "email", undefined, "Email: "),
+            fb.buildField(camposIds.categoria, idAfter, undefined, "select", undefined, "Categoria: ", undefined, data[0]),
+            fb.buildField(camposIds.anioGraduacion, idAfter, undefined, "number", undefined, "Año de graduación: "),
+            fb.buildField(camposIds.idClase, idAfter, undefined, "select", undefined, "Clase a la que pertenece: ", undefined, data[1]),
+            fb.buildField(camposIds.idCorporacion, idAfter, undefined, "select", undefined, "Corporación: ", undefined, data[2]),
+            fb.buildField(camposIds.nombreConyuge, idAfter, undefined, "text", undefined, "Nombre del cónyuge: "),
+            fb.buildField(camposIds.idCorporacionConyuge, idAfter, undefined, "select", undefined, "Corporación del cónyuge: ", undefined, data[2]),
+        )
+    }
 }
 const fb = new FormBuilder();

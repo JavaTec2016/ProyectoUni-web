@@ -24,6 +24,21 @@ class Validador {
         }
         return $codigos;
     }
+    public static function convertirModelo(string $tabla, array $modelo, bool $prepared=false){
+        $tipos = Models::get($tabla)::aggregateRule(DataRow::TIPO);
+        $out = [];
+        foreach ($modelo as $campo => $valor) {
+            $val = $valor;
+            if($val == null) {
+                if(!$prepared) $val = "";
+            }else if($tipos[$campo] != "date"){
+                $val = self::convertir($val, $tipos[$campo]);
+            }
+
+            $out[$campo] = $val;
+        }
+        return $out;
+    }
     public static function checkScan(array $codigos){
         foreach ($codigos as $campo => $codigo) {
             if($codigo != self::OK) return false;

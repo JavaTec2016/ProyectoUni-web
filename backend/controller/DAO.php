@@ -26,7 +26,8 @@
             $ponidos = array();
             foreach ($modelo as $key => $value) {
                 $val = $value;
-                if (is_string(($val)) || gettype($val) == "string") {
+                if(strlen($val) == 0) $val = "NULL";
+                else if (is_string(($val)) || gettype($val) == "string") {
                     $val = "'" . $val . "'";
                 }
                 $ponidos[$key] = $val;
@@ -191,14 +192,18 @@
         * @param string $wildcardPost wildcard despues del valor
         */
         public function makeFiltroLike(string $campo, $valor, string $wildcardPre="", string $wildcardPost=""){
+            $clause = $campo . " LIKE ?";
+            if(strlen("".$valor)==0) $clause .= " OR " . $campo . " IS NULL";
             return array(
-                "statement" => $campo . " LIKE ?",
+                "statement" => $clause,
                 "valor" => $wildcardPre . $valor . $wildcardPost
             );
         }
         public function makeFiltroLikeSimple(string $campo, $valor, string $wildcardPre="", string $wildcardPost="", string $tipo){
             $modo = $wildcardPre . $valor . $wildcardPost;
-            return $campo . " LIKE '" . $modo . "'";            
+            $clause = $campo . " LIKE '" . $modo . "'";
+            if(strlen("".$valor) == 0) $clause .= " OR " . $campo . " IS NULL";
+            return $clause;
         }
         /**
          * genera una parte de instruccion WHERE con el filtro exacto del valor

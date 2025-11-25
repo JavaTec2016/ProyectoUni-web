@@ -1,5 +1,6 @@
 <?php
 require_once('../../model/allModels.php');
+require_once('../../controller/DAO.php');
 require_once('abcc_manager.php');
 
 class FormCreador
@@ -8,6 +9,16 @@ class FormCreador
         "Fonoton" => "Fonoton",
         "Graduacion" => "Fiesta de graduacion",
         "Festival" => "Festival"
+    );
+    public static $donador_categorias = array(
+        "Graduado" => "Graduado",
+        "Alumno" => "Alumno",
+        "Padre" => "Padre",
+        "Administrador" => "Administrador",
+        "Personal Docente" => "Personal Docente",
+        "Personal Administrativo" => "Personal Administrativo",
+        "Corporación" => "Corporación",
+        "Docente" => "Docente"
     );
 
     static function makeFormEvento(string $id)
@@ -24,7 +35,8 @@ class FormCreador
                 echo buildField(Evento::DESCRIPCION, "text", "Descripcion: "); //textoarea
                 ?>
             </div>
-            <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -43,7 +55,8 @@ class FormCreador
                 echo buildField(Corporacion::EMAIL, "email", "Correo electronico: "); //selecccc
                 ?>
             </div>
-            <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -67,7 +80,66 @@ class FormCreador
                 //echo buildField(Garantia::ID_CIRCULO, "select", "Circulo: "); auto
                 ?>
             </div>
-            <button class="btn btn-primary px-5 margin-half" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+        </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormDonador(string $id)
+    {
+        $corporacionesSeleccion = array();
+        $clasesSeleccion = array();
+        ///consultar las clases y corporaciones pa los selects
+        $dao = new DAO();
+
+        $results = $dao->consultar("corporacion", array(Corporacion::ID, Corporacion::NOMBRE), null, null, [Corporacion::NOMBRE => DAO::ASCEND]);
+        $results = $dao->assoc($results);
+        foreach ($results as $result) {
+            $corporacionesSeleccion[$result[Corporacion::ID]] = $result[Corporacion::NOMBRE];
+        }
+        $results = $dao->consultar("clase", array(Clase::ID, Clase::ANIO_GRADUCION), null, null, [Clase::ANIO_GRADUCION => DAO::ASCEND]);
+        $results = $dao->assoc($results);
+        foreach ($results as $result) {
+            $clasesSeleccion[$result[Clase::ID]] = $result[Clase::ANIO_GRADUCION];
+        }
+
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Donador::NOMBRE, "text", "Nombre: ");
+                echo buildField(Donador::DIRECCION, "text", "Dirección: ");
+                echo buildField(Donador::TELEFONO, "number", "Telefono: ");
+                echo buildField(Donador::EMAIL, "email", "Correo electrónico: ");
+                echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, self::$donador_categorias);
+                echo buildField(Donador::ANIO_GRADUACION, "number", "Año de gradiación: ");
+                echo buildField(Donador::ID_CLASE, "select", "Clase a la que pertenece: ", null, $clasesSeleccion);
+                echo buildField(Donador::ID_CORPORACION, "select", "Corporación afiliada: ", null, $corporacionesSeleccion);
+                echo buildField(Donador::NOMBRE_CONYUGE, "text", "Nombre del conyuge: ");
+                echo buildField(Donador::ID_CORPORACION_CONYUGE, "select", "Corporación del conyuge: ", null, $corporacionesSeleccion);
+                ?>
+            </div>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+        </form>
+    <?php
+        return ob_get_clean();
+    }
+    static function makeFormClase(string $id)
+    {
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Clase::ANIO_GRADUCION, "number", "Año de graduación: ");
+                ?>
+            </div>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
         </form>
 <?php
         return ob_get_clean();

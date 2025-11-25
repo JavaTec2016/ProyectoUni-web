@@ -14,17 +14,19 @@
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../../model/model_evento.php');
+    require_once('../../model/model_donador.php');
     require_once('../toast.php');
     include_once('buildTablaModal.php');
     include_once('buildFormModal.php');
+    include_once('buildBuscadorModal.php');
     require_once('form_creador.php');
 
 
-    echo buildTablaModal("tablaDetalles", "Detalles del evento");
-    echo buildFormModal("formCambiar", "Datos del evento", "PUT");
+    echo buildTablaModal("tablaDetalles", "Detalles del donador");
+    echo buildFormModal("formCambiar", "Datos del donador", "PUT");
+    echo buildBuscadorModal("searcher", "Buscar [si]", "GET");
 
-    $campos = [Evento::NOMBRE, Evento::TIPO, Evento::FECHA_INICIO];
+    $campos = [Donador::NOMBRE, Donador::CATEGORIA, Donador::TELEFONO];
     ?>
     <div style="display:flex; height:100%">
 
@@ -36,7 +38,7 @@
             <nav class="bg-light abcc scroller" style="overflow-x:hidden; height: 90vh;">
                 <div clas="col">
                     <div class="row" id="form-header">
-                        <?php echo FormCreador::makeFormEvento("form"); ?>
+                        <?php echo FormCreador::makeFormDonador("form"); ?>
                     </div>
                 </div>
             </nav>
@@ -74,29 +76,40 @@
 
 <script type="text/javascript">
     ////DEFINICION DE DATOS
-
+    let seleccion = null;
+    let selectorTabla = "";
     console.log("A");
-    const tablaSQL = "evento";
+    const tablaSQL = "donador";
     let validacionRules = {};
-    const postSuccess = "Evento agregado";
-    const postFail = "No se pudo agregar el evento";
-    const putSuccess = "Evento actualizado";
-    const putFail = "No se pudo modificar el evento";
-    const deleteSuccess = "Evento eliminado";
-    const deleteFail = "No se pudo eliminar el evento";
+    const postSuccess = "Donador agregado";
+    const postFail = "No se pudo agregar el donador";
+    const putSuccess = "Donador actualizado";
+    const putFail = "No se pudo modificar el donador";
+    const deleteSuccess = "Donador eliminado";
+    const deleteFail = "No se pudo eliminar el donador";
 
+    const consultaURLGeneral = "../../API/api_mysql_consultas.php?";
     const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
     const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
     const bajasURL = "../../API/api_mysql_bajas.php?tabla=" + tablaSQL + "&";
 
     const validadorAgregar = new ValidadorRunner();
     const validadorModificar = new ValidadorRunner();
+    const validadorSearcher = new ValidadorRunner();
 
     const form = document.getElementById("form");
     const formModal = document.getElementById("formCambiar-form");
+    const formSearcher = document.getElementById("searcher-form");
     const formBody = document.getElementById("form-body");
+
     const tabla = document.getElementById("tablaResults");
     const tablaBody = document.getElementById("tablaResults-body");
+    const tablaSearcher = document.getElementById("searcher-table");
+    const tablaSearcherBody = document.getElementById("searcher-table-body");
+
+    const clasesSelect = {};
+    const corporacionesSelect = {};
+
     tablaBody.childNodes.forEach(n => tablaBody.removeChild(n));
 
     ///PHP DEFINICIONES
@@ -105,16 +118,25 @@
         <?php echoArray($campos) ?>
     ];
     const camposIds = {
-        id: "<?php echo Evento::ID ?>",
-        nombre: "<?php echo Evento::NOMBRE ?>",
-        fechaInicio: "<?php echo Evento::FECHA_INICIO ?>",
-        fechaFin: "<?php echo Evento::FECHA_FIN ?>",
-        tipo: "<?php echo Evento::TIPO ?>",
-        descripcion: "<?php echo Evento::DESCRIPCION ?>"
+        id: "<?php echo Donador::ID ?>",
+        nombre: "<?php echo Donador::NOMBRE ?>",
+        direccion: "<?php echo Donador::DIRECCION ?>",
+        telefono: "<?php echo Donador::TELEFONO ?>",
+        email: "<?php echo Donador::EMAIL ?>",
+        categoria: "<?php echo Donador::CATEGORIA ?>",
+        anioGraduacion: "<?php echo Donador::ANIO_GRADUACION ?>",
+        idClase: "<?php echo Donador::ID_CLASE ?>",
+        idCorporacion: "<?php echo Donador::ID_CORPORACION ?>",
+        nombreConyuge: "<?php echo Donador::NOMBRE_CONYUGE ?>",
+        idCorporacionConyuge: "<?php echo Donador::ID_CORPORACION_CONYUGE ?>",
     }
-    const eventosTipos = <?php echoAssoc(FormCreador::$evento_tipos) ?>;
+    const categorias = <?php echoAssoc(FormCreador::$donador_categorias) ?>;
+
     ///reglas auto
 
+    function setFormFields(form, idAfter = "#modal") {
+        FormBuilder.setFormFieldsDonador(form, idAfter, camposIds, categorias, clasesSelect, corporacionesSelect);
+    }
     requestRules(tablaSQL,
         (json) => {
             validacionRules = json.rules;
@@ -124,6 +146,7 @@
             console.error("Reglas fail: \n", reason)
         }
     )
+
     form.onsubmit = (ev) => {
         ev.preventDefault();
         if (!MetodosValidacion.validarForm(validadorAgregar, form)) return;
@@ -131,18 +154,13 @@
     }
 
     ///SETUP DE VALIDACION
-    function validarForm(validador, form) {
-        console.log(form);
-        if (Object.keys(validacionRules).length == 0 || !validador.runValidadores(new FormData(form))) return false;
-        return true;
-    }
 
     function setupRules() {
-        MetodosValidacion.makeMensajesEvento(validadorAgregar, "#", "_input", camposIds);
-        MetodosValidacion.makeMensajesEvento(validadorModificar, "#modal", "_input", camposIds);
+        MetodosValidacion.makeMensajesDonador(validadorAgregar, "#", "_input", camposIds);
+        MetodosValidacion.makeMensajesDonador(validadorModificar, "#modal", "_input", camposIds);
 
-        MetodosValidacion.makeValidadoresEvento(validadorAgregar, form, camposIds, validacionRules, "#");
-        MetodosValidacion.makeValidadoresEvento(validadorModificar, formModal, camposIds, validacionRules, "#modal");
+        MetodosValidacion.makeValidadoresDonador(validadorAgregar, form, camposIds, validacionRules, "#");
+        MetodosValidacion.makeValidadoresDonador(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     //////=================== todo lo de la movedera ABCC con el backend (no moverle)
@@ -175,15 +193,33 @@
     }
 
     function actualizarTablaMain(registros) {
+        actualizarTabla(tabla, tablaBody, registros);
+    }
+
+    function actualizarTabla(tabla, body, registros) {
         if (registros == 0) {
-            tablaBody.innerHTML = "Sin resultados";
+            body.innerHTML = "Sin resultados";
             return;
         }
-        clearBody(tablaBody);
+        clearBody(body);
         registros.forEach(reg => {
             let row = agregarRowCompleta(tabla, reg, reg["id"], datos);
             configRowBotones(reg, row);
         })
+    }
+
+    function consultarATabla(url = consultaURL, tabla, body, form, after = (resultSet) => {}) {
+        consultar(url, form,
+            (result) => {
+                actualizarTabla(tabla, body, result.resultSet);
+                after(result.resultSet);
+            },
+            (reason) => {
+                console.log(reason);
+                body.innerHTML = "Error al obtener los datos, intente mas tarde.";
+                fireToast("toast", "Error del servidor, intentelo mas tarde", null, "cerrar");
+            }
+        );
     }
 
     function configRowBotones(registro, row) {
@@ -239,16 +275,7 @@
     //ACCIONES PRINCIPALES
 
     function consultarFormulario() {
-        consultar(consultaURL, form,
-            (result) => {
-                actualizarTablaMain(result.resultSet);
-            },
-            (reason) => {
-                console.log(reason);
-                setText("tablaResults-body", "Error al obtener los datos, intente mas tarde.");
-                fireToast("toast", "Error del servidor, intentelo mas tarde", null, "cerrar");
-            }
-        );
+        consultarATabla(consultaURL, tabla, tablaBody, form);
     }
 
     function agregarRegistro(form) {
@@ -335,9 +362,8 @@
     ///PHP MODAL
 
     function makeModal(registro, form, url) {
-
-        FormBuilder.setFormFieldsEvento(form, "#modal", camposIds, eventosTipos);
-        
+        setFormFields(form);
+        console.log("modal: ", form);
         fb.fillForm(form, registro, "#modal");
 
         form.onsubmit = (ev) => {
@@ -346,6 +372,32 @@
             actualizarRegistro(url, form);
         }
     }
+
+    ///Setear opciones relacionales
+
+    let data = new FormData();
+    data.append("tabla", "clase");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let clases = result.resultSet;
+            clases.forEach(claseObj => {
+                clasesSelect[claseObj.id] = claseObj.anio_graduacion;
+            })
+        }
+    )
+    data = new FormData();
+    data.append("tabla", "corporacion");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let corpos = result.resultSet;
+            corpos.forEach(corpObj => {
+                corporacionesSelect[corpObj.id] = corpObj.nombre;
+            })
+        }
+    )
+
     consultarFormulario();
 </script>
 

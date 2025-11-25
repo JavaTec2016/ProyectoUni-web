@@ -128,6 +128,10 @@ abstract class Modelo {
         if (!in_array($key, array_keys(static::$aliases[$seccion]))) return null;
         return static::$aliases[$seccion][$key];
     }
+    public static function setAlias(string $seccion, string $campo, string $alias){
+        if($alias == null) $alias = $campo;
+        static::$aliases[$seccion][$campo] = $alias;
+    }
     /**
      * Combina campos de diferentes modelos con sus respectivas reglas en este modelo
      * @param array<string,array<string,string|null>> $seleccion arreglo asociativo con el formato (nombre original del campo) => (alias),
@@ -136,13 +140,13 @@ abstract class Modelo {
      */
     public static function combineAs(array $seleccion)
     {
-        $aliases = $seleccion;
         foreach ($seleccion as $tabla => $campos) {
             $ruleset = Models::get($tabla);
-
+            static::$aliases[$tabla] = array();
             foreach ($campos as $campo => $alias) {
                 if($alias == null) $alias = $campo;
                 static::addRule($alias, $ruleset[$campo]);
+                static::setAlias($tabla, $campo, $alias);
             }
         }
     }

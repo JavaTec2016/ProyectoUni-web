@@ -28,6 +28,7 @@ function procesarCambio(array $datos){
     
     if($datos_correctos){
         //modelo actualizao
+        $valores = Validador::convertirModelo($tabla, $valores);
         $modelo = Models::instanciar($tabla, $valores);
         $res = $dao->modificar($tabla, $filtro, $modelo);
     }
