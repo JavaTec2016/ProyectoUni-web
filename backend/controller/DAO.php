@@ -6,20 +6,14 @@
         public final const ASCEND = "ASC";
         public final const DESCEND = "DESC";
         private $conexion;
-
-        public function __construct(){
-            $this->conexion = new ConexionBD();
-
+        public function __construct(array $options=array()){
+            $this->conexion = new ConexionBD($options);
         }
-        
         public function getConexion()
         {
             return $this->conexion->getConexion();
         }
-
         //-----------ALTAS
-
-
         public function agregar(string $tabla, array $modelo){
             $campos = "(" . join(",", array_keys($modelo)) . ")";
             $sql = "INSERT INTO " . $tabla . " " . $campos . " VALUES";

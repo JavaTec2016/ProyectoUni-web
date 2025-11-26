@@ -1,6 +1,7 @@
 <?php
 
 include_once(__DIR__ . '/../controller/funcion_baja.php');
+if (!isset($_SESSION) || !$_SESSION['autenticado']) die(0);
 header("Content-Type: application/json");
 
 if($_SERVER["REQUEST_METHOD"] == "GET"){

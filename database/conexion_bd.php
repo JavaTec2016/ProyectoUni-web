@@ -28,8 +28,14 @@
             if(!$this->conexion){
                 die("ERROR: conexion fallida ---- \n" . mysqli_connect_error());
             }
+            $this->conexion->autocommit(false);
         }
-        
+        public function commit(){
+            $this->conexion->commit();
+        }
+        public function rollback(){
+            $this->conexion->rollback();
+        }
         public function getConexion(){
             return $this->conexion;
         }

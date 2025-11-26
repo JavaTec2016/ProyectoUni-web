@@ -14,7 +14,7 @@ class Clase extends Modelo
     public static function setRules()
     {
         static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, Modelo::REGEX_INTEGER));
-        static::addRule(self::ANIO_GRADUCION, new DataRow("string", "STRING", true, false, false, -1, -1, true, Modelo::REGEX_INTEGER));
+        static::addRule(self::ANIO_GRADUCION, new DataRow("string", "STRING", true, false, false, -1, -1, false, Modelo::REGEX_INTEGER));
     }
 }
 
