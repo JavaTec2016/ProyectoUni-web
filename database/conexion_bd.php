@@ -21,14 +21,12 @@
                 if(!isset($this->options[$key])) continue;
                 $this->options[$key] = $value;
             }
-            
             $address = $this->options[self::HOST] . ":" . $this->options[self::PORT];
             $this->conexion = mysqli_connect($address, $this->options[self::USUARIO], $this->options[self::PASSWORD], $this->options[self::BD]);
 
             if(!$this->conexion){
                 die("ERROR: conexion fallida ---- \n" . mysqli_connect_error());
             }
-            $this->conexion->autocommit(false);
         }
         public function commit(){
             $this->conexion->commit();

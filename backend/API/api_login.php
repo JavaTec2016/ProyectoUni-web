@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $_SESSION["autenticado"] = true;
         $_SESSION["usuario"] = $usr;
         $_SESSION["rol"] = $data["rol"];
+        
         $response["status"] = true;
         $response["rol"] = $_SESSION["rol"];
     } else {

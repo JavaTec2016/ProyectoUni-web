@@ -12,7 +12,7 @@ function procesarBaja($datos){
     $num = $datos[Models::get($tabla)::getCampoPrimario()]; //saca el nombre de la llave primaria del modelo
 
     $estado = $dao->eliminarPrimaria($tabla, $num);
-
+    $dao->getConexion()->commit();
     if ($estado != false) $estado = true;
     
     echo json_encode(array("status" => $estado));

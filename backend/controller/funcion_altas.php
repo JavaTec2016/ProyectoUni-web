@@ -21,6 +21,7 @@ function procesarAlta(array $datos){
     if ($datos_correctos) {
         $modelo = Validador::convertirModelo($tabla, $modelo);
         $res = $dao->agregar($tabla, $modelo);
+        $dao->getConexion()->commit();
     }
     if ($res != false) $res = true;
     $json['status'] = $res;

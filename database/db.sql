@@ -114,6 +114,8 @@ CREATE TABLE IF NOT EXISTS Llamada (
     FOREIGN KEY (id_garantia) REFERENCES Garantia(id)
 );
 
+
+
 CREATE OR REPLACE VIEW Garantia_donador_evento(
     id_garantia,
     id_donador,
