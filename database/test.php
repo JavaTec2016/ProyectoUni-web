@@ -11,7 +11,7 @@ $options = [
 
 $dao = new PDAO($options);
 
-$val = $dao->agregar("clase", ["anio_graduacion"=>777]);
+$val = $dao->modificar("clase", ["id"=>40], new Clase(null, 900));
 
 var_dump($val);
 ?>

@@ -29,6 +29,9 @@
         public static function getTiposOf(string $nombre){
             return static::get($nombre)::aggregateRule(DataRow::TIPO);
         }
+        /**
+         * Retorna el nombre del campo primario del modelo
+         */
         public static function getPrimariaOf(string $nombre){
             return static::get($nombre)::getCampoPrimario();
         }

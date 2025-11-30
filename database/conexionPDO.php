@@ -68,15 +68,21 @@ class conexionPDO {
      * @param array<string,mixed> $values
      * @param array<string,DataRow> $rules
      */
-    public function bind(PDOStatement $stmt, array $values, array $rules){
-        $i = 1;
+    public function bind(PDOStatement $stmt, array $values, array $rules, int $offset=1){
+        $i = $offset;
         foreach ($values as $key => $value) {
             $rule = $rules[$key];
             $tipo = self::getType($rule->get(DataRow::TIPO));
-            $stmt->bindParam($i, $value, $tipo);
+            $stmt->bindValue($i, $value, $tipo);
+            echo "Bound param " . $i . " (" . $key . ") to value " . $value . "<br>";
             $i++;
         }
         
+    }
+    public function queryAssoc(string $sql, array $values){
+        $stmt = $this->prepare($sql);
+        $stmt->execute($values);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
