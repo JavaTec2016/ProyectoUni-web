@@ -1,5 +1,4 @@
 <?php
-include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
 include_once(__DIR__ . '/GetUserPDAO.php');
 function procesarBaja($datos){

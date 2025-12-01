@@ -108,7 +108,7 @@
     }
 
     function setFormFields(form, idAfter = "#modal") {
-        FormBuilder.setFormFieldsCorporacion(form, idAfter, camposIds);
+        FormBuilder.setFormFieldsClase(form, idAfter, camposIds);
     }
 
     ///reglas auto
@@ -324,6 +324,7 @@
             ev.preventDefault();
             if (!MetodosValidacion.validarForm(validadorModificar, form)) return;
             actualizarRegistro(url, form);
+            consultarFormulario();
         }
     }
     consultarFormulario();

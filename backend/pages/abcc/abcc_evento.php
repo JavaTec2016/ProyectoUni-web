@@ -337,13 +337,14 @@
     function makeModal(registro, form, url) {
 
         FormBuilder.setFormFieldsEvento(form, "#modal", camposIds, eventosTipos);
-        
+
         fb.fillForm(form, registro, "#modal");
 
         form.onsubmit = (ev) => {
             ev.preventDefault();
             if (!MetodosValidacion.validarForm(validadorModificar, form)) return;
             actualizarRegistro(url, form);
+            consultarFormulario();
         }
     }
     consultarFormulario();

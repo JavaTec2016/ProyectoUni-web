@@ -1,12 +1,10 @@
 <?php
-
-include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
-
+include_once(__DIR__ . '/GetUserPDAO.php');
 function procesarConsulta(array $datos)
 {
 
-    $dao = new DAO();
+    $dao = getUserPDAO();
     $tabla = $datos["tabla"]; //saca el modelo
     unset($datos["tabla"]);
     $filtrados = array();
@@ -14,11 +12,11 @@ function procesarConsulta(array $datos)
     $filtrados = Models::cleanKeys($filtrados, "_input");
     $filtrados = Models::cutKeys($filtrados, "#");
     //tovia no hay comodines
-    $res = $dao->consultar($tabla, array(0 => "*"), $filtrados, $dao->fakeComodines($filtrados, true));
+    $res = $dao->consultar($tabla, array(0 => "*"), $filtrados);
 
     $json = array("resultSet" => []);
     if ($res) {
-        $json["resultSet"] = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $json["resultSet"] = $res;
     }
     echo json_encode($json);
 }

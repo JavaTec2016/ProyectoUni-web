@@ -110,7 +110,7 @@
         email: "<?php echo Corporacion::EMAIL ?>",
     }
 
-    function setFormFields(form, idAfter="#modal") {
+    function setFormFields(form, idAfter = "#modal") {
         FormBuilder.setFormFieldsCorporacion(form, idAfter, camposIds);
     }
 
@@ -327,6 +327,7 @@
             ev.preventDefault();
             if (!MetodosValidacion.validarForm(validadorModificar, form)) return;
             actualizarRegistro(url, form);
+            consultarFormulario();
         }
     }
     consultarFormulario();

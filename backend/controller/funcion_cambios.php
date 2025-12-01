@@ -1,13 +1,11 @@
 <?php
 
 header("Content-Type: application/json");
-
-include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
 include_once(__DIR__ . '/funcion_validador.php');
-
+include_once(__DIR__ . '/GetUserPDAO.php');
 function procesarCambio(array $datos){
-    $dao = new DAO();
+    $dao = getUserPDAO();
 
     //saca los datos actuales
     $tabla = $datos["tabla"];
@@ -33,7 +31,6 @@ function procesarCambio(array $datos){
         $valores = Validador::convertirModelo($tabla, $valores);
         $modelo = Models::instanciar($tabla, $valores);
         $res = $dao->modificar($tabla, $filtro, $modelo);
-        $dao->getConexion()->commit();
     }
     if ($res != false) $res = true;
     $json['status'] = $res;

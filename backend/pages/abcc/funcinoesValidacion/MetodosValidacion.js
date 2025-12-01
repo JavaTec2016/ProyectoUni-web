@@ -180,6 +180,8 @@ class MetodosValidacion {
         })
     }
 
+    ///GARANTIA
+
     /**
      * crea mensajes de error para garantia
      * @param {ValidadorRunner} validador 
@@ -266,6 +268,9 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
+
+    ///DONADOR
+
     static makeMensajesDonador(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
         validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
             validarCodigos.NULL_DATA, "",
@@ -369,6 +374,8 @@ class MetodosValidacion {
         })
     }
 
+    ///CLASE
+
     /**
      * crea mensajes de error para corporacion
      * @param {ValidadorRunner} validador 
@@ -378,6 +385,7 @@ class MetodosValidacion {
         validador.setMensajesEspecialesSerial(camposIds['anioGraduacion'] + postKey + inputPostfix, [
             validarCodigos.NULL_DATA, "",
             validarCodigos.WRONG_TYPE, "Debe ser un número entero positivo",
+            validarCodigos.REGEX_FAIL, "Debe ser un número entero positivo"
         ]);
     }
     /**
@@ -569,8 +577,7 @@ function vacio(dato = "") {
 }
 function probarRegex(dato="", regex=""){
     if(regex=="EMAIL" || regex=="DATE") return true;
-
-    let pattern = new RegExp(regex, "g");
+    let pattern = new RegExp("^"+regex+"$", "g");
     return pattern.test(dato);
 }
 /**

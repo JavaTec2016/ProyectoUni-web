@@ -370,6 +370,7 @@
             ev.preventDefault();
             if (!MetodosValidacion.validarForm(validadorModificar, form)) return;
             actualizarRegistro(url, form);
+            consultarFormulario();
         }
     }
 

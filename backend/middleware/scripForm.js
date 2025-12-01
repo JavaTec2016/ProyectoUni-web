@@ -190,5 +190,11 @@ class FormBuilder {
             fb.buildField(camposIds.idCorporacionConyuge, idAfter, undefined, "select", undefined, "Corporación del cónyuge: ", undefined, data[2]),
         )
     }
+    static setFormFieldsClase(form, idAfter = "#modal", camposIds, ...data) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.anioGraduacion, idAfter, undefined, "text", undefined, "Año de graduación: "),
+        )
+    }
 }
 const fb = new FormBuilder();

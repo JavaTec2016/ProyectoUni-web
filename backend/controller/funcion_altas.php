@@ -1,5 +1,4 @@
 <?php
-include_once(__DIR__ . '/PDAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
 include_once(__DIR__ . '/funcion_validador.php');
 include_once(__DIR__ . '/GetUserPDAO.php');
