@@ -1,9 +1,9 @@
 <?php
 include_once(__DIR__ . '/DAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
-
+include_once(__DIR__ . '/GetUserPDAO.php');
 function procesarBaja($datos){
-    $dao = new DAO();
+    $dao = getUserPDAO();
 
     $tabla = $datos["tabla"]; //saca el modelo
     $datos = Models::cleanKeys($datos, "caja_");
@@ -12,7 +12,6 @@ function procesarBaja($datos){
     $num = $datos[Models::get($tabla)::getCampoPrimario()]; //saca el nombre de la llave primaria del modelo
 
     $estado = $dao->eliminarPrimaria($tabla, $num);
-    $dao->getConexion()->commit();
     if ($estado != false) $estado = true;
     
     echo json_encode(array("status" => $estado));

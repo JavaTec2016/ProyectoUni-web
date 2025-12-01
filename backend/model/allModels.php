@@ -3,5 +3,5 @@
     include_once('model_donador.php');
     include_once('model_clase.php');
     include_once('model_corporacion.php');
-
+    include_once('model_usuario.php');
 ?>

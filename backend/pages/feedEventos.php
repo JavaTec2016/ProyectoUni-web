@@ -147,7 +147,7 @@
                 let id = parseInt(feed.id.split("_")[1]);
                 crearBody(tablaModal);
                 setBodyHTML(tablaModal, "Cargando...");
-                consultar("http://localhost:80/proyesto/backend/API/api_mysql_consultas.php?tabla=evento&id=" + id, null,
+                consultar("http://localhost:80/backend/API/api_mysql_consultas.php?tabla=evento&id=" + id, null,
                     (result) => {
                         console.log(result, id);
                         let modelo = result.resultSet[0];

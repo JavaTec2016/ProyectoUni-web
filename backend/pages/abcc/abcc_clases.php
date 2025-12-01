@@ -44,7 +44,7 @@
 
         <!-- CONTENEDOR DE TABLA Y ESAS COSAS -->
 
-        <div class="container scroller" style="position: relative;">
+        <div class="container scroller" style="position: relative; height:90vh;">
             <?php echo tostar("toast", "toastBody", "toastBtnOK", "toastBtnCancel"); ?>
             <div class="row">
                 <div class="col-sm-12">

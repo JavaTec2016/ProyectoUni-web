@@ -22,6 +22,6 @@ function eliminar(url, form, success = (res) => { }, reject = (reason) => { }){
     return req.callbackJSON(success, reject);
 }
 function requestRules(tabla, success=(res)=>{}, reject=(reason)=>{}){
-    const req = new FetchRequest("http://localhost:80/proyesto/backend/API/api_getRuleData.php?tabla="+tabla, "GET");
+    const req = new FetchRequest("http://localhost:80/backend/API/api_getRuleData.php?tabla="+tabla, "GET");
     req.callbackJSON(success, reject);
 }

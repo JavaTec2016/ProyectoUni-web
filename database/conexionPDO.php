@@ -84,6 +84,10 @@ class conexionPDO {
         $stmt->execute($values);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function preparedExecute(string $sql, array $values){
+        $stmt = $this->prepare($sql);
+        return $stmt->execute($values);
+    }
 }
 
 ?>

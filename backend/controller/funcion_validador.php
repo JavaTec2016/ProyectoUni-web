@@ -58,12 +58,13 @@ class Validador {
             $regex = $rules[DataRow::REGEX];
             if($regex == Modelo::CHECK_EMAIL){
                 if(filter_var($dato, FILTER_VALIDATE_EMAIL) == false) return self::REGEX_FAIL;
-            }else if(!self::vacio($regex)){
+            }else if($regex == Modelo::CHECK_DATE){
+                if(!date_parse($dato)) return self::REGEX_FAIL;
+            } else if(!self::vacio($regex)){
                 if(!preg_match("/^".$regex."$/", $dato)) return self::REGEX_FAIL;
             }
-
             $convertido = self::convertir($dato, $rules[DataRow::TIPO]);
-            if($convertido instanceof DateTime && self::probarFecha($convertido)) return self::WRONG_DATE;
+            if($convertido instanceof DateTime && !self::probarFecha($convertido)) return self::WRONG_DATE;
             $umbral = $rules[DataRow::UMBRAL];
             $limite = $rules[DataRow::LIMITE];
             if($umbral > -1){
@@ -88,13 +89,14 @@ class Validador {
      * Convierte un string a fecha
      */
     static function convertirFecha(string $dato, string $formato = "Y-m-d"){
+        
         return DateTime::createFromFormat($formato, $dato);
     }
     /**
      * Prueba que la fecha sea valida
      */
     static function probarFecha(DateTime $fecha){
-        return checkdate($fecha->format('m'), $fecha->format('d'), $fecha->format('Y'));
+        return checkdate((int)($fecha->format('m')), (int)($fecha->format('d')), (int)($fecha->format('Y')));
     }
     /**
      * prueba si un numero esta dentro de un rango

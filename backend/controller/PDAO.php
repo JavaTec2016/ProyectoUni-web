@@ -148,6 +148,22 @@ class PDAO {
         }
         return join(", ", $out);
     }
+    public function call(string $procedureName, array $params){
+        $questions = [];
+        foreach ($params as $key => $value) {
+            array_push($questions, "?");
+        }
+        $procedure = $procedureName . "(" . join(", ", $questions) .")";
+        return $this->conexion->preparedExecute($procedure, $params);
+    }
+    /**
+     * Agrega un usuario tanto a la tabla de usuarios como a la BD, y establece su rol
+     */
+    public function makeUser(string $nombre, string $pass, string $rol){
+        $usr = new Usuario($nombre, $pass, $rol);
+        $this->agregar("usuario", $usr->valores);
+        return $this->call("addUsuario", $usr->valores);
+    }
 }
 
 ?>

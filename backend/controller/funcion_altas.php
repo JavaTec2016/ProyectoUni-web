@@ -1,9 +1,10 @@
 <?php
-include_once(__DIR__ . '/DAO.php');
+include_once(__DIR__ . '/PDAO.php');
 include_once(__DIR__ . '/../model/allModels.php');
 include_once(__DIR__ . '/funcion_validador.php');
+include_once(__DIR__ . '/GetUserPDAO.php');
 function procesarAlta(array $datos){
-    $dao = new DAO();
+    $dao = getUserPDAO();
     $modelo = array();
     $tabla = $datos["tabla"];
     unset($datos['tabla']);
@@ -21,7 +22,6 @@ function procesarAlta(array $datos){
     if ($datos_correctos) {
         $modelo = Validador::convertirModelo($tabla, $modelo);
         $res = $dao->agregar($tabla, $modelo);
-        $dao->getConexion()->commit();
     }
     if ($res != false) $res = true;
     $json['status'] = $res;

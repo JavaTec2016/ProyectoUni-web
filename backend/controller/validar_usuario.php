@@ -18,16 +18,15 @@
 
         $sql = "SELECT * FROM usuario WHERE nombre='$u_cifrado' AND pass='$p_cifrado'";
         $res = mysqli_query($conexion, $sql);
-        $data = mysqli_fetch_all($res, MYSQLI_ASSOC);
         $num = mysqli_num_rows($res);
 
         if($num==1){
-            
+            $data = mysqli_fetch_all($res, MYSQLI_ASSOC)[0];
             session_start();
             $_SESSION["autenticado"] = true;
             $_SESSION["usuario"] = $usr;
+            $_SESSION["pass"] = $pass;
             $_SESSION["rol"] = $data["rol"];
-            ///nombre, apellido, ROL,  bla bla
             header("location: ../pages/feedEventos.php");
             exit(0);
         }else{
