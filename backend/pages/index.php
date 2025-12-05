@@ -13,7 +13,7 @@
     <?php include_once('navbar_landing.php') ?>
     <div class="container-fluid bg-white">
         <div class="d-flex justify-content-center pt-5">
-            <img src="assets/img/cogs.png" width="220px" alt="WIP">
+            <img src="assets/img/logo.webp" width="220px" alt="WIP">
         </div>
         <h1 class="display-1 text-center pb-5 pt-5">
             Eventos universitarios para Colectas y Donativos de la Institucion
@@ -50,12 +50,12 @@
 
             <div class="row text-center">
                 <div class="col pb-1 pt-4">
-                    <img src="./assets/img/si.png" alt="logo Univ" width="75px" height="75px">
+                    <img src="assets/img/logo.webp" alt="logo Universidad Beta" width="75px" height="75px">
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col pb-2 pt-4">
-                    <p>&copy;2025 - Univ</p>
+                    <p>&copy;2025 - Universidad Beta</p>
                     <p>Reservados todos los derechos</p>
                 </div>
             </div>

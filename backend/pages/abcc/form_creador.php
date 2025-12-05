@@ -1,6 +1,4 @@
 <?php
-require_once('../../model/allModels.php');
-require_once('../../controller/DAO.php');
 require_once('abcc_manager.php');
 
 class FormCreador
@@ -36,7 +34,7 @@ class FormCreador
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
-            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -56,7 +54,7 @@ class FormCreador
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
-            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -81,7 +79,7 @@ class FormCreador
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
-            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -123,7 +121,7 @@ class FormCreador
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
-            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
         return ob_get_clean();
@@ -139,7 +137,7 @@ class FormCreador
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
-            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Submit">Limpiar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
 <?php
         return ob_get_clean();

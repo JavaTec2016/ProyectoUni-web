@@ -1,7 +1,6 @@
 <?php
 header("location: /proyesto/backend/pages/feedEventos.php");
 exit(0);
-require_once('../auth.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

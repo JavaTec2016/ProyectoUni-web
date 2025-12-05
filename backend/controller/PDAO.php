@@ -133,8 +133,9 @@ class PDAO {
      */
     public function makeFiltroLike(string $campo, $valor, string $wildcardPre = "", string $wildcardPost = "")
     {
-        $clause = $campo . " LIKE ?";
+        $clause = "(". $campo . " LIKE ?";
         if (strlen("" . $valor) == 0) $clause .= " OR " . $campo . " IS NULL";
+        $clause .= ")";
         return array(
             "statement" => $clause,
             "valor" => $wildcardPre . $valor . $wildcardPost

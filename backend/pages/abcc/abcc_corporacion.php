@@ -1,4 +1,4 @@
-<?php require_once('../auth.php') ?>
+<?php require_once('backend/pages/auth.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,20 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABCC corporaciones</title>
-    <?php include_once('../addBootstrap.php') ?>
-    <?php include_once('../styles.php') ?>
+    <?php include_once('backend/pages/addBootstrap.php') ?>
+    <?php include_once('backend/pages/styles.php') ?>
 </head>
 
 <body>
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../../model/model_corporacion.php');
-    require_once('../toast.php');
-    include_once('buildTablaModal.php');
-    include_once('buildFormModal.php');
-    require_once('form_creador.php');
-
 
     echo buildTablaModal("tablaDetalles", "Detalles de la Corporacion");
     echo buildFormModal("formCambiar", "Datos de la Corporacion", "PUT");
@@ -65,12 +59,12 @@
         </div>
 </body>
 
-<script src="../../middleware/scripTabla.js"></script>
-<script src="../../middleware/request.js"></script>
-<script src="../../middleware/showToast.js"></script>
-<script src="../../middleware/scripForm.js"></script>
-<script src="../../middleware/ABCCUtils.js"></script>
-<script src="./funcinoesValidacion/MetodosValidacion.js"></script>
+<script src="js/scripTabla.js"></script>
+<script src="js/request.js"></script>
+<script src="js/showToast.js"></script>
+<script src="js/scripForm.js"></script>
+<script src="js/ABCCUtils.js"></script>
+<script src="js/funcinoesValidacion/MetodosValidacion.js"></script>
 
 <script type="text/javascript">
     ////DEFINICION DE DATOS
@@ -85,9 +79,9 @@
     const deleteSuccess = "Corporacion eliminada";
     const deleteFail = "No se pudo eliminar la corporacion";
 
-    const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
-    const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
-    const bajasURL = "../../API/api_mysql_bajas.php?tabla=" + tablaSQL + "&";
+    const consultaURL = "api_mysql_consultas.php?tabla=" + tablaSQL + "&";
+    const cambiosURL = "api_mysql_cambios.php?tabla=" + tablaSQL + "&";
+    const bajasURL = "api_mysql_bajas.php?tabla=" + tablaSQL + "&";
 
     const validadorAgregar = new ValidadorRunner();
     const validadorModificar = new ValidadorRunner();
@@ -145,8 +139,8 @@
     ///CONSULTAS
 
     /**@param {HTMLTableElement} tablaModal*/
-    function setTablaModal(tablaModal, url = "../../API/api_mysql_consultas.php") {
-        const req = new FetchRequest(url, "GET");
+    function setTablaModal(tablaModal, url = "api_mysql_consultas.php") {
+        const req = new FetchRequest(APIUrl + url, "GET");
         crearBody(tablaModal);
         setBodyHTML(tablaModal, "Buscando...");
         req.callbackJSON(
@@ -202,7 +196,7 @@
         btnDetalles.onclick = (ev) => {
             ev.preventDefault();
             btnDetallesCallback(btnDetalles, document.getElementById("tablaDetalles"), (tabla, boton) => {
-                setTablaModal(tabla, boton)
+                setTablaModal(tabla, trimAPIUrl(boton.href))
             })
         }
         btnModificar.onclick = (ev) => {
@@ -211,7 +205,7 @@
         }
         btnEliminar.onclick = (ev) => {
             ev.preventDefault();
-            eliminarRegistro(btnEliminar.href);
+            eliminarRegistro(trimAPIUrl(btnEliminar.href));
         }
         let _1 = document.createElement("td");
         _1.append(btnDetalles);
@@ -240,7 +234,7 @@
     function agregarRegistro(form) {
         let formData = new FormData(form);
         formData.append("tabla", tablaSQL);
-        agregar("../../API/api_mysql_altas.php", formData,
+        agregar("api_mysql_altas.php", formData,
             (response) => {
                 if (response.status) {
                     fireToast("toast", postSuccess, "OK", "Deshacer");
@@ -308,7 +302,7 @@
             },
             (result) => {
                 const old = result.resultSet[0];
-                makeModal(registro, form, boton.href);
+                makeModal(registro, form, trimAPIUrl(boton.href));
             },
             (reason) => {
                 console.log(reason);
@@ -331,6 +325,13 @@
         }
     }
     consultarFormulario();
+    fb.formOnInput(form, (field, ev) => {
+        consultarFormulario()
+    });
+    form.onreset = (ev) => {
+        form.reset();
+        consultarFormulario()
+    };
 </script>
 
 

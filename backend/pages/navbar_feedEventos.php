@@ -1,7 +1,7 @@
 <header class="navbar navbar-expand-lg bd-navbar sticky-top pt-0 pb-0 bg-body-tertiary">
     <nav class="container-fluid bd-gutter bg-body-tertiary pt-3 pb-3" id="nav-feed" style="width: 100%;">
         <a class="navbar-brand" href="#">
-            <img src="assets/img/cogs.png" alt="Bootstrap" width="30" style="margin-right: 1rem; margin-left: 1rem;">
+            <img src="assets/img/logo.webp" alt="logo" width="30" style="margin-right: 1rem; margin-left: 1rem;">
             MENU PRINCIPAL
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">

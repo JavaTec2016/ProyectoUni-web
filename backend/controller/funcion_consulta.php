@@ -13,7 +13,6 @@ function procesarConsulta(array $datos)
     $filtrados = Models::cutKeys($filtrados, "#");
     //tovia no hay comodines
     $res = $dao->consultar($tabla, array(0 => "*"), $filtrados);
-
     $json = array("resultSet" => []);
     if ($res) {
         $json["resultSet"] = $res;

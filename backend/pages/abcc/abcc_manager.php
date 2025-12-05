@@ -2,7 +2,12 @@
 
 use function PHPSTORM_META\type;
 
-include_once('../../model/allModels.php');
+include_once('backend/model/allModels.php');
+require_once('backend/controller/DAO.php');
+require_once('backend/pages/toast.php');
+include_once('buildTablaModal.php');
+include_once('buildFormModal.php');
+require_once('form_creador.php');
 function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null, string $invalidMsg = "")
 {
     $inputId = $id . "#_input";

@@ -1,4 +1,4 @@
-<?php require_once('../auth.php') ?>
+<?php require_once('backend/pages/auth.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,25 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <?php include_once('../addBootstrap.php') ?>
-    <?php include_once('../styles.php') ?>
+    <?php include_once('backend/pages/addBootstrap.php') ?>
+    <?php include_once('backend/pages/styles.php') ?>
 </head>
 
 <body>
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../../model/model_donador.php');
-    require_once('../toast.php');
-    include_once('buildTablaModal.php');
-    include_once('buildFormModal.php');
-    include_once('buildBuscadorModal.php');
-    require_once('form_creador.php');
-
 
     echo buildTablaModal("tablaDetalles", "Detalles del donador");
     echo buildFormModal("formCambiar", "Datos del donador", "PUT");
-    echo buildBuscadorModal("searcher", "Buscar [si]", "GET");
 
     $campos = [Donador::NOMBRE, Donador::CATEGORIA, Donador::TELEFONO];
     ?>
@@ -67,12 +59,12 @@
         </div>
 </body>
 
-<script src="../../middleware/scripTabla.js"></script>
-<script src="../../middleware/request.js"></script>
-<script src="../../middleware/showToast.js"></script>
-<script src="../../middleware/scripForm.js"></script>
-<script src="../../middleware/ABCCUtils.js"></script>
-<script src="./funcinoesValidacion/MetodosValidacion.js"></script>
+<script src="js/scripTabla.js"></script>
+<script src="js/request.js"></script>
+<script src="js/showToast.js"></script>
+<script src="js/scripForm.js"></script>
+<script src="js/ABCCUtils.js"></script>
+<script src="js/funcinoesValidacion/MetodosValidacion.js"></script>
 
 <script type="text/javascript">
     ////DEFINICION DE DATOS
@@ -88,10 +80,10 @@
     const deleteSuccess = "Donador eliminado";
     const deleteFail = "No se pudo eliminar el donador";
 
-    const consultaURLGeneral = "../../API/api_mysql_consultas.php?";
-    const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
-    const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
-    const bajasURL = "../../API/api_mysql_bajas.php?tabla=" + tablaSQL + "&";
+    const consultaURLGeneral = "api_mysql_consultas.php?";
+    const consultaURL = "api_mysql_consultas.php?tabla=" + tablaSQL + "&";
+    const cambiosURL = "api_mysql_cambios.php?tabla=" + tablaSQL + "&";
+    const bajasURL = "api_mysql_bajas.php?tabla=" + tablaSQL + "&";
 
     const validadorAgregar = new ValidadorRunner();
     const validadorModificar = new ValidadorRunner();
@@ -168,58 +160,31 @@
     ///CONSULTAS
 
     /**@param {HTMLTableElement} tablaModal*/
-    function setTablaModal(tablaModal, url = "../../API/api_mysql_consultas.php") {
-        const req = new FetchRequest(url, "GET");
+    function setTablaModal(tablaModal, url = "api_mysql_consultas.php") {
+        const req = new FetchRequest(APIUrl + url, "GET");
         crearBody(tablaModal);
         setBodyHTML(tablaModal, "Buscando...");
         req.callbackJSON(
             (result) => {
-                const modelo = result.resultSet[0];
                 setBodyHTML(tablaModal, "");
-                const headers = {};
-                headers[camposIds.id] = "ID: ";
-                headers[camposIds.nombre] = "Nombre: ";
-                headers[camposIds.fechaInicio] = "fecha de inicio: ";
-                headers[camposIds.fechaFin] = "fecha de fin: ";
-                headers[camposIds.tipo] = "Tipo: ";
-                headers[camposIds.descripcion] = "Descripcion: ";
-                agregarRow(tablaModal, modelo, modelo.id, headers);
-                console.log("Row")
+                agregarRows(tablaModal, result.resultSet, null);
             },
             (reason) => {
-                console.error(reason);
+
             }
         )
     }
 
     function actualizarTablaMain(registros) {
-        actualizarTabla(tabla, tablaBody, registros);
-    }
-
-    function actualizarTabla(tabla, body, registros) {
         if (registros == 0) {
-            body.innerHTML = "Sin resultados";
+            tablaBody.innerHTML = "Sin resultados";
             return;
         }
-        clearBody(body);
+        clearBody(tablaBody);
         registros.forEach(reg => {
             let row = agregarRowCompleta(tabla, reg, reg["id"], datos);
             configRowBotones(reg, row);
         })
-    }
-
-    function consultarATabla(url = consultaURL, tabla, body, form, after = (resultSet) => {}) {
-        consultar(url, form,
-            (result) => {
-                actualizarTabla(tabla, body, result.resultSet);
-                after(result.resultSet);
-            },
-            (reason) => {
-                console.log(reason);
-                body.innerHTML = "Error al obtener los datos, intente mas tarde.";
-                fireToast("toast", "Error del servidor, intentelo mas tarde", null, "cerrar");
-            }
-        );
     }
 
     function configRowBotones(registro, row) {
@@ -252,7 +217,7 @@
         btnDetalles.onclick = (ev) => {
             ev.preventDefault();
             btnDetallesCallback(btnDetalles, document.getElementById("tablaDetalles"), (tabla, boton) => {
-                setTablaModal(tabla, boton)
+                setTablaModal(tabla, trimAPIUrl(boton.href))
             })
         }
         btnModificar.onclick = (ev) => {
@@ -261,7 +226,7 @@
         }
         btnEliminar.onclick = (ev) => {
             ev.preventDefault();
-            eliminarRegistro(btnEliminar.href);
+            eliminarRegistro(trimAPIUrl(btnEliminar.href));
         }
         let _1 = document.createElement("td");
         _1.append(btnDetalles);
@@ -275,13 +240,22 @@
     //ACCIONES PRINCIPALES
 
     function consultarFormulario() {
-        consultarATabla(consultaURL, tabla, tablaBody, form);
+        consultar(consultaURL, form,
+            (result) => {
+                actualizarTablaMain(result.resultSet);
+            },
+            (reason) => {
+                console.log(reason);
+                setText("tablaResults-body", "Error al obtener los datos, intente mas tarde.");
+                fireToast("toast", "Error del servidor, intentelo mas tarde", null, "cerrar");
+            }
+        );
     }
 
     function agregarRegistro(form) {
         let formData = new FormData(form);
         formData.append("tabla", tablaSQL);
-        agregar("../../API/api_mysql_altas.php", formData,
+        agregar("api_mysql_altas.php", formData,
             (response) => {
                 if (response.status) {
                     fireToast("toast", postSuccess, "OK", "Deshacer");
@@ -349,7 +323,7 @@
             },
             (result) => {
                 const old = result.resultSet[0];
-                makeModal(registro, form, boton.href);
+                makeModal(registro, form, trimAPIUrl(boton.href));
             },
             (reason) => {
                 console.log(reason);
@@ -358,8 +332,6 @@
             }
         )
     }
-
-    ///PHP MODAL
 
     function makeModal(registro, form, url) {
         setFormFields(form);
@@ -373,33 +345,14 @@
             consultarFormulario();
         }
     }
-
-    ///Setear opciones relacionales
-
-    let data = new FormData();
-    data.append("tabla", "clase");
-    consultar(consultaURLGeneral, data,
-        (result) => {
-            let obj = {};
-            let clases = result.resultSet;
-            clases.forEach(claseObj => {
-                clasesSelect[claseObj.id] = claseObj.anio_graduacion;
-            })
-        }
-    )
-    data = new FormData();
-    data.append("tabla", "corporacion");
-    consultar(consultaURLGeneral, data,
-        (result) => {
-            let obj = {};
-            let corpos = result.resultSet;
-            corpos.forEach(corpObj => {
-                corporacionesSelect[corpObj.id] = corpObj.nombre;
-            })
-        }
-    )
-
     consultarFormulario();
+    fb.formOnInput(form, (field, ev) => {
+        consultarFormulario()
+    });
+    form.onreset = (ev) => {
+        form.reset();
+        consultarFormulario()
+    };
 </script>
 
 

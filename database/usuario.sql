@@ -64,7 +64,7 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
-    SET @sql_cmd = CONCAT('SET DEFAULT ROLE ALL TO ', user_full);
+    SET @sql_cmd = CONCAT('SET DEFAULT ROLE NONE FOR ', nombre);
     PREPARE stmt FROM @sql_cmd;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
@@ -74,3 +74,5 @@ BEGIN
 END//
 
 DELIMITER ;
+
+call addUsuario('Ras', 'Acrobacia', 'admin');

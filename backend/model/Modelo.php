@@ -2,7 +2,7 @@
 require_once('Models.php');
 abstract class Modelo {
     public final const REGEX_AZ = "[A-Z-a-z]+";
-    public final const REGEX_ACENTO = "([0-9 a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]+(\\s*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]*)*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}])+";
+    public final const REGEX_ACENTO = "([0-9a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]||(\\s*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]*)*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}])+";
     public final const REGEX_AZ_SPACE = "[A-Z-a-z]+";
     public final const REGEX_AZ_NUMBER = "[0-9A-Za-z]+";
     public final const REGEX_AZ_NUMBER_SPACE = "[0-9 A-Za-z]+";

@@ -1,5 +1,5 @@
 <?php
-include_once('../model/model_evento.php');
+include_once('backend/model/model_evento.php');
 function eventoCard(string $id, array $eventoDatos, string $imgPath = "assets/img/cogs.png")
 {
 

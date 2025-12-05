@@ -27,12 +27,12 @@
             $_SESSION["usuario"] = $usr;
             $_SESSION["pass"] = $pass;
             $_SESSION["rol"] = $data["rol"];
-            header("location: ../pages/feedEventos.php");
+            header("location: feed");
             exit(0);
         }else{
             session_start();
             $_SESSION["autenticado"] = false;
-            header("location: ../pages/login.php");
+            header("location: login");
             exit(0);
         }
 

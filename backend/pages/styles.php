@@ -73,6 +73,7 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
+        height: 90vh;
     }
 
     .fit-screen {

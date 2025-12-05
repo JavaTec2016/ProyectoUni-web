@@ -1,19 +1,40 @@
 <?php
-header("Location: backend/pages/");
-define("URL_BASE", "/");
-$path = $_SERVER['REQUEST_URI'];
+$url = $_GET['url'] ?? '';
+$url = trim($url, '/'); // limpiar barras
+//echo $url;
 
-//mochale la URL directorio
-if (substr($path, 0, strlen(URL_BASE)) == URL_BASE) {
-    $path = substr($path, strlen(URL_BASE));
+/////////////otras paginas
+
+$urlSegment = explode("_", $url);
+if (count($urlSegment) < 1) return;
+
+//paginas ABCC
+if ($urlSegment[0] == "abcc") {
+    require "backend/pages/abcc/" . $url . ".php";
+    return;
 }
 
-echo $path;
+///////////paginas no abcc
 
-    switch($path){
-        case '':
-            require "backend/pages/index.php";
-            break;
-        
-    }
-?>
+switch ($url) {
+    case '':
+        require "backend/pages/index.php";
+        return;
+    case 'logout':
+        require "backend/controller/cerrar_sesion.php";
+        return;
+    case 'login':
+        require "backend/pages/login.php";
+        return;
+    case 'validar':
+        require "backend/controller/validar_usuario.php";
+        return;
+    case 'feed':
+        require "backend/pages/feedEventos.php";
+        return;
+    ////bloquear acceso a paginas fuera del rango
+    default:
+        http_response_code(404);
+        return;
+}
+

@@ -13,7 +13,7 @@
 <body id="h">
     <?php require_once('plantillaEvento.php') ?>
     <?php require_once('navbar_feedEventos.php') ?>
-    <?php require_once('../controller/DAO.php') ?>
+    <?php require_once('backend/controller/DAO.php') ?>
 
     <!-- DETALLES DE EVENTO SI -->
 
@@ -51,15 +51,15 @@
 
                     </div>
                     <!-- botones para cambiar entre tablas ABCC rapidito -->
-                    <a class="row abcc_opcion" href="abcc/abcc_evento.php">
+                    <a class="row abcc_opcion" href="abcc_evento">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Eventos</p>
                     </a>
-                    <a class="row abcc_opcion" href="abcc/abcc_Corporacion.php">
+                    <a class="row abcc_opcion" href="abcc_corporacion">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Corporaciones</p>
                     </a>
-                    <a class="row abcc_opcion" href="abcc/abcc_donador.php">
+                    <a class="row abcc_opcion" href="abcc_donador">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Donadores</p>
                     </a>
@@ -67,11 +67,11 @@
                         <img src="assets/img/cogs.png" alt="">
                         <p>Donativos</p>
                     </a>
-                    <a class="row abcc_opcion" href="abcc/abcc_garantia.php">
+                    <a class="row abcc_opcion" href="abcc_garantia">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Garantías</p>
                     </a>
-                    <a class="row abcc_opcion" href="abcc/abcc_clases.php">
+                    <a class="row abcc_opcion" href="abcc_clases">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Clases</p>
                     </a>
@@ -100,7 +100,8 @@
                                 Evento::NOMBRE => 1,
                                 Evento::DESCRIPCION => 2,
                                 Evento::FECHA_INICIO => 3,
-                                Evento::FECHA_FIN => 4
+                                Evento::FECHA_FIN => 4,
+                                Evento::TIPO => 5,
                             );
                             $dao = new DAO();
                             $result = $dao->assoc($dao->consultar("evento", array_keys($datos), null, null, array(Evento::FECHA_INICIO => DAO::DESCEND), 16));
@@ -109,7 +110,10 @@
                             ?>
                                 <div class="col align-items-center">
                                     <?php
-                                    echo eventoCard("evento_" . $registro[Evento::ID], $registro);
+                                    $imgPath = "backgroundFestival.webp";
+                                    if($registro[Evento::TIPO] == 'Graduacion') $imgPath = "backgroundGraduacion.webp";
+                                    if ($registro[Evento::TIPO] == 'Fonoton') $imgPath = "backgroundFonoton.webp";
+                                    echo eventoCard("evento_" . $registro[Evento::ID], $registro, "assets/img/".$imgPath);
                                     ?>
                                 </div>
 
@@ -123,11 +127,11 @@
         </div>
     </div>
 </body>
-<script src="../middleware/scripTabla.js"></script>
-<script src="../middleware/request.js"></script>
-<script src="../middleware/showToast.js"></script>
-<script src="../middleware/scripForm.js"></script>
-<script src="../middleware/ABCCUtils.js"></script>
+<script src="js/scripTabla.js"></script>
+<script src="js/request.js"></script>
+<script src="js/showToast.js"></script>
+<script src="js/scripForm.js"></script>
+<script src="js/ABCCUtils.js"></script>
 <script>
     const feeds = [...document.getElementsByClassName('evento-feed')];
     const tablaModal = document.getElementById("detallesEvento_table");
@@ -147,7 +151,7 @@
                 let id = parseInt(feed.id.split("_")[1]);
                 crearBody(tablaModal);
                 setBodyHTML(tablaModal, "Cargando...");
-                consultar("http://localhost:80/backend/API/api_mysql_consultas.php?tabla=evento&id=" + id, null,
+                consultar("api_mysql_consultas.php?tabla=evento&id=" + id, null,
                     (result) => {
                         console.log(result, id);
                         let modelo = result.resultSet[0];
