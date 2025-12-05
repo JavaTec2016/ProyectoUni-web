@@ -3,7 +3,7 @@ USE BD_Web;
 
 
 
-CREATE TABLE IF NOT EXISTS Corporacion (
+CREATE TABLE IF NOT EXISTS corporacion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     direccion VARCHAR(200) NOT NULL,
@@ -11,20 +11,20 @@ CREATE TABLE IF NOT EXISTS Corporacion (
     email VARCHAR(20)
 );
 
-CREATE TABLE IF NOT EXISTS AnioFiscal (
+CREATE TABLE IF NOT EXISTS anioFiscal (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
     CHECK (fecha_inicio < fecha_fin)
 );
 
-CREATE TABLE IF NOT EXISTS Circulo (
+CREATE TABLE IF NOT EXISTS circulo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE,
     monto_minimo DECIMAL(10,2) NOT NULL CHECK (monto_minimo >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS Evento (
+CREATE TABLE IF NOT EXISTS evento (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     fecha_inicio DATE NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Evento (
     descripcion TEXT
 );
 
-CREATE TABLE IF NOT EXISTS Voluntario (
+CREATE TABLE IF NOT EXISTS voluntario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
@@ -41,14 +41,14 @@ CREATE TABLE IF NOT EXISTS Voluntario (
     rol VARCHAR(30) NOT NULL CHECK (rol IN ('fonoton','coordinador_clase','otros'))
 );
 
-CREATE TABLE IF NOT EXISTS Clase (
+CREATE TABLE IF NOT EXISTS clase (
     id INT AUTO_INCREMENT PRIMARY KEY,
     anio_graduacion INT NOT NULL
 );
 
 
 
-CREATE TABLE IF NOT EXISTS Donador (
+CREATE TABLE IF NOT EXISTS donador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     direccion VARCHAR(200),
@@ -60,12 +60,12 @@ CREATE TABLE IF NOT EXISTS Donador (
     id_corporacion INT,
     nombre_conyuge VARCHAR(100),
     id_corporacion_conyuge INT,
-    FOREIGN KEY (id_clase) REFERENCES Clase(id),
-    FOREIGN KEY (id_corporacion) REFERENCES Corporacion(id),
-    FOREIGN KEY (id_corporacion_conyuge) REFERENCES Corporacion(id)
+    FOREIGN KEY donadorfk_id_clase (id_clase) REFERENCES Clase(id),
+    FOREIGN KEY donadorfk_id_corporacion (id_corporacion) REFERENCES Corporacion(id),
+    FOREIGN KEY donadorfk_id_corporacion_conyuge (id_corporacion_conyuge) REFERENCES Corporacion(id)
 );
 
-CREATE TABLE IF NOT EXISTS AsistenciaEvento (
+CREATE TABLE IF NOT EXISTS asistenciaEvento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_evento INT NOT NULL,
     id_donador INT NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS AsistenciaEvento (
     UNIQUE (id_evento, id_donador)
 );
 
-CREATE TABLE IF NOT EXISTS Garantia (
+CREATE TABLE IF NOT EXISTS garantia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_donador INT NOT NULL,
     id_evento INT NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS Garantia (
     FOREIGN KEY (id_evento) REFERENCES Evento(id) ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Pago (
+CREATE TABLE IF NOT EXISTS pago (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_garantia INT NOT NULL,
     fecha DATE,
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS Pago (
     FOREIGN KEY (id_garantia) REFERENCES Garantia(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Llamada (
+CREATE TABLE IF NOT EXISTS llamada (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_voluntario INT NOT NULL,
     id_donador INT NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS Llamada (
 
 
 
-CREATE OR REPLACE VIEW Garantia_donador_evento(
+CREATE OR REPLACE VIEW garantia_donador_evento(
     id_garantia,
     id_donador,
     id_evento,

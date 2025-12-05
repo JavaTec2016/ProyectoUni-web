@@ -14,7 +14,8 @@ class conexionPDO {
     public const USUARIO = "usuario";
     public const PASSWORD = "password";
     public const BD = "bd";
-
+    public const BD_MAIN = "BD_Web";
+    public const BD_USER = "BD_Web_Usuarios";
     private $options = array(
         self::HOST => "localhost",
         self::PORT => 3306,

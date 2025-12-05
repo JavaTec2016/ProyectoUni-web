@@ -20,6 +20,7 @@ function agregar(url, form, success = (res) => { }, reject = (reason) => { }){
 function consultar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(APIUrl +url, "GET");
     req.setBody(form);
+    
     return req.callbackJSON(success, reject);
 }
 function eliminar(url, form, success = (res) => { }, reject = (reason) => { }){

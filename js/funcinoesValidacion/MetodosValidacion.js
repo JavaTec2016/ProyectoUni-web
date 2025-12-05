@@ -373,7 +373,6 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
-
     ///CLASE
 
     /**
@@ -398,6 +397,56 @@ class MetodosValidacion {
     static makeValidadoresClase(validador, form, camposIds, validacionRules, postKey = "#") {
         let key, fieldId;
         key = camposIds['anioGraduacion'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
+
+    ///USUARIO
+
+    /**
+     * crea mensajes de error para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesUsuario(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "",
+            validarCodigos.REGEX_FAIL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 100 caracteres"
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['pass'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "",
+            validarCodigos.REGEX_FAIL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 100 caracteres",
+            validarCodigos.DATA_TOO_SMALL, "Debe contener almenos 8 caracteres"
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['rol'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "rol inválido",
+        ]);
+
+    }
+    /**
+     * crea validadores para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresUsuario(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        });
+        key = camposIds['pass'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        });
+        key = camposIds['rol'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             return this.chekGeneral(id, codigo, validador);
         })

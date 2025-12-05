@@ -2,6 +2,7 @@
 function actualizar(url, form, success = (res) => { }, reject = (reason) => { }) {
     const req = new FetchRequest(url, "GET");
     req.setBody(form);
+    req.log();
     return req.callbackJSON(success, reject);
 }
 

@@ -13,7 +13,7 @@
 
     if($conexion){
         //cifraderas pero mejores
-        $u_cifrado = hash('sha256', $usr);
+        $u_cifrado = $usr;
         $p_cifrado = hash('sha256', $pass);
 
         $sql = "SELECT * FROM usuario WHERE nombre='$u_cifrado' AND pass='$p_cifrado'";

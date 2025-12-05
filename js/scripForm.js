@@ -209,5 +209,14 @@ class FormBuilder {
             fb.buildField(camposIds.anioGraduacion, idAfter, undefined, "text", undefined, "Año de graduación: "),
         )
     }
+
+    static setFormFieldsUsuario(form, idAfter = "#modal", camposIds, ...data) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.pass, idAfter, undefined, "text", undefined, "Contraseña: "),
+            fb.buildField(camposIds.rol, idAfter, undefined, "select", undefined, "Rol: ", undefined, data[0]),
+        )
+    }
 }
 const fb = new FormBuilder();

@@ -19,6 +19,11 @@ class FormCreador
         "Docente" => "Docente"
     );
 
+    public static $usuario_roles = array(
+        "admin"=>"Administrador",
+        "Coordinador" => "Coordinador",
+        "Voluntario" => "Voluntario",
+    );
     static function makeFormEvento(string $id)
     {
         ob_start();
@@ -134,6 +139,25 @@ class FormCreador
             <div id="<?php echo $id ?>-body">
                 <?php
                 echo buildField(Clase::ANIO_GRADUCION, "number", "Año de graduación: ");
+                ?>
+            </div>
+            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
+        </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormUsuario(string $id)
+    {
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Usuario::NOMBRE, "text", "Nombre: ");
+                echo buildField(Usuario::PASS, "text", "Contraseña: ");
+                echo buildField(Usuario::ROL, "select", "Rol: ", null, self::$usuario_roles);
                 ?>
             </div>
             <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>

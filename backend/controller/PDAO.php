@@ -31,7 +31,6 @@ class PDAO {
         $vals = "(" . join(", ", $ponidos) . ")";
 
         $sql = $sql.$vals;
-
         return $this->execute($sql, $modelo, $tablaRules);
     }
     public function eliminar(string $tabla, array $modelo){
@@ -52,13 +51,10 @@ class PDAO {
         $where = $this->makeWhereCampos($filtros);
 
         $sql = $sql . $campos . $where;
-
-        
         ///hay que bindear por separado porque el arreglo SET y el WHERE utilizan las mismas llaves
         $stmt = $this->conexion->prepare($sql);
         $this->conexion->bind($stmt, $modelo->valores, $tablaRules);
         $this->conexion->bind($stmt, $filtros, $tablaRules, count($modelo->valores)+1);
-        
         return $stmt->execute();
     }
     public function consultar(string $tabla, array $selectNombres = array(0 => "*"), array|null $camposValores = null, array|null $camposComodines = null, array|null $camposOrder = null, int $limite = -1) {
@@ -76,6 +72,7 @@ class PDAO {
         };
         if ($camposOrder != null) $sql = $sql . " ORDER BY " . $this->getCamposOrder($camposOrder);
         if ($limite > 0) $sql = $sql . " LIMIT " . $limite;
+
         return $this->conexion->queryAssoc($sql, array_values($filtros));
     }
 
@@ -154,7 +151,8 @@ class PDAO {
         foreach ($params as $key => $value) {
             array_push($questions, "?");
         }
-        $procedure = $procedureName . "(" . join(", ", $questions) .")";
+        $procedure = "call ". $procedureName . "(" . join(", ", $questions) .")";
+        
         return $this->conexion->preparedExecute($procedure, $params);
     }
     /**
@@ -163,7 +161,15 @@ class PDAO {
     public function makeUser(string $nombre, string $pass, string $rol){
         $usr = new Usuario($nombre, $pass, $rol);
         $this->agregar("usuario", $usr->valores);
-        return $this->call("addUsuario", $usr->valores);
+        return $this->call("addUsuario", array_values($usr->valores));
+    }
+    /**
+     * Elimina un usuario tanto de la tabla de usuarios como de la BD
+     */
+    public function deleteUser(string $nombre)
+    {
+        return $this->eliminarPrimaria("usuario", $nombre);
+        return $this->call("deleteUsuario", [$nombre]);
     }
 }
 

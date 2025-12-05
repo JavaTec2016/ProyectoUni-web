@@ -24,6 +24,11 @@
                 Próximamente
             </a>
             <?php require_once('formLogout.php'); ?>
+            <?php
+            if (!isset($_SESSION) || !$_SESSION['autenticado'] || $_SESSION['rol'] != 'admin') {
+                echo "";
+            } else echo '<span data-bs-toggle="offcanvas" data-bs-target="#settings"><img src="assets/img/settings.webp" height="40" alt="config"></span>';
+            ?>
         </div>
     </nav>
 </header>

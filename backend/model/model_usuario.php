@@ -11,7 +11,7 @@ class Usuario extends Modelo {
     public static function setRules()
     {
         static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, true, false, 0, 100, false, Modelo::REGEX_ACENTO));
-        static::addRule(self::PASS, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, "*"));
+        static::addRule(self::PASS, new DataRow("string", "VARCHAR", true, false, false, 8, 100, false, ".*"));
         static::addRule(self::ROL, new DataRow("string", "VARCHAR", true, false, false, 0, 30, false, Modelo::REGEX_ACENTO));
     }
 }

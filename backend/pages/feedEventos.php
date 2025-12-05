@@ -14,7 +14,11 @@
     <?php require_once('plantillaEvento.php') ?>
     <?php require_once('navbar_feedEventos.php') ?>
     <?php require_once('backend/controller/DAO.php') ?>
+    <?php
 
+    if(!isset($_SESSION) || !$_SESSION['autenticado'] || $_SESSION['rol'] != 'admin'){}
+    else require_once('backend/pages/usuariosLateral.php');
+    ?>
     <!-- DETALLES DE EVENTO SI -->
 
     <div class="modal" tabindex="-1" id="modalEvento" aria-hidden="false">

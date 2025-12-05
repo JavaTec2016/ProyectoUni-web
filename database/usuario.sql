@@ -21,7 +21,6 @@ DROP TRIGGER IF EXISTS usuario_cifrado//
 CREATE TRIGGER usuario_cifrado BEFORE INSERT ON usuario
 FOR EACH ROW
 BEGIN
-    SET NEW.nombre = SHA2(NEW.nombre, 256);
     SET NEW.pass = SHA2(NEW.pass, 256);
 END;
 //
@@ -31,6 +30,27 @@ INSERT INTO usuario VALUES('Ras', 'Acrobacia', 'admin');
 
 DELIMITER //
 
+DROP PROCEDURE IF EXISTS deleteUsuario//
+CREATE PROCEDURE deleteUsuario(
+    IN nombre VARCHAR(100)
+)
+BEGIN
+    DECLARE usr VARCHAR(200);
+    SET usr = nombre;
+    START TRANSACTION;
+    SET usr = CONCAT('\'', nombre, '\'@\'', '%', '\'');
+    SET @sql_cmd = CONCAT('DROP USER IF EXISTS ', usr);
+
+    PREPARE stmt FROM @sql_cmd;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    FLUSH PRIVILEGES;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
 DROP PROCEDURE IF EXISTS addUsuario//
 CREATE PROCEDURE addUsuario(
     IN nombre VARCHAR(100), 
@@ -38,7 +58,7 @@ CREATE PROCEDURE addUsuario(
     IN rol VARCHAR(30)
 )
 BEGIN
-    DECLARE host VARCHAR(50) DEFAULT '%';
+    DECLARE host VARCHAR(50) DEFAULT 'localhost';
     DECLARE user_full VARCHAR(200);
     SET user_full = CONCAT('\'', nombre, '\'@\'', host, '\'');
     
@@ -48,13 +68,13 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
     
-    SET @sql_cmd = CONCAT('CREATE USER ', user_full, ' IDENTIFIED BY \'', pass, '\'');
+    SET @sql_cmd = CONCAT('CREATE USER ', user_full, ' IDENTIFIED WITH mysql_native_password BY \'', pass, '\'');
     PREPARE stmt FROM @sql_cmd;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
     IF rol = 'admin' THEN
-        SET @sql_cmd = CONCAT('GRANT admin_role TO ', user_full);
+        SET @sql_cmd = CONCAT('GRANT ALL PRIVILEGES ON *.* TO ', user_full, ' WITH GRANT OPTION');
     ELSEIF rol = 'coordinador' THEN
         SET @sql_cmd = CONCAT('GRANT coordinador_role TO ', user_full);
     ELSE
@@ -63,12 +83,6 @@ BEGIN
     PREPARE stmt FROM @sql_cmd;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-
-    SET @sql_cmd = CONCAT('SET DEFAULT ROLE NONE FOR ', nombre);
-    PREPARE stmt FROM @sql_cmd;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
     FLUSH PRIVILEGES;
     COMMIT;
 END//
@@ -76,3 +90,5 @@ END//
 DELIMITER ;
 
 call addUsuario('Ras', 'Acrobacia', 'admin');
+call addUsuario('pru', 'pru', 'admin');
+call deleteUsuario('pru');
