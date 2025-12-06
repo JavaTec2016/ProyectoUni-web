@@ -13,7 +13,7 @@
 <body id="h">
     <?php require_once('plantillaEvento.php') ?>
     <?php require_once('navbar_feedEventos.php') ?>
-    <?php require_once('backend/controller/DAO.php') ?>
+    <?php include_once('backend/controller/GetUserPDAO.php'); ?>
     <?php
 
     if(!isset($_SESSION) || !$_SESSION['autenticado'] || $_SESSION['rol'] != 'admin'){}
@@ -107,9 +107,11 @@
                                 Evento::FECHA_FIN => 4,
                                 Evento::TIPO => 5,
                             );
-                            $dao = new DAO();
-                            $result = $dao->assoc($dao->consultar("evento", array_keys($datos), null, null, array(Evento::FECHA_INICIO => DAO::DESCEND), 16));
-
+                            $dao = getUserPDAO(conexionPDO::BD_USER);
+                            $result = $dao->consultar("evento", array_keys($datos), null, null, array(Evento::FECHA_INICIO => PDAO::DESCEND), 16);
+                            if(count($result) == 0){
+                                echo '<i class="text-center pb-5">No hay eventos recientes.</i>';
+                            }
                             foreach ($result as $idx => $registro) {
                             ?>
                                 <div class="col align-items-center">

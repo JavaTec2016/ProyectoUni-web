@@ -74,6 +74,7 @@ class conexionPDO {
         foreach ($values as $key => $value) {
             $rule = $rules[$key];
             $tipo = self::getType($rule->get(DataRow::TIPO));
+            if (empty($value)) $value = null;
             $stmt->bindValue($i, $value, $tipo);
             //echo "Bound param " . $i . " (" . $key . ") to value " . $value . "<br>";
             $i++;

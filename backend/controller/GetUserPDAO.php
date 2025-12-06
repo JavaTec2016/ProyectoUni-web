@@ -1,6 +1,8 @@
 <?php
 require_once(__DIR__ . '/PDAO.php');
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
     if (!$_SESSION['autenticado']) {
         return json_encode(["status" => false]);
     }

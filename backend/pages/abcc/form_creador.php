@@ -95,15 +95,13 @@ class FormCreador
         $corporacionesSeleccion = array();
         $clasesSeleccion = array();
         ///consultar las clases y corporaciones pa los selects
-        $dao = new DAO();
+        $dao = getUserPDAO();
 
-        $results = $dao->consultar("corporacion", array(Corporacion::ID, Corporacion::NOMBRE), null, null, [Corporacion::NOMBRE => DAO::ASCEND]);
-        $results = $dao->assoc($results);
+        $results = $dao->consultar("corporacion", array(Corporacion::ID, Corporacion::NOMBRE), null, null, [Corporacion::NOMBRE => PDAO::ASCEND]);
         foreach ($results as $result) {
             $corporacionesSeleccion[$result[Corporacion::ID]] = $result[Corporacion::NOMBRE];
         }
-        $results = $dao->consultar("clase", array(Clase::ID, Clase::ANIO_GRADUCION), null, null, [Clase::ANIO_GRADUCION => DAO::ASCEND]);
-        $results = $dao->assoc($results);
+        $results = $dao->consultar("clase", array(Clase::ID, Clase::ANIO_GRADUCION), null, null, [Clase::ANIO_GRADUCION => PDAO::ASCEND]);
         foreach ($results as $result) {
             $clasesSeleccion[$result[Clase::ID]] = $result[Clase::ANIO_GRADUCION];
         }

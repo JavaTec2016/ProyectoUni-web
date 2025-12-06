@@ -28,9 +28,10 @@ CREATE TABLE IF NOT EXISTS evento (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL CHECK(fecha_fin > fecha_inicio),
+    fecha_fin DATE NOT NULL,
     tipo VARCHAR(50),
-    descripcion TEXT
+    descripcion TEXT,
+    CHECK(fecha_fin > fecha_inicio)
 );
 
 CREATE TABLE IF NOT EXISTS voluntario (
@@ -60,9 +61,9 @@ CREATE TABLE IF NOT EXISTS donador (
     id_corporacion INT,
     nombre_conyuge VARCHAR(100),
     id_corporacion_conyuge INT,
-    FOREIGN KEY donadorfk_id_clase (id_clase) REFERENCES Clase(id),
-    FOREIGN KEY donadorfk_id_corporacion (id_corporacion) REFERENCES Corporacion(id),
-    FOREIGN KEY donadorfk_id_corporacion_conyuge (id_corporacion_conyuge) REFERENCES Corporacion(id)
+    FOREIGN KEY donadorfk_id_clase (id_clase) REFERENCES clase(id),
+    FOREIGN KEY donadorfk_id_corporacion (id_corporacion) REFERENCES corporacion(id),
+    FOREIGN KEY donadorfk_id_corporacion_conyuge (id_corporacion_conyuge) REFERENCES corporacion(id)
 );
 
 CREATE TABLE IF NOT EXISTS asistenciaEvento (
@@ -73,32 +74,36 @@ CREATE TABLE IF NOT EXISTS asistenciaEvento (
     FOREIGN KEY (id_donador) REFERENCES Donador(id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE (id_evento, id_donador)
 );
-
 CREATE TABLE IF NOT EXISTS garantia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_donador INT NOT NULL,
     id_evento INT NOT NULL,
-    garantia DECIMAL(10,2) NOT NULL CHECK (garantia >= 0),
-    pago_total DECIMAL(10,2) DEFAULT 0 CHECK (pago_total >= 0),
+    garantia DECIMAL(10,2) NOT NULL,
+    pago_total DECIMAL(10,2) DEFAULT 0,
     metodo_pago VARCHAR(50) NOT NULL,
-    numero_pagos INT DEFAULT 1 CHECK (numero_pagos > 0),
+    numero_pagos INT DEFAULT 1,
     numero_tarjeta VARCHAR(20),
     fecha_inicio DATE NOT NULL,
     fecha_garantia DATE NOT NULL,
     id_circulo INT,
-    estado VARCHAR(20) DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente', 'Completada')),
+    estado VARCHAR(20) DEFAULT 'Pendiente',
+    FOREIGN KEY (id_donador) REFERENCES donador(id) ON UPDATE CASCADE,
+    FOREIGN KEY (id_circulo) REFERENCES circulo(id) ON UPDATE CASCADE,
+    FOREIGN KEY (id_evento) REFERENCES evento(id) ON UPDATE CASCADE,
     CHECK(fecha_garantia > fecha_inicio),
-    FOREIGN KEY (id_donador) REFERENCES Donador(id) ON UPDATE CASCADE,
-    FOREIGN KEY (id_circulo) REFERENCES Circulo(id) ON UPDATE CASCADE,
-    FOREIGN KEY (id_evento) REFERENCES Evento(id) ON UPDATE CASCADE
+    CHECK (estado IN ('Pendiente', 'Completada')),
+    CHECK (numero_pagos > 0),
+    CHECK (garantia >= 0),
+    CHECK (pago_total >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS pago (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_garantia INT NOT NULL,
-    fecha DATE,
-    monto DECIMAL(10,2) NOT NULL CHECK (monto >= 0),
-    FOREIGN KEY (id_garantia) REFERENCES Garantia(id) ON DELETE CASCADE ON UPDATE CASCADE
+    fecha DATE NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_garantia) REFERENCES garantia(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CHECK (monto >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS llamada (

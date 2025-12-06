@@ -24,7 +24,7 @@
                 <input type="password" id="pass_input" name="pass_input" placeholder="Tu contraseña" required>
             </div>
             <div class="g-recaptcha" data-sitekey="6LdZeSIsAAAAADtA2uVZpczpQ8YviYeU4gtwULHg" data-action="LOGIN"></div>
-            <button type="submit" class="btn btn-primary">Ingresar</button>
+            <button id="submiter" type="submit" class="btn btn-primary">Ingresar</button>
         </form>
     </div>
 </body>

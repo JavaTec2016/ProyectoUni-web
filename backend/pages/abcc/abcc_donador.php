@@ -353,6 +353,34 @@
         form.reset();
         consultarFormulario()
     };
+
+
+    ///OPCIONES RELACIONALES
+
+
+    let data = new FormData();
+    data.append("tabla", "clase");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let clases = result.resultSet;
+            clases.forEach(claseObj => {
+                clasesSelect[claseObj.id] = "Clase del " + claseObj.anio_graduacion;
+            })
+        }
+    )
+    data = new FormData();
+    data.append("tabla", "corporacion");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let corpos = result.resultSet;
+            corpos.forEach(corpObj => {
+                if (corpObj.nombre == null || corpObj.nombre == "") corpObj.nombre = "Ninguna";
+                corporacionesSelect[corpObj.id] = corpObj.nombre;
+            })
+        }
+    )
 </script>
 
 

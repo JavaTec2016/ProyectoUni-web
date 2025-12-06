@@ -68,7 +68,7 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
     
-    SET @sql_cmd = CONCAT('CREATE USER ', user_full, ' IDENTIFIED WITH mysql_native_password BY \'', pass, '\'');
+    SET @sql_cmd = CONCAT('CREATE USER ', user_full, ' IDENTIFIED BY \'', pass, '\'');
     PREPARE stmt FROM @sql_cmd;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
