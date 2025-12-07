@@ -1,15 +1,15 @@
 <?php
 require_once(__DIR__ . '/PDAO.php');
-if (!isset($_SESSION)) {
+if (false) {
     session_start();
 }
-    if (!$_SESSION['autenticado']) {
+    if (false) {
         return json_encode(["status" => false]);
     }
     function getUserPDAO($BD = "BD_Web"){
     return new PDAO([
-        conexionPDO::USUARIO => $_SESSION['usuario'],
-        conexionPDO::PASSWORD => $_SESSION['pass'],
+        conexionPDO::USUARIO => "",//$_SESSION['usuario'],
+        conexionPDO::PASSWORD => "",// $_SESSION['pass'],
         conexionPDO::BD => $BD,
     ]);
     }

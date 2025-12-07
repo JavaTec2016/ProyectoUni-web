@@ -23,7 +23,7 @@
             static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, Modelo::REGEX_INTEGER));
             static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, Modelo::REGEX_ACENTO));
             static::addRule(self::DIRECCION, new DataRow("string", "VARCHAR", false, false, false, 0, 200, false, ""));
-            static::addRule(self::TELEFONO, new DataRow("string", "VARCHAR", false, false, false, 0, 10, false, Modelo::REGEX_INTEGER));
+            static::addRule(self::TELEFONO, new DataRow("string", "VARCHAR", false, false, false, 10, 10, false, Modelo::REGEX_INTEGER));
             static::addRule(self::EMAIL, new DataRow("string", "VARCHAR", false, false, false, 0, 100, false, Modelo::CHECK_EMAIL));
             static::addRule(self::CATEGORIA, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, Modelo::REGEX_ACENTO));
             static::addRule(self::ANIO_GRADUACION, new DataRow("int", "INT", true, false, false, -1, -1, false, Modelo::REGEX_INTEGER));

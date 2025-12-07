@@ -27,12 +27,10 @@
             $_SESSION["pass"] = $pass;
             $_SESSION["rol"] = $data["rol"];
             header("location: feed");
-            exit(0);
         }else{
             session_start();
             $_SESSION["autenticado"] = false;
             header("location: login");
-            exit(0);
         }
 
         
