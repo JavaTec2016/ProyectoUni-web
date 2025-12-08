@@ -1,5 +1,9 @@
 //incluir FetchRequest en donde se vaya a usar esto
-const APIUrl = "http://localhost:80/backend/API/";
+const APIlocal = "http://localhost:80/backend/API/";
+const APIhosting = "http://proyectowelb.atwebpages.com/backend/API/";
+const APIdebian = "http://192.168.2.16:80/backend/API/";
+
+let APIUrl = APIlocal;
 function trimAPIUrl(url){
     let urlStart = url.indexOf("api");
     let url2 = url.substring(urlStart);
