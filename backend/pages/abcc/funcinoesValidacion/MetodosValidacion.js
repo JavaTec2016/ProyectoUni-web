@@ -402,6 +402,34 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
+    ///CATEGORIA
+
+    /**
+     * crea mensajes de error para donador categoria
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesDonadorCategoria(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.REGEX_FAIL, "No se permiten números o caracteres especiales",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 50 caracteres"
+        ]);
+    }
+    /**
+     * crea validadores para donador categoria
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeMensajesDonadorCategoria(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
 }
 
 /**

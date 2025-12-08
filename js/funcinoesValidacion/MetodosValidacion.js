@@ -25,7 +25,7 @@ class MetodosValidacion {
  * @param {ValidadorRunner} validador 
  */
     static chekGeneral(id, codigo, validador) {
-        console.log(validador.errorMensajes.get(id));
+       // console.log(validador.errorMensajes.get(id));
         if (codigo == validarCodigos.OK) {
             fb.hideInvalido(id);
             return true;
@@ -353,12 +353,10 @@ class MetodosValidacion {
         })
         key = camposIds['anioGraduacion'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
-            console.log(dato, tipo, regex)
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['idClase'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
-            console.log(dato, codigo);
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['idCorporacion'], fieldId = key + postKey + "_input";
@@ -628,9 +626,9 @@ function vacio(dato = "") {
 function probarRegex(dato = "", regex = "") {
     if (regex == "EMAIL" || regex == "DATE") return true;
     let pattern = new RegExp("^" + regex + "$");
-    console.log("regex gloval: ", "^" + regex + "$", " para ", dato);
+    //console.log("regex gloval: ", "^" + regex + "$", " para ", dato);
     let b = pattern.test(dato);
-    console.log(b)
+    //console.log(b)
     return b;
 }
 /**

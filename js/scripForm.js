@@ -172,7 +172,7 @@ class FormBuilder {
         form.append(
             fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
             fb.buildField(camposIds.direccion, idAfter, undefined, "text", undefined, "Direccion: "),
-            fb.buildField(camposIds.telefono, idAfter, undefined, "tel", undefined, "Telefono: "),
+            fb.buildField(camposIds.telefono, idAfter, undefined, "text", undefined, "Telefono: ", {maxlength:10}),
             fb.buildField(camposIds.email, idAfter, undefined, "email", undefined, "Email: "),
         )
     }
@@ -193,7 +193,7 @@ class FormBuilder {
         form.append(
             fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
             fb.buildField(camposIds.direccion, idAfter, undefined, "text", undefined, "Direccion: "),
-            fb.buildField(camposIds.telefono, idAfter, undefined, "tel", undefined, "Telefono: "),
+            fb.buildField(camposIds.telefono, idAfter, undefined, "tel", undefined, "Telefono: ", { maxlength: 10 }),
             fb.buildField(camposIds.email, idAfter, undefined, "email", undefined, "Email: "),
             fb.buildField(camposIds.categoria, idAfter, undefined, "select", undefined, "Categoria: ", undefined, data[0]),
             fb.buildField(camposIds.anioGraduacion, idAfter, undefined, "number", undefined, "Año de graduación: "),

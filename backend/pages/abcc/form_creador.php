@@ -62,7 +62,7 @@ class FormCreador
                 <?php
                 echo buildField(Corporacion::NOMBRE, "text", "Nombre: ");
                 echo buildField(Corporacion::DIRECCION, "text", "Direccion: ");
-                echo buildField(Corporacion::TELEFONO, "tel", "Numero de telefono: ");
+                echo buildField(Corporacion::TELEFONO, "text", "Numero de telefono: ", null, null, "", 10);
                 echo buildField(Corporacion::EMAIL, "email", "Correo electronico: "); //selecccc
                 ?>
             </div>
@@ -106,6 +106,7 @@ class FormCreador
     {
         $corporacionesSeleccion = array();
         $clasesSeleccion = array();
+        $categoriasSeleccion = array();
         ///consultar las clases y corporaciones pa los selects
         $dao = getUserPDAO();
 
@@ -117,6 +118,10 @@ class FormCreador
         foreach ($results as $result) {
             $clasesSeleccion[$result[Clase::ID]] = $result[Clase::ANIO_GRADUCION];
         }
+        $results = $dao->consultar("donador_categoria", array(Donador_Categoria::NOMBRE), null, null, [Donador_Categoria::NOMBRE => PDAO::ASCEND]);
+        foreach ($results as $result) {
+            $categoriasSeleccion[$result[Donador_Categoria::NOMBRE]] = $result[Donador_Categoria::NOMBRE];
+        }
 
         ob_start();
     ?>
@@ -125,14 +130,15 @@ class FormCreador
                 <?php
                 echo buildField(Donador::NOMBRE, "text", "Nombre: ");
                 echo buildField(Donador::DIRECCION, "text", "Dirección: ");
-                echo buildField(Donador::TELEFONO, "number", "Telefono: ");
+                echo buildField(Donador::TELEFONO, "text", "Telefono: ", null, null, "", 10);
                 echo buildField(Donador::EMAIL, "email", "Correo electrónico: ");
-                echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, self::$donador_categorias);
+                echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, $categoriasSeleccion);
                 echo buildField(Donador::ANIO_GRADUACION, "number", "Año de gradiación: ");
                 echo buildField(Donador::ID_CLASE, "select", "Clase a la que pertenece: ", null, $clasesSeleccion);
                 echo buildField(Donador::ID_CORPORACION, "select", "Corporación afiliada: ", null, $corporacionesSeleccion);
                 echo buildField(Donador::NOMBRE_CONYUGE, "text", "Nombre del conyuge: ");
                 echo buildField(Donador::ID_CORPORACION_CONYUGE, "select", "Corporación del conyuge: ", null, $corporacionesSeleccion);
+                self::$donador_categorias = $categoriasSeleccion;
                 ?>
             </div>
             <?php if ($_SESSION['rol'] == 'admin') { ?>
@@ -169,8 +175,8 @@ class FormCreador
         <form id="<?php echo $id ?>">
             <div id="<?php echo $id ?>-body">
                 <?php
-                echo buildField(Usuario::NOMBRE, "text", "Nombre: ");
-                echo buildField(Usuario::PASS, "text", "Contraseña: ");
+                echo buildField(Usuario::NOMBRE, "text", "Nombre: ", null, null, "", 100);
+                echo buildField(Usuario::PASS, "text", "Contraseña: ", null, null, "", 100);
                 echo buildField(Usuario::ROL, "select", "Rol: ", null, self::$usuario_roles);
                 ?>
             </div>
@@ -202,14 +208,14 @@ class FormCreador
         foreach ($results as $result) {
             $donadores[$result[Donador::ID]] = $result[Donador::NOMBRE];
         }
-    $results = $dao->consultar("evento", array(Evento::ID, Evento::NOMBRE));
-    foreach ($results as $result) {
-        $eventos[$result[Evento::ID]] = $result[Evento::NOMBRE];
-    }
-    $results = $dao->consultar("circulo", array(Circulo::ID, Circulo::NOMBRE));
-    foreach ($results as $result) {
-        $circulos[$result[Circulo::ID]] = $result[Circulo::NOMBRE];
-    }
+        $results = $dao->consultar("evento", array(Evento::ID, Evento::NOMBRE));
+        foreach ($results as $result) {
+            $eventos[$result[Evento::ID]] = $result[Evento::NOMBRE];
+        }
+        $results = $dao->consultar("circulo", array(Circulo::ID, Circulo::NOMBRE));
+        foreach ($results as $result) {
+            $circulos[$result[Circulo::ID]] = $result[Circulo::NOMBRE];
+        }
 
         ob_start();
     ?>
@@ -219,7 +225,7 @@ class FormCreador
                 echo buildField(Garantia_donador_evento::$aliases["garantia"][Garantia::ID], "select", "Garantia: ", null, $garantias);
                 echo buildField(Garantia::ID_DONADOR, "select", "Donador: ", null, $donadores);
                 echo buildField(Garantia::ID_EVENTO, "select", "Evento: ", null, $eventos);
-                echo buildField(Garantia::GARANTIA, "number", "Monto garantizado: ");
+                echo buildField(Garantia::GARANTIA, "number", "Monto garantizado: ", null, null, "", 13);
                 //echo buildField(Garantia::PAGO_TOTAL, "number", "Pago total: ");
                 //echo buildField(Garantia::METODO_PAGO, "text", "Método de pago: ");
                 //echo buildField(Garantia::NUMERO_PAGOS, "number", "Número: ");
@@ -231,6 +237,25 @@ class FormCreador
                 //echo buildField(Donador::NOMBRE, "text", "Nombre del donador: ", null, self::$garantia_estados);
                 ?>
             </div>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
+        </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormDonadorCategoria(string $id)
+    {
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Donador_Categoria::NOMBRE, "text", "Nombre de la categoria: ", null, null, "", 50);
+                ?>
+            </div>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
 <?php

@@ -6,7 +6,7 @@ require_once('backend/pages/toast.php');
 include_once('buildTablaModal.php');
 include_once('buildFormModal.php');
 require_once('form_creador.php');
-function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null, string $invalidMsg = "")
+function buildField(string $id, string $type, string $label, string|null $inputName = null, array|null $values = null, string $invalidMsg = "", int|null $length = null)
 {
     $inputId = $id . "#_input";
     if (!isset($inputName) || $inputName == null) $inputName = $inputId;
@@ -29,8 +29,11 @@ function buildField(string $id, string $type, string $label, string|null $inputN
             <textarea class="form-control" name="<?php echo $inputName ?>" id="<?php echo $inputId ?>"></textarea>
         <?php } else if ($type == 'decimal') { ?>
             <input type="number" step="0.01" min="0" maxlength="13" class="form-control" id="<?php echo $inputId ?>" name="<?php echo $inputName ?>">
-        <?php } else { ?>
-            <input type="<?php echo $type ?>" class="form-control" id="<?php echo $inputId ?>" name="<?php echo $inputName ?>">
+        <?php } else { 
+            ?>
+            <input type="<?php echo $type ?>" class="form-control" id="<?php echo $inputId ?>" name="<?php echo $inputName ?>"
+            <?php if($length != null) echo "maxlength=\"$length\""; ?>
+            >
         <?php } ?>
         <div class="invalid-feedback" id="<?php echo $inputId ?>_invalid" hidden>
             <?php echo $invalidMsg ?>

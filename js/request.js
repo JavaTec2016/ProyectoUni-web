@@ -54,15 +54,21 @@ class FetchRequest {
         })
         return this;
     }
-    getJSON(){
-        return this.response.then(res => res.json());
+    getJSON(log=false){
+        return this.response.then(res => {
+            if(log){
+                let k = res.clone();
+                k.text().then(txt=>console.log(txt)).catch(reas=>{console.log(reas)});
+            }
+            return res.json();
+        }).catch(reas=>{console.log(reas)});
     }
     getText(){
         return this.response.then(res => res.text());
     }
-    callbackJSON(success=(json)=>{}, reject=(reason)=>{}){
+    callbackJSON(success=(json)=>{}, reject=(reason)=>{}, log=false){
         return this.send()
-        .getJSON()
+        .getJSON(log)
         .then(json => success(json))
         .catch(reason => reject(reason));
     }

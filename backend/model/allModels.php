@@ -7,4 +7,5 @@
     include_once('model_garantia.php');
     include_once('model_circulo.php');
     include_once('model_garantia_donador_evento.php');
+    include_once('model_donador_categoria.php');
 ?>
