@@ -60,6 +60,13 @@ CREATE PROCEDURE add_usuario(
     IN rol VARCHAR(30)
 )
 BEGIN
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+
     DECLARE host VARCHAR(50) DEFAULT 'localhost';
     DECLARE user_full VARCHAR(200);
     SET user_full = CONCAT('\'', nombre, '\'@\'', host, '\'');

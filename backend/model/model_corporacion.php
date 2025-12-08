@@ -19,7 +19,7 @@
             static::addRule(self::NOMBRE, new DataRow("string", "VARCHAR", true, false, false, 0, 100, false, Modelo::REGEX_ACENTO));
             static::addRule(self::DIRECCION, new DataRow("string", "VARCHAR", true, false, false, 0, 200, false, Modelo::REGEX_NO_SPECIAL));
             static::addRule(self::TELEFONO, new DataRow("string", "VARCHAR", false, false, false, 0, 10, false, Modelo::REGEX_INTEGER));
-            static::addRule(self::EMAIL, new DataRow("string", "VARCHAR", false, false, false, 0, 50, false, Modelo::CHECK_EMAIL));
+            static::addRule(self::EMAIL, new DataRow("string", "VARCHAR", false, false, false, 0, 50, false, Modelo::REGEX_EMAIL));
 
         }
     }

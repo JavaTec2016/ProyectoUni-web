@@ -1,4 +1,5 @@
 <?php
+
 include_once(__DIR__ . '/../controller/funcion_altas.php');
 header("Content-Type: application/json");
 

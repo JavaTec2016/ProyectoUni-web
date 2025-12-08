@@ -56,9 +56,7 @@ class Validador {
 
         try{
             $regex = $rules[DataRow::REGEX];
-            if($regex == Modelo::CHECK_EMAIL){
-                if(filter_var($dato, FILTER_VALIDATE_EMAIL) == false) return self::REGEX_FAIL;
-            }else if($regex == Modelo::CHECK_DATE){
+            if($regex == Modelo::CHECK_DATE){
                 if(!date_parse($dato)) return self::REGEX_FAIL;
             } else if(!self::vacio($regex)){
                 if(!preg_match("/^".$regex."$/", $dato)) return self::REGEX_FAIL;

@@ -14,6 +14,7 @@ function actualizar(url, form, success = (res) => { }, reject = (reason) => { })
 function agregar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(APIUrl +url, "POST");
     req.setBody(form);
+    req.log();
     return req.callbackJSON(success, reject);
 }
 

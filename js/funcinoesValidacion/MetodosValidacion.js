@@ -358,6 +358,7 @@ class MetodosValidacion {
         })
         key = camposIds['idClase'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            console.log(dato, codigo);
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['idCorporacion'], fieldId = key + postKey + "_input";
@@ -624,11 +625,13 @@ function probarFechas(dateMenor, dateMayor) {
 function vacio(dato = "") {
     return dato == null | dato.length == 0;
 }
-function probarRegex(dato="", regex=""){
-    if(regex=="EMAIL" || regex=="DATE") return true;
-    let pattern = new RegExp("^"+regex+"$", "g");
+function probarRegex(dato = "", regex = "") {
+    if (regex == "EMAIL" || regex == "DATE") return true;
+    let pattern = new RegExp("^" + regex + "$");
     console.log("regex gloval: ", "^" + regex + "$", " para ", dato);
-    return pattern.test(dato);
+    let b = pattern.test(dato);
+    console.log(b)
+    return b;
 }
 /**
  * secuencia de validacion, retorna un codigo de error si sale mal o 0 si sale bien
@@ -638,7 +641,7 @@ function probarRegex(dato="", regex=""){
  * @param {number} umbral 
  * @param {number} limite 
  */
-function validar(datoString, tipo, noNulo, umbral, limite, regex="") {
+function validar(datoString, tipo, noNulo, umbral, limite, regex = "") {
     let dato = null;
     if (!noNulo && vacio(datoString)) return validarCodigos.OK;
     if (noNulo && vacio(datoString)) return validarCodigos.NULL_DATA;
@@ -649,8 +652,10 @@ function validar(datoString, tipo, noNulo, umbral, limite, regex="") {
     } catch (e) { return validarCodigos.WRONG_TYPE; }
     if (umbral > -1 && !enRangoMulti(dato, undefined, umbral)) { return validarCodigos.DATA_TOO_SMALL; }
     if (limite > -1 && !enRangoMulti(dato, limite)) { return validarCodigos.DATA_TOO_BIG; }
-    if(regex != null && regex.length > 0){
-        if(!probarRegex(datoString, regex)) return validarCodigos.REGEX_FAIL;
+    if (regex != null && regex.length > 0) {
+        if (!probarRegex(datoString, regex)) {
+            return validarCodigos.REGEX_FAIL;
+        }
     }
     return validarCodigos.OK;
 }

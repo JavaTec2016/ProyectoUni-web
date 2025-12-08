@@ -300,6 +300,7 @@
                 }
             },
             (reason) => {
+                console.log(reason);
                 fireToast("toast", "Error del servidor, intentelo mas tarde", null, "cerrar");
             }
         )

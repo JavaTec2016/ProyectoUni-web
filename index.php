@@ -10,7 +10,7 @@ $urlSegment = explode("_", $url);
 if (count($urlSegment) < 1) return;
 
 //paginas ABCC
-if ($urlSegment[0] == "abcc") {
+if ($urlSegment[0] == "abcc" && count($urlSegment) > 1) {
     
     //si un no admin intenta entrar a algo fuera de donadores, retorna
     if($url != "abcc_donador" && !(isset($_SESSION) && $_SESSION['rol'] == "admin" )){

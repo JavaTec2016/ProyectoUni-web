@@ -70,7 +70,7 @@
                             <img src="assets/img/cogs.png" alt="">
                             <p>Corporaciones</p>
                         </a>
-                        <a class="row abcc_opcion" href="#">
+                        <a class="row abcc_opcion" href="#" hidden>
                             <img src="assets/img/cogs.png" alt="">
                             <p>Donativos</p>
                         </a>

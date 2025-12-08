@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once(__DIR__ . '/../../database/conexionPDO.php');
 header("Content-Type: application/json");
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $_SESSION["autenticado"] = true;
         $_SESSION["usuario"] = $usr;
         $_SESSION["rol"] = $data["rol"];
-        
+        $_SESSION['timestamp'] = time();
         $response["status"] = true;
         $response["rol"] = $_SESSION["rol"];
     } else {

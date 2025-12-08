@@ -21,6 +21,17 @@ CREATE TABLE IF NOT EXISTS circulo (
     nombre VARCHAR(50) NOT NULL UNIQUE,
     monto_minimo DECIMAL(10,2) NOT NULL CHECK (monto_minimo >= 0)
 );
+CREATE TABLE IF NOT EXISTS donador_categoria(
+    nombre VARCHAR(50) NOT NULL PRIMARY KEY
+);
+INSERT INTO donador_categoria VALUES('Graduado');
+INSERT INTO donador_categoria VALUES('Alumno');
+INSERT INTO donador_categoria VALUES('Padre');
+INSERT INTO donador_categoria VALUES('Administrador');
+INSERT INTO donador_categoria VALUES('Personal Docente');
+INSERT INTO donador_categoria VALUES('Personal Administrativo');
+INSERT INTO donador_categoria VALUES('Corporación');
+INSERT INTO donador_categoria VALUES('Amigo');
 
 CREATE TABLE IF NOT EXISTS evento (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -45,20 +56,19 @@ CREATE TABLE IF NOT EXISTS clase (
     anio_graduacion INT NOT NULL
 );
 
-
-
 CREATE TABLE IF NOT EXISTS donador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     direccion VARCHAR(200),
     telefono VARCHAR(10),
     email VARCHAR(100),
-    categoria VARCHAR(50) NOT NULL CHECK (categoria IN ('Graduado', 'Alumno', 'Padre', 'Administrador', 'Personal Docente', 'Personal Administrativo', 'Corporación', 'Amigo')),
+    categoria VARCHAR(50) NOT NULL,
     anio_graduacion INT,
     id_clase INT NOT NULL,
     id_corporacion INT,
     nombre_conyuge VARCHAR(100),
     id_corporacion_conyuge INT,
+    FOREIGN KEY donadorfk_categoria (categoria) REFERENCES donador_categoria(nombre),
     FOREIGN KEY donadorfk_id_clase (id_clase) REFERENCES clase(id),
     FOREIGN KEY donadorfk_id_corporacion (id_corporacion) REFERENCES corporacion(id),
     FOREIGN KEY donadorfk_id_corporacion_conyuge (id_corporacion_conyuge) REFERENCES corporacion(id)
@@ -156,11 +166,29 @@ SELECT
     d.telefono,
     d.email,
     e.nombre
-FROM Garantia g
-INNER JOIN Donador d
+FROM garantia g
+INNER JOIN donador d
 ON d.id=g.id_donador
-INNER JOIN Evento e
+INNER JOIN evento e
 ON e.id=g.id_evento;
 
 
-insert into garantia values(1, 1, 15, 15000, 0, 'credito', 4, 1234, '2012-12-12', '2026-12-12', 1, 'Pendiente');
+DELIMITER //
+DROP FUNCTION IF EXISTS getCirculo//
+CREATE FUNCTION getCirculo(monto INT) RETURNS VARCHAR(50) deterministic
+BEGIN
+    DECLARE circulo VARCHAR(50);
+
+    IF monto >= 50000 THEN
+        SET circulo = 'Oro';
+    ELSEIF monto >= 100000 THEN
+        SET circulo = 'Presidente';
+    END IF;
+
+    RETURN circulo;
+END//
+
+DELIMITER ;
+
+insert into circulo(nombre, monto_minimo) values ('Presidente', 100000);
+insert into garantia values(2, 1, 1, 15000, 0, 'credito', 4, 1234, '2012-12-12', '2026-12-12', 1, 'Pendiente');

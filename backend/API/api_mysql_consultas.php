@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 include_once(__DIR__ . '/../controller/funcion_consulta.php');
 header("Content-Type: application/json");
 if($_SERVER["REQUEST_METHOD"] == "GET"){

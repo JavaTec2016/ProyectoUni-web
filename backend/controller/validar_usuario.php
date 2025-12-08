@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
     include_once(__DIR__ . '/../../database/conexionPDO.php');
     $con = conexionPDO::get();
     $con->connect([
@@ -26,6 +27,7 @@
             $_SESSION["usuario"] = $usr;
             $_SESSION["pass"] = $pass;
             $_SESSION["rol"] = $data["rol"];
+            $_SESSION['timestamp'] = time();
             header("location: feed");
         }else{
             session_start();

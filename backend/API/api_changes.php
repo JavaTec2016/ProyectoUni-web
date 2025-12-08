@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
     include_once(__DIR__ . '/../../database/DAO.php');
     if(!isset($_SESSION) || !$_SESSION['autenticado']) die(0);
     
