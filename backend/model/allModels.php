@@ -4,4 +4,7 @@
     include_once('model_clase.php');
     include_once('model_corporacion.php');
     include_once('model_usuario.php');
+    include_once('model_garantia.php');
+    include_once('model_circulo.php');
+    include_once('model_garantia_donador_evento.php');
 ?>

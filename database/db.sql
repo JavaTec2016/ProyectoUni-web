@@ -1,8 +1,6 @@
 CREATE DATABASE IF NOT EXISTS BD_Web;
 USE BD_Web;
 
-
-
 CREATE TABLE IF NOT EXISTS corporacion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -163,3 +161,6 @@ INNER JOIN Donador d
 ON d.id=g.id_donador
 INNER JOIN Evento e
 ON e.id=g.id_evento;
+
+
+insert into garantia values(1, 1, 15, 15000, 0, 'credito', 4, 1234, '2012-12-12', '2026-12-12', 1, 'Pendiente');

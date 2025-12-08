@@ -24,6 +24,12 @@ class FormCreador
         "Coordinador" => "Coordinador",
         "Voluntario" => "Voluntario",
     );
+
+    public static $garantia_estados = array(
+        "Pendiente" => "Pendiente",
+        "Completada" => "Completada",
+    );
+
     static function makeFormEvento(string $id)
     {
         ob_start();
@@ -171,6 +177,60 @@ class FormCreador
             <?php if ($_SESSION['rol'] == 'admin') { ?>
                 <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
             <?php } ?>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
+        </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormGarantiaDonadorEvento(string $id)
+    {
+
+        $garantias = array();
+        $donadores = array();
+        $eventos = array();
+        $circulos = array();
+        ///consultar garantias pa seleccionar
+        $dao = getUserPDAO();
+
+        $results = $dao->consultar("garantia", array(Garantia::ID, Garantia::GARANTIA));
+        foreach ($results as $result) {
+            $garantias[$result[Garantia::ID]] = $result[Garantia::GARANTIA];
+        }
+
+        $results = $dao->consultar("donador", array(Donador::ID, Donador::NOMBRE));
+        foreach ($results as $result) {
+            $donadores[$result[Donador::ID]] = $result[Donador::NOMBRE];
+        }
+    $results = $dao->consultar("evento", array(Evento::ID, Evento::NOMBRE));
+    foreach ($results as $result) {
+        $eventos[$result[Evento::ID]] = $result[Evento::NOMBRE];
+    }
+    $results = $dao->consultar("circulo", array(Circulo::ID, Circulo::NOMBRE));
+    foreach ($results as $result) {
+        $circulos[$result[Circulo::ID]] = $result[Circulo::NOMBRE];
+    }
+
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Garantia_donador_evento::$aliases["garantia"][Garantia::ID], "select", "Garantia: ", null, $garantias);
+                echo buildField(Garantia::ID_DONADOR, "select", "Donador: ", null, $donadores);
+                echo buildField(Garantia::ID_EVENTO, "select", "Evento: ", null, $eventos);
+                echo buildField(Garantia::GARANTIA, "number", "Monto garantizado: ");
+                //echo buildField(Garantia::PAGO_TOTAL, "number", "Pago total: ");
+                //echo buildField(Garantia::METODO_PAGO, "text", "Método de pago: ");
+                //echo buildField(Garantia::NUMERO_PAGOS, "number", "Número: ");
+                //echo buildField(Garantia::NUMERO_TARJETA, "number", "Número de tarjeta: ");
+                //echo buildField(Garantia::FECHA_INICIO, "date", "Fecha de inicio: ");
+                //echo buildField(Garantia::FECHA_GARANTIA, "date", "Fecha límite: ");
+                //echo buildField(Garantia::ID_CIRCULO, "select", "Círculo: ", null, $circulos);
+                //echo buildField(Garantia::ESTADO, "select", "Estado de la garantía: ", null, self::$garantia_estados);
+                //echo buildField(Donador::NOMBRE, "text", "Nombre del donador: ", null, self::$garantia_estados);
+                ?>
+            </div>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
 <?php

@@ -13,10 +13,7 @@
                     <a class="nav-link active" aria-current="page" href="#h">Principio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Lista detallada</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Filtrar</a>
+                    <a class="nav-link" href="abcc_garantiadonadorevento">Lista detallada</a>
                 </li>
             </ul>
 

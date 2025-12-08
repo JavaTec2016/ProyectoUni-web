@@ -36,4 +36,6 @@ class Garantia_donador_evento extends Modelo {
     }
 }
 
+Garantia_donador_evento::setRules();
+Models::set("garantia_donador_evento", new Garantia_donador_evento());
 ?>

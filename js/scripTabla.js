@@ -76,8 +76,11 @@ function agregarRowCompleta(tabla, datos={}, id=null, campos=[]){
     let row = document.createElement("tr");
     if (id) row.setAttribute("id",body.id + "_" + id);
     row.setAttribute("row_id", id);
+
+    console.log(datos, campos);
     for(const key of campos){
         if(!(key in datos)) continue;
+        console.log(key);
 
         let dato = datos[key];
         let celda = document.createElement("td");

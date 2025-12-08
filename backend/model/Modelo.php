@@ -141,7 +141,7 @@ abstract class Modelo {
     public static function combineAs(array $seleccion)
     {
         foreach ($seleccion as $tabla => $campos) {
-            $ruleset = Models::get($tabla);
+            $ruleset = Models::get($tabla)::$rules;
             static::$aliases[$tabla] = array();
             foreach ($campos as $campo => $alias) {
                 if($alias == null) $alias = $campo;
