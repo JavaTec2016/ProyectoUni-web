@@ -30,8 +30,9 @@ INSERT INTO usuario VALUES('Ras', 'Acrobacia', 'admin');
 
 DELIMITER //
 
+DROP PROCEDURE IF EXISTS delete_usuario//
 DROP PROCEDURE IF EXISTS deleteUsuario//
-CREATE PROCEDURE deleteUsuario(
+CREATE PROCEDURE delete_usuario(
     IN nombre VARCHAR(100)
 )
 BEGIN
@@ -52,7 +53,8 @@ DELIMITER ;
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS addUsuario//
-CREATE PROCEDURE addUsuario(
+DROP PROCEDURE IF EXISTS add_usuario//
+CREATE PROCEDURE add_usuario(
     IN nombre VARCHAR(100), 
     IN pass VARCHAR(100),
     IN rol VARCHAR(30)
@@ -75,10 +77,8 @@ BEGIN
 
     IF rol = 'admin' THEN
         SET @sql_cmd = CONCAT('GRANT ALL PRIVILEGES ON *.* TO ', user_full, ' WITH GRANT OPTION');
-    ELSEIF rol = 'coordinador' THEN
-        SET @sql_cmd = CONCAT('GRANT coordinador_role TO ', user_full);
     ELSE
-        SET @sql_cmd = CONCAT('GRANT voluntario_role TO ', user_full);
+        SET @sql_cmd = CONCAT('GRANT SELECT ON *.* TO ', user_full);
     END IF;
     PREPARE stmt FROM @sql_cmd;
     EXECUTE stmt;
@@ -89,6 +89,6 @@ END//
 
 DELIMITER ;
 
-call addUsuario('Ras', 'Acrobacia', 'admin');
-call addUsuario('pru', 'pru', 'admin');
-call deleteUsuario('pru');
+call add_usuario('Ras', 'Acrobacia', 'admin');
+call add_usuario('pru', 'pru', 'admin');
+call delete_usuario('pru');

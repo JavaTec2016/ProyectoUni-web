@@ -1,4 +1,5 @@
 <?php
+session_start();
 $url = $_GET['url'] ?? '';
 $url = trim($url, '/'); // limpiar barras
 //echo $url;
@@ -10,6 +11,12 @@ if (count($urlSegment) < 1) return;
 
 //paginas ABCC
 if ($urlSegment[0] == "abcc") {
+    
+    //si un no admin intenta entrar a algo fuera de donadores, retorna
+    if($url != "abcc_donador" && !(isset($_SESSION) && $_SESSION['rol'] == "admin" )){
+        header("location: /");
+        return;
+    }
     require "backend/pages/abcc/" . $url . ".php";
     return;
 }

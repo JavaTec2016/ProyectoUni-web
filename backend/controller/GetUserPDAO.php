@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/PDAO.php');
-if (false) {
+if (!isset($_SESSION)) {
     session_start();
 }
     if (false) {
@@ -8,8 +8,6 @@ if (false) {
     }
     function getUserPDAO($BD = "BD_Web"){
     return new PDAO([
-        conexionPDO::USUARIO => "",//$_SESSION['usuario'],
-        conexionPDO::PASSWORD => "",// $_SESSION['pass'],
         conexionPDO::BD => $BD,
     ]);
     }

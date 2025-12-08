@@ -16,8 +16,8 @@
     <?php include_once('backend/controller/GetUserPDAO.php'); ?>
     <?php
 
-    if(!isset($_SESSION) || !$_SESSION['autenticado'] || $_SESSION['rol'] != 'admin'){}
-    else require_once('backend/pages/usuariosLateral.php');
+    if (!isset($_SESSION) || !$_SESSION['autenticado'] || $_SESSION['rol'] != 'admin') {
+    } else require_once('backend/pages/usuariosLateral.php');
     ?>
     <!-- DETALLES DE EVENTO SI -->
 
@@ -53,33 +53,36 @@
                     <!-- cosas de eventos o volver al panel -->
                     <div class="row">
 
+
                     </div>
-                    <!-- botones para cambiar entre tablas ABCC rapidito -->
-                    <a class="row abcc_opcion" href="abcc_evento">
-                        <img src="assets/img/cogs.png" alt="">
-                        <p>Eventos</p>
-                    </a>
-                    <a class="row abcc_opcion" href="abcc_corporacion">
-                        <img src="assets/img/cogs.png" alt="">
-                        <p>Corporaciones</p>
-                    </a>
                     <a class="row abcc_opcion" href="abcc_donador">
                         <img src="assets/img/cogs.png" alt="">
                         <p>Donadores</p>
                     </a>
-                    <a class="row abcc_opcion" href="#">
-                        <img src="assets/img/cogs.png" alt="">
-                        <p>Donativos</p>
-                    </a>
-                    <a class="row abcc_opcion" href="abcc_garantia">
-                        <img src="assets/img/cogs.png" alt="">
-                        <p>Garantías</p>
-                    </a>
-                    <a class="row abcc_opcion" href="abcc_clases">
-                        <img src="assets/img/cogs.png" alt="">
-                        <p>Clases</p>
-                    </a>
+                    <?php if ($_SESSION['rol'] == 'admin') { ?>
+                        <!-- botones para cambiar entre tablas ABCC rapidito -->
+                        <a class="row abcc_opcion" href="abcc_evento">
+                            <img src="assets/img/cogs.png" alt="">
+                            <p>Eventos</p>
+                        </a>
 
+                        <a class="row abcc_opcion" href="abcc_corporacion">
+                            <img src="assets/img/cogs.png" alt="">
+                            <p>Corporaciones</p>
+                        </a>
+                        <a class="row abcc_opcion" href="#">
+                            <img src="assets/img/cogs.png" alt="">
+                            <p>Donativos</p>
+                        </a>
+                        <a class="row abcc_opcion" href="abcc_garantia">
+                            <img src="assets/img/cogs.png" alt="">
+                            <p>Garantías</p>
+                        </a>
+                        <a class="row abcc_opcion" href="abcc_clases">
+                            <img src="assets/img/cogs.png" alt="">
+                            <p>Clases</p>
+                        </a>
+                    <?php } ?>
                 </div>
             </nav>
         </div>
@@ -107,9 +110,9 @@
                                 Evento::FECHA_FIN => 4,
                                 Evento::TIPO => 5,
                             );
-                            $dao = getUserPDAO(conexionPDO::BD_USER);
+                            $dao = getUserPDAO(conexionPDO::BD_MAIN);
                             $result = $dao->consultar("evento", array_keys($datos), null, null, array(Evento::FECHA_INICIO => PDAO::DESCEND), 16);
-                            if(count($result) == 0){
+                            if (count($result) == 0) {
                                 echo '<i class="text-center pb-5">No hay eventos recientes.</i>';
                             }
                             foreach ($result as $idx => $registro) {
@@ -117,9 +120,9 @@
                                 <div class="col align-items-center">
                                     <?php
                                     $imgPath = "backgroundFestival.webp";
-                                    if($registro[Evento::TIPO] == 'Graduacion') $imgPath = "backgroundGraduacion.webp";
+                                    if ($registro[Evento::TIPO] == 'Graduacion') $imgPath = "backgroundGraduacion.webp";
                                     if ($registro[Evento::TIPO] == 'Fonoton') $imgPath = "backgroundFonoton.webp";
-                                    echo eventoCard("evento_" . $registro[Evento::ID], $registro, "assets/img/".$imgPath);
+                                    echo eventoCard("evento_" . $registro[Evento::ID], $registro, "assets/img/" . $imgPath);
                                     ?>
                                 </div>
 

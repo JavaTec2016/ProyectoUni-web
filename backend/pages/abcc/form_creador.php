@@ -20,7 +20,7 @@ class FormCreador
     );
 
     public static $usuario_roles = array(
-        "admin"=>"Administrador",
+        "admin" => "Administrador",
         "Coordinador" => "Coordinador",
         "Voluntario" => "Voluntario",
     );
@@ -38,7 +38,9 @@ class FormCreador
                 echo buildField(Evento::DESCRIPCION, "text", "Descripcion: "); //textoarea
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
@@ -58,7 +60,9 @@ class FormCreador
                 echo buildField(Corporacion::EMAIL, "email", "Correo electronico: "); //selecccc
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
@@ -83,7 +87,9 @@ class FormCreador
                 //echo buildField(Garantia::ID_CIRCULO, "select", "Circulo: "); auto
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
@@ -123,7 +129,9 @@ class FormCreador
                 echo buildField(Donador::ID_CORPORACION_CONYUGE, "select", "Corporación del conyuge: ", null, $corporacionesSeleccion);
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
@@ -139,7 +147,9 @@ class FormCreador
                 echo buildField(Clase::ANIO_GRADUCION, "number", "Año de graduación: ");
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
     <?php
@@ -158,7 +168,9 @@ class FormCreador
                 echo buildField(Usuario::ROL, "select", "Rol: ", null, self::$usuario_roles);
                 ?>
             </div>
-            <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
 <?php

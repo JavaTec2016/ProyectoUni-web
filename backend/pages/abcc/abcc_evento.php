@@ -145,7 +145,7 @@
 
     /**@param {HTMLTableElement} tablaModal*/
     function setTablaModal(tablaModal, url = "api_mysql_consultas.php") {
-        const req = new FetchRequest(APIUrl +url, "GET");
+        const req = new FetchRequest(APIUrl + url, "GET");
         crearBody(tablaModal);
         setBodyHTML(tablaModal, "Buscando...");
         req.callbackJSON(
@@ -223,8 +223,10 @@
         }
         let _1 = document.createElement("td");
         _1.append(btnDetalles);
-        _1.append(btnModificar);
-        _1.append(btnEliminar);
+        if ("<?php echo $_SESSION['rol'] ?>" == "admin") {
+            _1.append(btnModificar);
+            _1.append(btnEliminar);
+        }
 
         row.append(_1);
 
@@ -342,7 +344,7 @@
         }
     }
     consultarFormulario();
-    fb.formOnInput(form, (field, ev)=>{
+    fb.formOnInput(form, (field, ev) => {
         consultarFormulario()
     });
     form.onreset = (ev) => {

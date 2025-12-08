@@ -230,8 +230,11 @@
         }
         let _1 = document.createElement("td");
         _1.append(btnDetalles);
-        _1.append(btnModificar);
-        _1.append(btnEliminar);
+        if ("<?php echo $_SESSION['rol'] ?>" == "admin") {
+            _1.append(btnModificar);
+            _1.append(btnEliminar);
+        }
+
 
         row.append(_1);
 

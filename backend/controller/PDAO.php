@@ -161,7 +161,7 @@ class PDAO {
     public function makeUser(string $nombre, string $pass, string $rol){
         $usr = new Usuario($nombre, $pass, $rol);
         $this->agregar("usuario", $usr->valores);
-        return $this->call("addUsuario", array_values($usr->valores));
+        return $this->call("add_usuario", array_values($usr->valores));
     }
     /**
      * Elimina un usuario tanto de la tabla de usuarios como de la BD
@@ -169,7 +169,7 @@ class PDAO {
     public function deleteUser(string $nombre)
     {
         return $this->eliminarPrimaria("usuario", $nombre);
-        return $this->call("deleteUsuario", [$nombre]);
+        return $this->call("delete_usuario", [$nombre]);
     }
 }
 
