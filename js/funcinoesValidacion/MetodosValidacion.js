@@ -550,6 +550,34 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
+    ///CLASE
+
+    /**
+     * crea mensajes de error para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesDonadorCategoria(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "",
+            validarCodigos.REGEX_FAIL, "No se admiten caracteres especiales"
+        ]);
+    }
+    /**
+     * crea validadores para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresDonadorCategoria(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
 }
 
 /**

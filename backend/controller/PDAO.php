@@ -55,7 +55,14 @@ class PDAO {
         $stmt = $this->conexion->prepare($sql);
         $this->conexion->bind($stmt, $modelo->valores, $tablaRules);
         $this->conexion->bind($stmt, $filtros, $tablaRules, count($modelo->valores)+1);
-        return $stmt->execute();
+
+        try{
+            return $stmt->execute();
+        }catch(Exception $e){
+            echo $e;
+            return $e;
+        }
+        
     }
     public function consultar(string $tabla, array $selectNombres = array(0 => "*"), array|null $camposValores = null, array|null $camposComodines = null, array|null $camposOrder = null, int $limite = -1) {
         $sql = "SELECT " . join(", ", $selectNombres) . " FROM " . $tabla;

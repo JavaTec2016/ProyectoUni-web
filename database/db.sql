@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS donador (
     id_corporacion INT,
     nombre_conyuge VARCHAR(100),
     id_corporacion_conyuge INT,
-    FOREIGN KEY donadorfk_categoria (categoria) REFERENCES donador_categoria(nombre),
+    FOREIGN KEY donadorfk_categoria (categoria) REFERENCES donador_categoria(nombre) ON UPDATE CASCADE,
     FOREIGN KEY donadorfk_id_clase (id_clase) REFERENCES clase(id),
     FOREIGN KEY donadorfk_id_corporacion (id_corporacion) REFERENCES corporacion(id),
     FOREIGN KEY donadorfk_id_corporacion_conyuge (id_corporacion_conyuge) REFERENCES corporacion(id)
@@ -178,7 +178,7 @@ DROP FUNCTION IF EXISTS getCirculo//
 CREATE FUNCTION getCirculo(monto INT) RETURNS INT deterministic
 BEGIN
     DECLARE circulo2 INT;
-    SELECT id FROM circulo WHERE monto_minimo < monto ORDER BY monto_minimo ASC LIMIT 1 INTO circulo2;
+    SELECT id FROM circulo WHERE monto_minimo < monto ORDER BY monto_minimo DESC LIMIT 1 INTO circulo2;
     RETURN circulo2;
 END//
 

@@ -14,19 +14,37 @@ class conexionPDO {
     public const USUARIO = "usuario";
     public const PASSWORD = "password";
     public const BD = "bd";
-    public const BD_MAIN = "BD_Web";
-    public const BD_USER = "BD_Web_Usuarios";
-    private $options = array(
+    public const BD_MAIN_LOCAL = "BD_Web";
+    public const BD_USER_LOCAL = "BD_Web_Usuarios";
+
+    public const BD_MAIN_HOSTING = "4676369_bdweb";
+    public const BD_USER_HOSTING = "4676369_bdweb";
+    public const BD_MAIN = self::BD_MAIN_LOCAL;
+    public const BD_USER = self::BD_USER_LOCAL;
+
+    private $optionsLocal = array(
         self::HOST => "localhost",
         self::PORT => 3306,
         self::USUARIO => "dominik",
         self::PASSWORD => "santiago",
-        self::BD => "BD_Web"
+        self::BD => self::BD_MAIN_LOCAL
     );
+
+    private $optionsHosting = array(
+        self::HOST => "fdb1032.awardspace.net",
+        self::PORT => 3306,
+        self::USUARIO => "4676369_bdweb",
+        self::PASSWORD => "Caradeweb1209",
+        self::BD => self::BD_MAIN_HOSTING
+    );
+    
+    private $options;
 
     ///singleton
 
-    private function __construct() {}
+    private function __construct() {
+        $this->options = $this->optionsLocal;
+    }
 
     public static function get(){
         if(self::$instance == null) self::$instance = new conexionPDO();
