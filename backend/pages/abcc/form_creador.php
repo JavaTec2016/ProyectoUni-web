@@ -145,7 +145,7 @@ class FormCreador
                 echo buildField(Donador::DIRECCION, "text", "Dirección: ");
                 echo buildField(Donador::TELEFONO, "text", "Telefono: ", null, null, "", 10);
                 echo buildField(Donador::EMAIL, "email", "Correo electrónico: ");
-                //echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, $categoriasSeleccion);
+                echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, $categoriasSeleccion);
                 echo buildField(Donador::ANIO_GRADUACION, "number", "Año de gradiación: ");
                 echo buildField(Donador::ID_CLASE, "select", "Clase a la que pertenece: ", null, $clasesSeleccion);
                 echo buildField(Donador::ID_CORPORACION, "select", "Corporación afiliada: ", null, $corporacionesSeleccion);

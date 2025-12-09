@@ -240,6 +240,7 @@ class MetodosValidacion {
         })
         key = camposIds['idEvento'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
+            console.log(dato, codigo);
             return this.chekGeneral(id, codigo, validador);
         })
         key = camposIds['garantia'], fieldId = key + postKey + "_input";
@@ -727,7 +728,7 @@ function probarRegex(dato = "", regex = "") {
     let pattern = new RegExp("^" + regex + "$");
     //console.log("regex gloval: ", "^" + regex + "$", " para ", dato);
     let b = pattern.test(dato);
-    //console.log(b)
+    console.log(dato, regex, b);
     return b;
 }
 /**

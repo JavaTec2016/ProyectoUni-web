@@ -34,9 +34,9 @@ class Garantia extends Modelo
 
     public static function setRules()
     {
-        static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, Modelo::REGEX_INTEGER));
-        static::addRule(self::ID_DONADOR, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER));
-        static::addRule(self::ID_EVENTO, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER));
+        static::addRule(self::ID, new DataRow("int", "INT", true, true, false, -1, -1, true, Modelo::REGEX_INTEGER_SIGNED));
+        static::addRule(self::ID_DONADOR, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER_SIGNED));
+        static::addRule(self::ID_EVENTO, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER_SIGNED));
         static::addRule(self::GARANTIA, new DataRow("double", "DECIMAL", true, false, false, -1, -1, false, Modelo::REGEX_DECIMAL));
         static::addRule(self::PAGO_TOTAL, new DataRow("double", "DECIMAL", true, false, false, -1, -1, false, Modelo::REGEX_DECIMAL));
         static::addRule(self::METODO_PAGO, new DataRow("string", "VARCHAR", true, false, false, 0, 50, false, Modelo::REGEX_ACENTO));
@@ -44,7 +44,7 @@ class Garantia extends Modelo
         static::addRule(self::NUMERO_TARJETA, new DataRow("int", "INT", true, false, false, 0, 20, false, Modelo::REGEX_INTEGER));
         static::addRule(self::FECHA_INICIO, new DataRow("date", "DATE", true, false, false, -1, -1, false, Modelo::CHECK_DATE));
         static::addRule(self::FECHA_GARANTIA, new DataRow("date", "DATE", true, false, false, -1, -1, false, Modelo::CHECK_DATE));
-        static::addRule(self::ID_CIRCULO, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER));
+        static::addRule(self::ID_CIRCULO, new DataRow("int", "INT", true, false, true, -1, -1, false, Modelo::REGEX_INTEGER_SIGNED));
         static::addRule(self::ESTADO, new DataRow("int", "INT", true, false, false, 0, 20, false, Modelo::REGEX_AZ));
     }
 }

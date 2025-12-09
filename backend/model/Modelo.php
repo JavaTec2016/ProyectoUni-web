@@ -2,7 +2,7 @@
 require_once('Models.php');
 abstract class Modelo {
     public final const REGEX_AZ = "[A-Z-a-z]+";
-    public final const REGEX_EMAIL = "\w+@\w.\w";
+    public final const REGEX_EMAIL = "\w+@\w+.\w+";
     public final const REGEX_ACENTO = "([0-9a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]||(\\s*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}]*)*[a-zA-ZÀ-ÿ\\x{00f1}\\x{00d1}])+";
     public final const REGEX_A_Z_ACENTO = "[ a-zA-ZÀ-ÿ]+";
     public final const REGEX_AZ_SPACE = "[A-Z-a-z]+";
@@ -10,6 +10,7 @@ abstract class Modelo {
     public final const REGEX_AZ_NUMBER_SPACE = "[0-9 A-Za-z]+";
     public final const REGEX_NO_SPECIAL = "[^@!$%^&*+\\-_=\\/\\(\\)\\[\\]]+";
     public final const REGEX_INTEGER = "[0-9]+";
+    public final const REGEX_INTEGER_SIGNED = "-?[0-9]+";
     public final const REGEX_DECIMAL = "(\\d{1,10}.\\d{1,2})";
     public final const CHECK_DATE = "DATE";
     /**
