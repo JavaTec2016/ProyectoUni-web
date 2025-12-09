@@ -6,25 +6,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABCC Garantias</title>
-    <?php include_once('../addBootstrap.php') ?>
-    <?php include_once('../styles.php') ?>
+    <?php include_once('backend/pages/addBootstrap.php') ?>
+    <?php include_once('backend/pages/styles.php') ?>
 </head>
 
 <body>
     <?php
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
-    require_once('../toast.php');
-    include_once('buildTablaModal.php');
-    include_once('buildFormModal.php');
-    require_once('form_creador.php');
-
 
     echo buildTablaModal("tablaDetalles", "Detalles de la Garantia");
     echo buildFormModal("formCambiar", "Datos de la Garantia", "PUT");
 
     //vistas uuuu
-    $campos = [Garantia::ID, Garantia::FECHA_INICIO, Donador::NOMBRE, Evento::NOMBRE];
+    $campos = [Garantia::ID, Garantia::FECHA_INICIO, Garantia::GARANTIA, Garantia::FECHA_GARANTIA];
     ?>
     <div style="display:flex; height:100%">
 
@@ -36,7 +31,7 @@
             <nav class="bg-light abcc scroller" style="overflow-x:hidden; height: 90vh;">
                 <div clas="col">
                     <div class="row" id="form-header">
-                        <?php echo FormCreador::makeFormCorporacion("form"); ?>
+                        <?php echo FormCreador::makeFormGarantia("form"); ?>
                     </div>
                 </div>
             </nav>
@@ -65,29 +60,30 @@
         </div>
 </body>
 
-<script src="../../middleware/scripTabla.js"></script>
-<script src="../../middleware/request.js"></script>
-<script src="../../middleware/showToast.js"></script>
-<script src="../../middleware/scripForm.js"></script>
-<script src="../../middleware/ABCCUtils.js"></script>
-<script src="./funcinoesValidacion/MetodosValidacion.js"></script>
+<script src="js/scripTabla.js"></script>
+<script src="js/request.js"></script>
+<script src="js/showToast.js"></script>
+<script src="js/scripForm.js"></script>
+<script src="js/ABCCUtils.js"></script>
+<script src="js/funcinoesValidacion/MetodosValidacion.js"></script>
 
 <script type="text/javascript">
     ////DEFINICION DE DATOS
 
     console.log("A");
-    const tablaSQL = "corporacion";
+    const tablaSQL = "garantia";
     let validacionRules = {};
-    const postSuccess = "Corporacion agregada";
-    const postFail = "No se pudo agregar la corporacion";
-    const putSuccess = "Corporacion actualizada";
-    const putFail = "No se pudo modificar la corporacion";
-    const deleteSuccess = "Corporacion eliminada";
-    const deleteFail = "No se pudo eliminar la corporacion";
+    const postSuccess = "Garantia agregada";
+    const postFail = "No se pudo agregar la garantia";
+    const putSuccess = "Garantia actualizada";
+    const putFail = "No se pudo modificar la garantia";
+    const deleteSuccess = "Garantia eliminada";
+    const deleteFail = "No se pudo eliminar la garantia";
 
-    const consultaURL = "../../API/api_mysql_consultas.php?tabla=" + tablaSQL + "&";
-    const cambiosURL = "../../API/api_mysql_cambios.php?tabla=" + tablaSQL + "&";
-    const bajasURL = "../../API/api_mysql_bajas.php?tabla=" + tablaSQL + "&";
+    const consultaURLGeneral = "api_mysql_consultas.php?";
+    const consultaURL = "api_mysql_consultas.php?tabla=" + tablaSQL + "&";
+    const cambiosURL = "api_mysql_cambios.php?tabla=" + tablaSQL + "&";
+    const bajasURL = "api_mysql_bajas.php?tabla=" + tablaSQL + "&";
 
     const validadorAgregar = new ValidadorRunner();
     const validadorModificar = new ValidadorRunner();
@@ -98,26 +94,26 @@
     const tabla = document.getElementById("tablaResults");
     const tablaBody = document.getElementById("tablaResults-body");
     tablaBody.childNodes.forEach(n => tablaBody.removeChild(n));
-
+    const donadoresSelect = {};
+    const eventosSelect = {};
     ///PHP DEFINICIONES
 
     const datos = [<?php echoArray($campos) ?>];
     const camposIds = {
-        id: "<?php echo Corporacion::ID ?>",
-        nombre: "<?php echo Corporacion::NOMBRE ?>",
-        direccion: "<?php echo Corporacion::DIRECCION ?>",
-        telefono: "<?php echo Corporacion::TELEFONO ?>",
-        email: "<?php echo Corporacion::EMAIL ?>",
+        id: "<?php echo Garantia::ID ?>",
+        idEvento: "<?php echo Garantia::ID_EVENTO ?>",
+        idDonador: "<?php echo Garantia::ID_DONADOR ?>",
+        garantia: "<?php echo Garantia::GARANTIA ?>",
+        pagoTotal: "<?php echo Garantia::PAGO_TOTAL ?>",
+        metodoPago: "<?php echo Garantia::METODO_PAGO ?>",
+        numeroPagos: "<?php echo Garantia::NUMERO_PAGOS ?>",
+        fechaInicio: "<?php echo Garantia::FECHA_INICIO ?>",
+        fechaLimite: "<?php echo Garantia::FECHA_GARANTIA ?>",
+        idCirculo: "<?php echo Garantia::ID_CIRCULO ?>",
     }
 
-    function setFormFields(form) {
-        form.innerHTML = "";
-        form.append(
-            fb.buildField(camposIds.nombre, "#modal", undefined, "text", undefined, "Nombre: "),
-            fb.buildField(camposIds.direccion, "#modal", undefined, "text", undefined, "Direccion: "),
-            fb.buildField(camposIds.telefono, "#modal", undefined, "tel", undefined, "Telefono: "),
-            fb.buildField(camposIds.email, "#modal", undefined, "email", undefined, "Email: "),
-        )
+    function setFormFields(form, idAfter = "#modal") {
+        FormBuilder.setFormFieldsGarantia(form, idAfter, camposIds, eventosSelect, donadoresSelect);
     }
 
     ///reglas auto
@@ -125,6 +121,7 @@
     requestRules(tablaSQL,
         (json) => {
             validacionRules = json.rules;
+            console.log(validacionRules);
             setupRules();
         },
         (reason) => {
@@ -139,11 +136,11 @@
 
     ///SETUP DE VALIDACION
     function setupRules() {
-        MetodosValidacion.makeMensajesCorporacion(validadorAgregar, "#", "_input", camposIds);
-        MetodosValidacion.makeMensajesCorporacion(validadorModificar, "#modal", "_input", camposIds);
+        MetodosValidacion.makeMensajesGarantia(validadorAgregar, "#", "_input", camposIds);
+        MetodosValidacion.makeMensajesGarantia(validadorModificar, "#modal", "_input", camposIds);
 
-        MetodosValidacion.makeValidadoresCorporacion(validadorAgregar, form, camposIds, validacionRules, "#");
-        MetodosValidacion.makeValidadoresCorporacion(validadorModificar, formModal, camposIds, validacionRules, "#modal");
+        MetodosValidacion.makeValidadoresGarantia(validadorAgregar, form, camposIds, validacionRules, "#");
+        MetodosValidacion.makeValidadoresGarantia(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     //////=================== todo lo de la movedera ABCC con el backend (no moverle)
@@ -151,8 +148,8 @@
     ///CONSULTAS
 
     /**@param {HTMLTableElement} tablaModal*/
-    function setTablaModal(tablaModal, url = "../../API/api_mysql_consultas.php") {
-        const req = new FetchRequest(url, "GET");
+    function setTablaModal(tablaModal, url = "api_mysql_consultas.php") {
+        const req = new FetchRequest(APIUrl + url, "GET");
         crearBody(tablaModal);
         setBodyHTML(tablaModal, "Buscando...");
         req.callbackJSON(
@@ -208,7 +205,7 @@
         btnDetalles.onclick = (ev) => {
             ev.preventDefault();
             btnDetallesCallback(btnDetalles, document.getElementById("tablaDetalles"), (tabla, boton) => {
-                setTablaModal(tabla, boton)
+                setTablaModal(tabla, trimAPIUrl(boton.href))
             })
         }
         btnModificar.onclick = (ev) => {
@@ -217,7 +214,7 @@
         }
         btnEliminar.onclick = (ev) => {
             ev.preventDefault();
-            eliminarRegistro(btnEliminar.href);
+            eliminarRegistro(trimAPIUrl(btnEliminar.href));
         }
         let _1 = document.createElement("td");
         _1.append(btnDetalles);
@@ -246,7 +243,7 @@
     function agregarRegistro(form) {
         let formData = new FormData(form);
         formData.append("tabla", tablaSQL);
-        agregar("../../API/api_mysql_altas.php", formData,
+        agregar("api_mysql_altas.php", formData,
             (response) => {
                 if (response.status) {
                     fireToast("toast", postSuccess, "OK", "Deshacer");
@@ -314,7 +311,7 @@
             },
             (result) => {
                 const old = result.resultSet[0];
-                makeModal(registro, form, boton.href);
+                makeModal(registro, form, trimAPIUrl(boton.href));
             },
             (reason) => {
                 console.log(reason);
@@ -337,6 +334,36 @@
         }
     }
     consultarFormulario();
+    fb.formOnInput(form, (field, ev) => {
+        consultarFormulario()
+    });
+    form.onreset = (ev) => {
+        form.reset();
+        consultarFormulario()
+    };
+
+    let data = new FormData();
+    data.append("tabla", "evento");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let eventos = result.resultSet;
+            eventos.forEach(claseObj => {
+                eventosSelect[claseObj.id] = claseObj.tipo + ": " + claseObj.nombre;
+            })
+        }
+    )
+    data = new FormData();
+    data.append("tabla", "donador");
+    consultar(consultaURLGeneral, data,
+        (result) => {
+            let obj = {};
+            let donadores = result.resultSet;
+            donadores.forEach(claseObj => {
+                donadoresSelect[claseObj.id] = claseObj.id + ": " + claseObj.nombre;
+            })
+        }
+    )
 </script>
 
 

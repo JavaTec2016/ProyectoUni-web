@@ -14,7 +14,10 @@ function procesarConsulta(array $datos)
     $filtrados = Models::cleanKeys($filtrados, "_input");
     $filtrados = Models::cutKeys($filtrados, "#");
     //tovia no hay comodines
+    //puede tronar si no coinciden los campos del modelo on el datos
+    
     $res = $dao->consultar($tabla, array(0 => "*"), $filtrados);
+    //var_dump($res);
     $json = array("resultSet" => []);
     if ($res) {
         $json["resultSet"] = $res;

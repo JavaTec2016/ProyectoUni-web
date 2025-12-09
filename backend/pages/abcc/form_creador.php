@@ -77,13 +77,26 @@ class FormCreador
 
     static function makeFormGarantia(string $id)
     {
+
+        $donadores = array();
+        $eventos = array();
+        $dao = getUserPDAO();
+        $results = $dao->consultar("donador", array(Donador::ID, Donador::NOMBRE));
+        foreach ($results as $result) {
+            $donadores[$result[Donador::ID]] = $result[Donador::NOMBRE];
+        }
+
+        $results = $dao->consultar("evento", array(Evento::ID, Evento::TIPO, Evento::NOMBRE));
+        foreach ($results as $result) {
+            $eventos[$result[Evento::ID]] = $result[Evento::TIPO] . ": " . $result[Evento::NOMBRE];
+        }
         ob_start();
     ?>
         <form id="<?php echo $id ?>">
             <div id="<?php echo $id ?>-body">
                 <?php
-                echo buildField(Garantia::ID_EVENTO, "button", "Evento al que pertenece: "); //configuracion posterior
-                echo buildField(Garantia::ID_DONADOR, "button", "Donador: ");
+                echo buildField(Garantia::ID_EVENTO, "select", "Evento al que pertenece: ", null, $eventos); //configuracion posterior
+                echo buildField(Garantia::ID_DONADOR, "select", "Donador: ", null, $donadores);
                 echo buildField(Garantia::GARANTIA, "decimal", "Donacion garantizada: ");
                 //echo buildField(Garantia::PAGO_TOTAL, "decimal", "Ttotal pagado: "); auto
                 echo buildField(Garantia::METODO_PAGO, "text", "Metodo de pago: ");
@@ -132,7 +145,7 @@ class FormCreador
                 echo buildField(Donador::DIRECCION, "text", "Dirección: ");
                 echo buildField(Donador::TELEFONO, "text", "Telefono: ", null, null, "", 10);
                 echo buildField(Donador::EMAIL, "email", "Correo electrónico: ");
-                echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, $categoriasSeleccion);
+                //echo buildField(Donador::CATEGORIA, "select", "Categoria: ", null, $categoriasSeleccion);
                 echo buildField(Donador::ANIO_GRADUACION, "number", "Año de gradiación: ");
                 echo buildField(Donador::ID_CLASE, "select", "Clase a la que pertenece: ", null, $clasesSeleccion);
                 echo buildField(Donador::ID_CORPORACION, "select", "Corporación afiliada: ", null, $corporacionesSeleccion);
@@ -222,7 +235,7 @@ class FormCreador
         <form id="<?php echo $id ?>">
             <div id="<?php echo $id ?>-body">
                 <?php
-                echo buildField(Garantia_donador_evento::$aliases["garantia"][Garantia::ID], "select", "Garantia: ", null, $garantias);
+                echo buildField(model_garantia_donador_evento::$aliases["garantia"][Garantia::ID], "select", "Garantia: ", null, $garantias);
                 echo buildField(Garantia::ID_DONADOR, "select", "Donador: ", null, $donadores);
                 echo buildField(Garantia::ID_EVENTO, "select", "Evento: ", null, $eventos);
                 echo buildField(Garantia::GARANTIA, "number", "Monto garantizado: ", null, null, "", 13);
@@ -245,6 +258,7 @@ class FormCreador
 
     static function makeFormDonadorCategoria(string $id)
     {
+
         ob_start();
     ?>
         <form id="<?php echo $id ?>">

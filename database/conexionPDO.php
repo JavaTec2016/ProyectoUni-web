@@ -90,6 +90,14 @@ class conexionPDO {
         $stmt = $this->prepare($sql);
         return $stmt->execute($values);
     }
+    public function commit()
+    {
+        $this->conexion->commit();
+    }
+    public function rollback()
+    {
+        $this->conexion->rollback();
+    }
 }
 
 ?>

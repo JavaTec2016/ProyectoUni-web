@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 require_once(__DIR__ . "/../controller/getRuleData.php");
 header("Content-Type: application/json");
 

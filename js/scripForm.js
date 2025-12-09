@@ -209,7 +209,17 @@ class FormBuilder {
             fb.buildField(camposIds.anioGraduacion, idAfter, undefined, "text", undefined, "Año de graduación: "),
         )
     }
-
+    static setFormFieldsGarantia(form, idAfter = "#modal", camposIds, ...data) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.idEvento, idAfter, undefined, "select", undefined, "Evento: ", undefined, data[0]),
+            fb.buildField(camposIds.idDonador, idAfter, undefined, "select", undefined, "Donador: ", undefined, data[1]),
+            fb.buildField(camposIds.garantia, idAfter, undefined, "text", undefined, "Monto garantizado: ", { maxlength: 13 }),
+            fb.buildField(camposIds.metodoPago, idAfter, undefined, "text", undefined, "Metodo de pago: "),
+            fb.buildField(camposIds.fechaInicio, idAfter, undefined, "date", undefined, "Fecha de inicio: "),
+            fb.buildField(camposIds.fechaLimite, idAfter, undefined, "date", undefined, "Fecha limite: "),
+        )
+    }
     static setFormFieldsUsuario(form, idAfter = "#modal", camposIds, ...data) {
         form.innerHTML = "";
         form.append(

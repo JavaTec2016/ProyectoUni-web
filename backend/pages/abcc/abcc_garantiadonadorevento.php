@@ -17,8 +17,8 @@
 
     echo buildTablaModal("tablaDetalles", "Detalles de la garantia");
     $campos = [
-        Garantia_donador_evento::$aliases['donador'][Donador::NOMBRE],
-        Garantia_donador_evento::$aliases['evento'][Evento::NOMBRE],
+        model_garantia_donador_evento::$aliases['donador'][Donador::NOMBRE],
+        model_garantia_donador_evento::$aliases['evento'][Evento::NOMBRE],
         Garantia::GARANTIA
     ];
     ?>
@@ -94,7 +94,7 @@
         <?php echoArray($campos) ?>
     ];
     const camposIds = {
-        id_garantia: "<?php echo Garantia_donador_evento::$aliases['garantia'][Garantia::ID] ?>",
+        id_garantia: "<?php echo model_garantia_donador_evento::$aliases['garantia'][Garantia::ID] ?>",
         id_donador: "<?php echo Garantia::ID_DONADOR ?>",
         id_evento: "<?php echo Garantia::ID_EVENTO ?>",
         garantia: "<?php echo Garantia::GARANTIA ?>",

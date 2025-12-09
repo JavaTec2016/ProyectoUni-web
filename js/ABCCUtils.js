@@ -18,18 +18,18 @@ function actualizar(url, form, success = (res) => { }, reject = (reason) => { })
 function agregar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(APIUrl +url, "POST");
     req.setBody(form);
-    return req.callbackJSON(success, reject, true);
+    return req.callbackJSON(success, reject);
 }
 
 function consultar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(APIUrl +url, "GET");
     req.setBody(form);
-    return req.callbackJSON(success, reject, true);
+    return req.callbackJSON(success, reject);
 }
 function eliminar(url, form, success = (res) => { }, reject = (reason) => { }){
     const req = new FetchRequest(APIUrl +url, "GET");
     req.setBody(form);
-    return req.callbackJSON(success, reject, true);
+    return req.callbackJSON(success, reject);
 }
 function requestRules(tabla, success=(res)=>{}, reject=(reason)=>{}){
     const req = new FetchRequest(APIUrl +"api_getRuleData.php?tabla="+tabla, "GET");

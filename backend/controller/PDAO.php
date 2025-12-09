@@ -16,7 +16,7 @@ class PDAO {
         $this->conexion->bind($stmt, $values, $rules);
         return $stmt->execute();
     }
-
+    public function getConexion(){return $this->conexion;}
     ///ABCC
 
     public function agregar(string $tabla, array $modelo){

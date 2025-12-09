@@ -1,6 +1,4 @@
 <?php
-
-header("Content-Type: application/json");
 include_once(__DIR__ . '/../model/allModels.php');
 include_once(__DIR__ . '/funcion_validador.php');
 include_once(__DIR__ . '/GetUserPDAO.php');
@@ -32,8 +30,10 @@ function procesarCambio(array $datos){
         //modelo actualizao
         $valores = Validador::convertirModelo($tabla, $valores);
         $modelo = Models::instanciar($tabla, $valores);
+        
         $res = $dao->modificar($tabla, $filtro, $modelo);
     }
+    
     if ($res != false) $res = true;
     $json['status'] = $res;
     echo json_encode($json);

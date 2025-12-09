@@ -1,16 +1,21 @@
 
 <?php
-require_once('allModels.php');
-class Garantia_donador_evento extends Modelo {
+error_reporting(0);
+require_once('model_garantia.php');
+require_once('model_donador.php');
+require_once('model_evento.php');
+class model_garantia_donador_evento extends Modelo
+{
     public static $rules = [];
 
-    public function __construct(mixed ...$args) {
+    public function __construct(mixed ...$args)
+    {
         $this->fillValuesFrom(static::$rules, $args);
     }
     public static function setRules()
     {
         static::combineAs(array(
-            "garantia"=>array(
+            "garantia" => array(
                 Garantia::ID => "id_garantia",
                 Garantia::ID_DONADOR => null,
                 Garantia::ID_EVENTO => null,
@@ -24,18 +29,18 @@ class Garantia_donador_evento extends Modelo {
                 Garantia::ID_CIRCULO => null,
                 Garantia::ESTADO => null,
             ),
-            "donador"=>array(
+            "donador" => array(
                 Donador::NOMBRE => "nombre_donador",
                 Donador::TELEFONO => null,
                 Donador::EMAIL => null,
             ),
-            "evento"=>array(
+            "evento" => array(
                 Evento::NOMBRE => "nombre_evento"
             )
         ));
     }
 }
 
-Garantia_donador_evento::setRules();
-Models::set("garantia_donador_evento", new Garantia_donador_evento());
+model_garantia_donador_evento::setRules();
+Models::set("garantia_donador_evento", new model_garantia_donador_evento());
 ?>

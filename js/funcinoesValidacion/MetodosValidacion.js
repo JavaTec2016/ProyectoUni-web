@@ -215,7 +215,7 @@ class MetodosValidacion {
             validarCodigos.NULL_DATA, "No puede ser nulo",
             validarCodigos.REGEX_FAIL, "Formato de fecha invalido",
         ]);
-        validador.setMensajesEspecialesSerial(camposIds['fechaGarantia'] + postKey + inputPostfix, [
+        validador.setMensajesEspecialesSerial(camposIds['fechaLimite'] + postKey + inputPostfix, [
             validarCodigos.NULL_DATA, "No puede ser nulo",
             validarCodigos.REGEX_FAIL, "Formato de fecha invalido",
             validarCodigos.DATE_NEGATIVE, "No debe ser menor a la fecha de inicio"
@@ -254,7 +254,7 @@ class MetodosValidacion {
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
-        key = camposIds['fechaGarantia'], fieldId = key + postKey + "_input";
+        key = camposIds['fechaLimite'], fieldId = key + postKey + "_input";
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
             if (codigo == 0) {
                 //otra vez
@@ -267,6 +267,60 @@ class MetodosValidacion {
         validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite) => {
             return this.chekGeneral(id, codigo, validador);
         })
+    }
+
+    ///DONADOR
+
+    static makeMensajesDonador(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "No se permiten caracteres especiales",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['direccion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_SMALL, "",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 200 caracteres",
+            validarCodigos.REGEX_FAIL, "",
+        ]);
+        //pago total skipeado
+        validador.setMensajesEspecialesSerial(camposIds['telefono'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_SMALL, "Debe contener 10 caracteres",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 10 caracteres",
+            validarCodigos.REGEX_FAIL, "Formato de numero telefónico inválido",
+        ]);
+        //numero pagos skipeado
+        validador.setMensajesEspecialesSerial(camposIds['email'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "Formato de correo invalido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['categoria'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "No puede ser nulo",
+            validarCodigos.REGEX_FAIL, "Categoria inválida",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['anioGraduacion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "Debe ser un número entero positivo",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idClase'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idCorporacion'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['nombreConyuge'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.DATA_TOO_BIG, "No puede exceder 100 caracteres",
+            validarCodigos.REGEX_FAIL, "No se permiten caracteres especiales",
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['idCorporacionConyuge'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "ID inválido",
+        ]);
     }
 
     ///DONADOR

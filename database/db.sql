@@ -175,19 +175,33 @@ ON e.id=g.id_evento;
 
 DELIMITER //
 DROP FUNCTION IF EXISTS getCirculo//
-CREATE FUNCTION getCirculo(monto INT) RETURNS VARCHAR(50) deterministic
+CREATE FUNCTION getCirculo(monto INT) RETURNS INT deterministic
 BEGIN
-    DECLARE circulo VARCHAR(50);
-
-    IF monto >= 50000 THEN
-        SET circulo = 'Oro';
-    ELSEIF monto >= 100000 THEN
-        SET circulo = 'Presidente';
-    END IF;
-
-    RETURN circulo;
+    DECLARE circulo2 INT;
+    SELECT id FROM circulo WHERE monto_minimo < monto ORDER BY monto_minimo ASC LIMIT 1 INTO circulo2;
+    RETURN circulo2;
 END//
 
+DELIMITER ;
+
+DELIMITER //
+DROP TRIGGER IF EXISTS autoCirculo//
+CREATE TRIGGER IF NOT EXISTS autoCirculo BEFORE INSERT ON garantia
+FOR EACH ROW
+BEGIN
+    SET NEW.id_circulo = getCirculo(NEW.garantia);
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+DROP TRIGGER IF EXISTS autoCirculoEdit//
+CREATE TRIGGER IF NOT EXISTS autoCirculoEdit BEFORE UPDATE ON garantia
+FOR EACH ROW
+BEGIN
+    SET NEW.id_circulo = getCirculo(NEW.garantia);
+END;
+//
 DELIMITER ;
 
 insert into circulo(nombre, monto_minimo) values ('Presidente', 100000);
