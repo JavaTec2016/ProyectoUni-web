@@ -272,6 +272,26 @@ class FormCreador
             <?php } ?>
             <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
         </form>
+    <?php
+        return ob_get_clean();
+    }
+
+    static function makeFormCirculo(string $id)
+    {
+        ob_start();
+    ?>
+        <form id="<?php echo $id ?>">
+            <div id="<?php echo $id ?>-body">
+                <?php
+                echo buildField(Circulo::NOMBRE, "text", "Nombre: ", null, null, "", 100);
+                echo buildField(Circulo::MONTO_MINIMO, "text", "Contraseña: ", null, null, "", 13);
+                ?>
+            </div>
+            <?php if ($_SESSION['rol'] == 'admin') { ?>
+                <button class="btn btn-primary px-2 ms-2" type="submit" id="<?php echo $id ?>Submit">Enviar</button>
+            <?php } ?>
+            <button class="btn btn-secondary px-2 me-2" type="reset" id="<?php echo $id ?>Clear">Limpiar</button>
+        </form>
 <?php
         return ob_get_clean();
     }

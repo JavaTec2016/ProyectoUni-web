@@ -504,6 +504,51 @@ class MetodosValidacion {
             return this.chekGeneral(id, codigo, validador);
         })
     }
+
+    ///CIRCULO
+
+    /**
+     * crea mensajes de error para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {any{}} camposIds 
+     */
+    static makeMensajesCirculo(validador, postKey = "#", inputPostfix = "_input", camposIds = {}) {
+        validador.setMensajesEspecialesSerial(camposIds['nombre'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "",
+            validarCodigos.REGEX_FAIL, "No se admiten caracteres especiales",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 100 caracteres"
+        ]);
+        validador.setMensajesEspecialesSerial(camposIds['montoMinimo'] + postKey + inputPostfix, [
+            validarCodigos.NULL_DATA, "",
+            validarCodigos.WRONG_TYPE, "Debe ser un número decimal positivo",
+            validarCodigos.REGEX_FAIL, "Formato de número decimal incorrecto",
+            validarCodigos.DATA_TOO_BIG, "No debe exceder 13 caracteres (10 digitos, punto, 2 decimales)",
+        ]);
+
+    }
+    /**
+     * crea validadores para corporacion
+     * @param {ValidadorRunner} validador 
+     * @param {HTMLFormElement} form 
+     * @param {any{}} camposIds 
+     * @param {any{}} validacionRules 
+     */
+    static makeValidadoresCirculo(validador, form, camposIds, validacionRules, postKey = "#") {
+        let key, fieldId;
+        key = camposIds['nombre'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        });
+        key = camposIds['pass'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        });
+        key = camposIds['rol'], fieldId = key + postKey + "_input";
+        validador.agregarValidador(fieldId, ...validacionRules[key], (codigo, id, dato, tipo, noNulo, umbral, limite, regex) => {
+            return this.chekGeneral(id, codigo, validador);
+        })
+    }
 }
 
 /**

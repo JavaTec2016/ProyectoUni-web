@@ -12,7 +12,7 @@ class Donador_Categoria extends Modelo
     }
     public static function setRules()
     {
-        static::addRule(self::NOMBRE, new DataRow("string", "STRING", true, false, false, 0, 50, true, Modelo::REGEX_A_Z_ACENTO));
+        static::addRule(self::NOMBRE, new DataRow("string", "STRING", true, true, false, 0, 50, true, Modelo::REGEX_A_Z_ACENTO));
     }
 }
 

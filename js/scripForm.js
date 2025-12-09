@@ -228,5 +228,18 @@ class FormBuilder {
             fb.buildField(camposIds.rol, idAfter, undefined, "select", undefined, "Rol: ", undefined, data[0]),
         )
     }
+    static setFormFieldsCirculo(form, idAfter = "#modal", camposIds, ...data) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+            fb.buildField(camposIds.montoMinimo, idAfter, undefined, "text", undefined, "Monto minimo: ", {maxlength: 13}),
+        )
+    }
+    static setFormFieldsDonadorCategoria(form, idAfter = "#modal", camposIds, ...data) {
+        form.innerHTML = "";
+        form.append(
+            fb.buildField(camposIds.nombre, idAfter, undefined, "text", undefined, "Nombre: "),
+        )
+    }
 }
 const fb = new FormBuilder();

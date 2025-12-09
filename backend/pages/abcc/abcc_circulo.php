@@ -15,10 +15,10 @@
     require_once('nav_abcc.php');
     require_once('abcc_manager.php');
 
-    echo buildTablaModal("tablaDetalles", "Detalles de la clase");
-    echo buildFormModal("formCambiar", "Datos de la clase", "PUT");
+    echo buildTablaModal("tablaDetalles", "Detalles del Circulo");
+    echo buildFormModal("formCambiar", "Datos del Circulo", "PUT");
 
-    $campos = [Donador_Categoria::NOMBRE];
+    $campos = [Circulo::ID, Circulo::NOMBRE, Circulo::MONTO_MINIMO];
     ?>
     <div style="display:flex; height:100%">
 
@@ -30,7 +30,7 @@
             <nav class="bg-light abcc scroller" style="overflow-x:hidden; height: 90vh;">
                 <div clas="col">
                     <div class="row" id="form-header">
-                        <?php echo FormCreador::makeFormDonadorCategoria("form"); ?>
+                        <?php echo FormCreador::makeFormCirculo("form"); ?>
                     </div>
                 </div>
             </nav>
@@ -70,14 +70,14 @@
     ////DEFINICION DE DATOS
 
     console.log("A");
-    const tablaSQL = "donador_categoria";
+    const tablaSQL = "circulo";
     let validacionRules = {};
-    const postSuccess = "Categoría agregada";
-    const postFail = "No se pudo agregar la categoría";
-    const putSuccess = "Categoría actualizada";
-    const putFail = "No se pudo modificar la categoría";
-    const deleteSuccess = "Categoría eliminada";
-    const deleteFail = "No se pudo eliminar la categoría";
+    const postSuccess = "Circulo agregado";
+    const postFail = "No se pudo agregar el circulo";
+    const putSuccess = "Circulo actualizado";
+    const putFail = "No se pudo modificar el circulo";
+    const deleteSuccess = "Circulo eliminado";
+    const deleteFail = "No se pudo eliminar el circulo";
 
     const consultaURLGeneral = "api_mysql_consultas.php?";
     const consultaURL = "api_mysql_consultas.php?tabla=" + tablaSQL + "&";
@@ -98,11 +98,13 @@
 
     const datos = [<?php echoArray($campos) ?>];
     const camposIds = {
-        nombre: "<?php echo Donador_Categoria::NOMBRE ?>",
+        id: "<?php echo Circulo::ID ?>",
+        nombre: "<?php echo Circulo::NOMBRE ?>",
+        montoMinimo: "<?php echo Circulo::MONTO_MINIMO ?>",
     }
 
     function setFormFields(form, idAfter = "#modal") {
-        FormBuilder.setFormFieldsDonadorCategoria(form, idAfter, camposIds);
+        FormBuilder.setFormFieldsCirculo(form, idAfter, camposIds);
     }
 
     ///reglas auto
@@ -124,11 +126,11 @@
 
     ///SETUP DE VALIDACION
     function setupRules() {
-        MetodosValidacion.makeMensajesDonadorCategoria(validadorAgregar, "#", "_input", camposIds);
-        MetodosValidacion.makeMensajesDonadorCategoria(validadorModificar, "#modal", "_input", camposIds);
+        MetodosValidacion.makeMensajesCirculo(validadorAgregar, "#", "_input", camposIds);
+        MetodosValidacion.makeMensajesCirculo(validadorModificar, "#modal", "_input", camposIds);
 
-        MetodosValidacion.makeValidadoresDonadorCategoria(validadorAgregar, form, camposIds, validacionRules, "#");
-        MetodosValidacion.makeValidadoresDonadorCategoria(validadorModificar, formModal, camposIds, validacionRules, "#modal");
+        MetodosValidacion.makeValidadoresCirculo(validadorAgregar, form, camposIds, validacionRules, "#");
+        MetodosValidacion.makeValidadoresCirculo(validadorModificar, formModal, camposIds, validacionRules, "#modal");
     }
 
     //////=================== todo lo de la movedera ABCC con el backend (no moverle)
@@ -165,23 +167,23 @@
 
     function configRowBotones(registro, row) {
         const btnDetalles = makeBotonHref(
-            row.nombre + "_detalles",
-            consultaURL + "nombre=" + registro.nombre,
+            row.id + "_detalles",
+            consultaURL + "id=" + registro.id,
             "linkDetalles",
             "Detalles",
             "modal", "tablaDetalles"
         );
         const btnModificar = makeBotonHref(
-            row.nombre + "_modificar",
-            cambiosURL + "OLD_nombre=" + registro.nombre + "&",
+            row.id + "_modificar",
+            cambiosURL + "OLD_id=" + registro.id + "&",
             "linkModificar",
             "Modificar",
             "modal", "formCambiar",
             "btn-primary"
         );
         const btnEliminar = makeBotonHref(
-            row.nombre + "_eliminar",
-            bajasURL + "nombre=" + registro.nombre,
+            row.id + "_eliminar",
+            bajasURL + "id=" + registro.id,
             "linkEliminar",
             "Eliminar",
             null, null,
@@ -295,7 +297,7 @@
     /**@param {HTMLAnchorElement} boton @param {any{}} registro @param {HTMLFormElement} form */
     function prepararModal(boton, registro, form) {
         consultar(consultaURL, {
-                nombre: registro.nombre
+                id: registro.id
             },
             (result) => {
                 const old = result.resultSet[0];

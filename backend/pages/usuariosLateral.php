@@ -5,6 +5,8 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-        <a href="abcc_usuario">Gestionar usuarios</a>
+        <a href="abcc_usuario">Gestionar usuarios</a><br>
+        <a href="abcc_donadorcategoria">Categorias de donadores</a><br>
+        <a href="abcc_circulo">Circulos de donacion</a><br>
     </div>
 </div>

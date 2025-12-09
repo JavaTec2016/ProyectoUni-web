@@ -7,14 +7,15 @@ function procesarCambio(array $datos){
     $tabla = $datos["tabla"]; //saca el modelo
     unset($datos["tabla"]);
     $dao = null;
+    
     if ($tabla == "usuario") $dao = getUserPDAO(conexionPDO::BD_USER);
     else $dao = getUserPDAO(conexionPDO::BD_MAIN);
-    
+
     $primaria = Models::get($tabla)::getCampoPrimario();
     $num = $datos["OLD_" . $primaria];
     unset($datos["OLD_" . $primaria]);
     //filtro pal dao
-    
+    //si no tiene llaves primarias marcadas el mddelo, truena esto
     $filtro = array("" . $primaria => $num);
     $valores = Models::cleanKeys($datos, "_input");
     $valores = Models::cutKeys($valores, "#");
